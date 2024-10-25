@@ -8,12 +8,8 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import theme from "../materialUI/theme";
 import { loginUser } from "../models/AuthCrud";
-// import Navbar from "../Navbar/navbar";
-// import Footer from "../Footer/Footer";
 import { Formik, Form, FormikHelpers } from "formik";
-// import { Formik } from "formik";
 import * as Yup from "yup";
 
 const LoginForm = () => {
@@ -22,7 +18,6 @@ const LoginForm = () => {
     password: string;
   }
 
-  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .min(2, "Too Short!")
@@ -55,8 +50,6 @@ const LoginForm = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      {/* <Navbar /> */}
       <Container maxWidth="sm">
         <Typography
           variant="h4"
@@ -128,8 +121,6 @@ const LoginForm = () => {
           )}
         </Formik>
       </Container>
-      {/* <Footer /> */}
-    </ThemeProvider>
   );
 };
 
