@@ -2,54 +2,60 @@ import React from "react";
 import {
   Button,
   TextField,
-  Grid,
+  Grid2,
   Typography,
   Container,
-  ThemeProvider,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { loginUser } from "../models/AuthCrud";
+// import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../../services/LoginService/loginUser";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 const LoginForm = () => {
   interface LoginData {
-    username: string;
+    email: string;
     password: string;
   }
 
+  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Username is required"),
-    password: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Password is required"),
-  });
+      email: Yup.string()
+        .email("Invalid email format")
+        .max(50, "Too Long!")
+        .required("Email is required"),
+      password: Yup.string()
+        .min(8, "Password must be at least 8 characters")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+        )
+        .max(20, "Too Long!")
+        .required("Password is required"),
+    });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = async (
-    loginData: LoginData,
-    { setSubmitting, setStatus }: FormikHelpers<LoginData>
-  ) => {
-    try {
-      const response = await loginUser(loginData.username, loginData.password);
-      if (response && (response as { token?: string }).token) {
-        console.log("Login successful:", response);
-        setStatus({ success: true });
-        navigate("/cards");
+      loginData: LoginData,
+      { setSubmitting, setStatus }: FormikHelpers<LoginData>
+    ) => {
+      try {
+        const response = await loginUser(loginData.email, loginData.password);
+        if (response && (response as { token?: string }).token) {
+          setStatus({ success: true });
+          // navigate("/cards");   //SuperAdminDashboard
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        setStatus({ success: false, message: "Invalid credentials" });
+      } finally {
+        setSubmitting(false);
       }
-    } catch (error) {
-      setStatus({ success: false, message: "Invalid credentials" });
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    };
 
   return (
+    <>
+      {/* <Navbar /> */}
       <Container maxWidth="sm">
         <Typography
           variant="h4"
@@ -64,27 +70,27 @@ const LoginForm = () => {
           Login
         </Typography>
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting, handleChange, handleBlur, values, errors, touched, status }) => (
             <Form>
-              <Grid container spacing={2} sx={{ marginTop: 2 }}>
-                <Grid item xs={12}>
+              <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
+                <Grid2 size={12}>
                   <TextField
                     fullWidth
-                    label="Username"
+                    label="email"
                     variant="outlined"
-                    name="username"
+                    name="email"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.username}
-                    helperText={touched.username && errors.username}
-                    error={touched.username && Boolean(errors.username)}
+                    value={values.email}
+                    helperText={touched.email && errors.email}
+                    error={touched.email && Boolean(errors.email)}
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </Grid2>
+                <Grid2 size={12}>
                   <TextField
                     fullWidth
                     label="Password"
@@ -97,15 +103,15 @@ const LoginForm = () => {
                     helperText={touched.password && errors.password}
                     error={touched.password && Boolean(errors.password)}
                   />
-                </Grid>
+                </Grid2>
                 {status?.message && (
-                  <Grid item xs={12}>
+                  <Grid2 size={12}>
                     <Typography color="error" align="center">
                       {status.message}
                     </Typography>
-                  </Grid>
+                  </Grid2>
                 )}
-                <Grid item xs={12}>
+                <Grid2 size={12}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -115,15 +121,16 @@ const LoginForm = () => {
                   >
                     Login
                   </Button>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </Form>
           )}
         </Formik>
       </Container>
+      {/* <Footer /> */}
+      </>
+    
   );
 };
 
 export default LoginForm;
-
-
