@@ -1,9 +1,7 @@
 import React from "react";
-import {Grid2} from "@mui/material";
-// import Navbar from "../../components/Navbar";
-// import Footer from "../../components/Footer";
-import { Box, Container } from "@mui/material";
-import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard"; // Changed to default import
+import { Grid2 } from '@mui/material';
+import { Box, Container, Typography } from "@mui/material";
+import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
 import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
 
 const SuperAdminDashboard = () => {
@@ -37,24 +35,27 @@ const SuperAdminDashboard = () => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 3 }}>
-        <Grid2 container spacing={3}>
+        {/* Scrollable Organisation Cards Section */}
+        <Typography variant="h5" sx={{ mb: 2 }}>
+         Available Organisations
+        </Typography>
+        <Box sx={{ display: "flex", overflowX: "auto", pb: 2 }}>
           {organisations.map((org, index) => (
-            <Grid2
-              key={index}
-              xs={12} // Full width on extra-small screens (mobile)
-              sm={6} // Two columns on small screens (tablet)
-              md={4} // Three columns on medium and larger screens (desktop)
-            >
+            <Box key={index} sx={{ minWidth: 350, mr: 2 }}>
               <OrganisationCard
                 title={org.title}
                 description={org.description}
                 location={org.location}
                 status={org.status}
               />
-            </Grid2>
+            </Box>
           ))}
-        </Grid2>
-      
+        </Box>
+
+        {/* Static Organisation Approval Cards Section */}
+        <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
+          Pending Organisation Approvals
+        </Typography>
         <Grid2 container spacing={3}>
           {organisations.map((org, index) => (
             <Grid2
@@ -72,7 +73,6 @@ const SuperAdminDashboard = () => {
             </Grid2>
           ))}
         </Grid2>
-      
       </Container>
     </Box>
   );
