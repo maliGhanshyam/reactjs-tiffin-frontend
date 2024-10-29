@@ -6,11 +6,18 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
+import LoginPage from './pages/LoginPage';
+import theme from './components/materialUI/theme';
+import { ThemeProvider } from '@mui/material';
 
 let childRoutes = [
   {
     path: 'register',
     element: <AdminRegistrationPage />
+  },
+  {
+    path: 'login',
+    element: <LoginPage />
   },
   {
     path: '**',
@@ -30,8 +37,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
-    {/* <App /> */}
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+      {/* <App /> */}
+    </ThemeProvider>
   </React.StrictMode>
 );
 reportWebVitals();
