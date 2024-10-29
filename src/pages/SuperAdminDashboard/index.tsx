@@ -1,12 +1,3 @@
-import React from 'react'
+import SuperAdminDashboard from "./SuperAdminDashboardComp/SuperAdminDashboard";
 
-const SuperAdminDashboard = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default SuperAdminDashboard
-
+export default SuperAdminDashboard;
