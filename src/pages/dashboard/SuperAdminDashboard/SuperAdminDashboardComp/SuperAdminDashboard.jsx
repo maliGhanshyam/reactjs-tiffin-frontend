@@ -3,7 +3,7 @@ import {Grid2} from "@mui/material";
 // import Navbar from "../../components/Navbar";
 // import Footer from "../../components/Footer";
 import { Box, Container } from "@mui/material";
-import OrganisationCard from "../../../components/OrganisationCardComp/OrganisationCard"; // Changed to default import
+import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard"; // Changed to default import
 
 const SuperAdminDashboard = () => {
   const organisations = [

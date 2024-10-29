@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import SuperAdminDashboard from "./pages/SuperAdminDashboard/SuperAdminDashboardComp/SuperAdminDashboard";
+// import SuperAdminDashboard from "./pages/SuperAdminDashboard/SuperAdminDashboardComp/SuperAdminDashboard";
 import "./App.css";
 import AdminRegistrationPage from "./pages/AdminRegistrationPage";
 import NavbarComponent from "./components/NavbarComponent";

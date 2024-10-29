@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
 
-let childRoutes = [
+const childRoutes = [
   {
     path: 'register',
     element: <AdminRegistrationPage />
