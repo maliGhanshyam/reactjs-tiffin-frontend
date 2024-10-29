@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import LoginPage from './pages/LoginPage';
-import Footer from './components/Footer/components/Footer';
+import Footer from './components/FooterComponent/components/Footer';
 
 function App() {
   return (
