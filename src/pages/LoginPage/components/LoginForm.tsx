@@ -80,7 +80,7 @@ const LoginForm = () => {
                 <Grid2 size={12}>
                   <TextField
                     fullWidth
-                    label="email"
+                    label="Email"
                     variant="outlined"
                     name="email"
                     onChange={handleChange}

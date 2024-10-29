@@ -10,6 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
+    navigate('/login')
     setIsLoggedIn(true);
     setIsAdmin(false);
   };
@@ -33,7 +34,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#7542a8' }}>
+    <AppBar position="static" >
       <Toolbar>
         <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
           <img

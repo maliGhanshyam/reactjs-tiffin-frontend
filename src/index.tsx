@@ -7,6 +7,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
 import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
+import LoginPage from './pages/LoginPage';
+import theme from './components/materialUI/theme';
+import { ThemeProvider } from '@mui/material';
 
 const childRoutes = [
   {
@@ -21,7 +24,12 @@ const childRoutes = [
     path: "dashboard",
     element: <SuperAdminDashboard />,
   },
-];
+  {
+    path: 'login',
+    element: <LoginPage />
+  },
+  
+]
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,8 +43,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
-    {/* <App /> */}
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+      {/* <App /> */}
+    </ThemeProvider>
   </React.StrictMode>
 );
 reportWebVitals();
