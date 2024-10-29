@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
+import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
 
 const childRoutes = [
   {
@@ -13,10 +14,14 @@ const childRoutes = [
     element: <AdminRegistrationPage />
   },
   {
-    path: '**',
-    element: <NotFound></NotFound>
-  }
-]
+    path: "**",
+    element: <NotFound></NotFound>,
+  },
+  {
+    path: "dashboard",
+    element: <SuperAdminDashboard />,
+  },
+];
 const router = createBrowserRouter([
   {
     path: "/",
