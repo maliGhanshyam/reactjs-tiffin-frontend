@@ -28,21 +28,21 @@ export const Footer: FC = (): ReactElement => {
             </Typography>
           </Grid2>
           {/* About Us */}
-          <Grid2 size={{ xs: 12, md: 4, lg: 4}} textAlign={{ xs: "center", md: "left" }} sx={{ mt: 2 }}>
+          <Grid2 size={{ xs: 12, md: 4}} textAlign={{ xs: "center", md: "left" }} sx={{ mt: 2 }}>
             <Typography variant="body1" color="textPrimary">
               <strong>About Us</strong>: We are dedicated to bringing delicious homemade meals straight to your doorstep.
             </Typography> 
           </Grid2>
 
           {/* Contact Information */}
-          <Grid2 size={{ xs: 12, md: 4, lg: 4 }} textAlign="center">
+          <Grid2 size={{ xs: 12, md: 4 }} textAlign="center">
             <Typography variant="body1" color="textPrimary">
               <strong>Contact:</strong> tiffinService@gmail.com | Phone: (123) 456-7890
             </Typography>
           </Grid2>
 
           {/* Social Media Links */}
-          <Grid2 size={{ xs: 12, md: 4, lg: 4 }} textAlign={{ xs: "center", md: "right" }}>
+          <Grid2 size={{ xs: 12, md: 4 }} textAlign={{ xs: "center", md: "right" }}>
             <Typography variant="body1" color="textPrimary">
               <strong>Follow Us:</strong>
               <Link href="https://facebook.com" target="_blank" color="inherit" sx={{ ml: 1 }}>
