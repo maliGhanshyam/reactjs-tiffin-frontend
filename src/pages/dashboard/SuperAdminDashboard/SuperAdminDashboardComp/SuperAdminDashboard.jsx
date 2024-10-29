@@ -4,6 +4,7 @@ import {Grid2} from "@mui/material";
 // import Footer from "../../components/Footer";
 import { Box, Container } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard"; // Changed to default import
+import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
 
 const SuperAdminDashboard = () => {
   const organisations = [
@@ -53,6 +54,25 @@ const SuperAdminDashboard = () => {
             </Grid2>
           ))}
         </Grid2>
+      
+        <Grid2 container spacing={3}>
+          {organisations.map((org, index) => (
+            <Grid2
+              key={index}
+              xs={12} // Full width on extra-small screens (mobile)
+              sm={6} // Two columns on small screens (tablet)
+              md={4} // Three columns on medium and larger screens (desktop)
+            >
+              <OrganisationApprovalCard
+                title={org.title}
+                description={org.description}
+                location={org.location}
+                status={org.status}
+              />
+            </Grid2>
+          ))}
+        </Grid2>
+      
       </Container>
     </Box>
   );
