@@ -127,7 +127,6 @@ const LoginForm = () => {
           )}
         </Formik>
       </Container>
-      {/* <Footer /> */}
       </>
     
   );
