@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
 import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
@@ -28,7 +28,14 @@ const childRoutes = [
     path: 'login',
     element: <LoginPage />
   },
-  
+  {
+    path: '',
+    element: <Navigate to="login" />
+  },
+  {
+    path: '**',
+    element: <NotFound></NotFound>
+  }
 ]
 const router = createBrowserRouter([
   {
