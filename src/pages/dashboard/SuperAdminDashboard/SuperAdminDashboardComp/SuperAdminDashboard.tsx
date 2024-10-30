@@ -1,11 +1,19 @@
 import React from "react";
-import { Grid2 } from '@mui/material';
+import { Grid2 } from "@mui/material"; // Import the experimental Grid2 component
 import { Box, Container, Typography } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
 import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
 
-const SuperAdminDashboard = () => {
-  const organisations = [
+// Define a TypeScript interface for the organization data structure
+interface Organisation {
+  title: string;
+  description: string;
+  location: string;
+  status: string;
+}
+
+const SuperAdminDashboard: React.FC = () => {
+  const organisations: Organisation[] = [
     {
       title: "First Organization",
       description: "This is my first try to add a new data",
@@ -37,7 +45,7 @@ const SuperAdminDashboard = () => {
       <Container sx={{ flexGrow: 1, py: 3 }}>
         {/* Scrollable Organisation Cards Section */}
         <Typography variant="h5" sx={{ mb: 2 }}>
-         Available Organisations
+          Available Organisations
         </Typography>
         <Box sx={{ display: "flex", overflowX: "auto", pb: 2 }}>
           {organisations.map((org, index) => (
@@ -56,14 +64,10 @@ const SuperAdminDashboard = () => {
         <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
           Pending Organisation Approvals
         </Typography>
-        <Grid2 container spacing={3}>
-          {organisations.map((org, index) => (
-            <Grid2
-              key={index}
-              xs={12} // Full width on extra-small screens (mobile)
-              sm={6} // Two columns on small screens (tablet)
-              md={4} // Three columns on medium and larger screens (desktop)
-            >
+        <Grid2 container spacing={3} size={12}>
+          {organisations.map((org) => (
+            // eslint-disable-next-line react/jsx-key
+            <Grid2>
               <OrganisationApprovalCard
                 title={org.title}
                 description={org.description}
