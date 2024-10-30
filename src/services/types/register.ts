@@ -1,10 +1,10 @@
 export interface registerData{
     username: string,
     email: string,
-    contactNumber: string,
+    contact_number: string,
     address: string,
     password: string,
     confirmPassword: string,
-    organizationName: string,
+    organization_id: string,
     role: string
 }
