@@ -20,12 +20,16 @@ export interface Organization {
   isActive: boolean;
   __v: number;
 }
-
+// Define the expected response structure
+interface OrganizationsResponse {
+  statuscode: number;
+  data: Organization[];
+}
 // Fetch all organizations
 export const getOrganizations = async (): Promise<Organization[]> => {
-  const response = await axios.get<Organization[]>(
-    `${API_URL}/api/organizations/getall`
+    const response = await axios.get<OrganizationsResponse>(
+      `${API_URL}/api/organizations/getall`
     );
     console.log(response.data);
-  return response.data;
+  return response.data.data;
 };
