@@ -18,13 +18,13 @@ export const Footer: FC = (): ReactElement => {
       <Container maxWidth="lg">
         <Grid2 container justifyContent="space-between" alignItems="center">
           {/* Contact Information */}
-          <Grid2 size={{ xs: 12, md: 4 }} textAlign="left">
+          <Grid2 size={{ xs: 12, md: 4 }} textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="body1" color="white">
               <strong>Contact:</strong> tiffinService@gmail.com | Phone: (123) 456-7890
             </Typography>
           </Grid2>
 
-          <Grid2 size={{ xs: 12, md: 4}} textAlign={{ xs: "center", md: "center" }} sx={{ mt: 2 }}>
+          <Grid2 size={{ xs: 12, md: 4}} textAlign={{ xs: "center", md: "center" }}>
               <Typography color="white" variant="h5">
                 Neo-Tiffins 
               </Typography>
