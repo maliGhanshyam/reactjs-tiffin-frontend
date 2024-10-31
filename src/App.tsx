@@ -4,13 +4,10 @@ import "./App.css";
 import "./App.css";
 import AdminRegistrationPage from "./pages/AdminRegistrationPage";
 import LoginPage from "./pages/LoginPage";
-import Footer from "./components/FooterComponent/components/Footer";
 import './App.css';
 import NavbarComponent from './components/NavbarComponent';
-import { Outlet } from 'react-router-dom';
-
-        
 import FooterComponent from './components/FooterComponent';
+import { Outlet } from 'react-router-dom';
 function App() {
   return (
     <div className="App">

@@ -64,8 +64,6 @@ const Navbar = () => {
 
           {/*for Desktop */}
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, marginLeft: 'auto', gap: 2 }}>
-            {/* {getToken() && <Button color="inherit" component={Link} to="/dashboard">Dashboard</Button>}
-            {getToken() && <Button color="inherit" component={Link} to="/approve">Approve</Button>} */}
             <Button color="inherit" component={Link} to={getToken() ? "#" : "/login"} onClick={getToken() ? handleAuthToggle : undefined}>
               {getToken() ? "Logout" : "Login"}
             </Button>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_URL } from '../constants/Constants';
+import { API_URL } from '../constants/Constants'; 
 import { registerData } from './types/Register.type';
 
 

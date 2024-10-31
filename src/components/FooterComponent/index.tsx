@@ -1,6 +1,9 @@
-import React from 'react'
-import Footer from './components/Footer'
+import Footer from './Footer'
 
+const FooterComponent = () => {
+  return (
+    <Footer/>
+  )
+}
 
-
-export default Footer
+export default FooterComponent
