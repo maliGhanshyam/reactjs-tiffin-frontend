@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Drawer, List, ListItem, ListItemText, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
 import tiff3 from '../../../assets/tiff3.png';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobile, setmobile] = useState(false);
   const [loggedIn, setLoggedIn] = useState(true); 
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setmobile(!mobile);
   };
 
   const handleAuthToggle = () => {
@@ -22,10 +21,7 @@ const Navbar = () => {
         {loggedIn && (
           <>
             <ListItem component={Link} to="/dashboard">
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem component={Link} to="/approve">
-              <ListItemText primary="Approve" sx={{ color: 'inherit' }} />
+              <ListItemText primary="Home" />
             </ListItem>
           </>
         )}
@@ -52,16 +48,20 @@ const Navbar = () => {
               fontFamily: '"Comic Sans MS", cursive, sans-serif',
               textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)'
             }}>Neo-Tiffins</Typography>
+            {loggedIn && (
+              <Button color="inherit" component={Link} to="/dashboard" sx={{ fontSize: '1.05rem', marginLeft: 4, display: { xs: 'none', sm: 'block' } }}>
+                Home
+              </Button>
+            )}
           </Box>
 
           {/*for Desktop */}
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, marginLeft: 'auto', gap: 2 }}>
-            {loggedIn && <Button color="inherit" component={Link} to="/dashboard">Dashboard</Button>}
-            {loggedIn && <Button color="inherit" component={Link} to="/approve">Approve</Button>}
-            <Button color="inherit" component={Link} to={loggedIn ? "#" : "/login"} onClick={loggedIn ? handleAuthToggle : undefined}>
+            {/* {loggedIn && <Button color="inherit" component={Link} to="/dashboard" sx={{ fontSize: '1.05rem' }}>Dashboard</Button>} */}
+            <Button color="inherit" component={Link} to={loggedIn ? "#" : "/login"} onClick={loggedIn ? handleAuthToggle : undefined} sx={{ fontSize: '1.05rem' }}>
               {loggedIn ? "Logout" : "Login"}
             </Button>
-            {!loggedIn && <Button color="inherit" component={Link} to="/register">Admin Register</Button>}
+            {!loggedIn && <Button color="inherit" component={Link} to="/register" sx={{ fontSize: '1.05rem' }}>Admin Register</Button>}
           </Box>
 
           {/* Menu Icon */}
@@ -72,7 +72,7 @@ const Navbar = () => {
       </AppBar>
 
       {/* Drawer Mobile View */}
-      <Drawer anchor="right" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }}
+      <Drawer anchor="right" open={mobile} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }}
         PaperProps={{ sx: { width: 'auto' } }}>
         {drawer}
       </Drawer>
