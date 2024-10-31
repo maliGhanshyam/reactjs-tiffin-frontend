@@ -6,10 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
-import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
 import LoginPage from './pages/LoginPage';
 import theme from './components/materialUI/theme';
 import { ThemeProvider } from '@mui/material';
+import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
 
 const childRoutes = [
   {
