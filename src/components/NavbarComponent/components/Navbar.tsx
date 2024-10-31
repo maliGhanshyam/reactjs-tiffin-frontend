@@ -5,15 +5,17 @@ import tiff3 from '../../../assets/tiff3.png';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const [mobile, setmobile] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(true); 
+  const [mobile, setmobile] = useState(false); 
+  // to check if mobile screen is open
+  
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const handleDrawerToggle = () => {
     setmobile(!mobile);
   };
 
   const handleAuthToggle = () => {
-    setLoggedIn(prev => !prev); 
+    setLoggedIn(previous => !previous);
   };
 
   const drawer = (
@@ -43,6 +45,7 @@ const Navbar = () => {
       <AppBar position="static">
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            {/* flexGrow is used for expanding the height ref to other links */}
             <img src={tiff3} alt="Logo" style={{ height: '45px', width: '30px', borderRadius: '45%', marginRight: '10px' }} />
             <Typography variant="h5" sx={{
               fontWeight: 'bold', color: '#caf010', letterSpacing: '0.1em',
@@ -72,7 +75,7 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Drawer Mobile View */}
+      {/* Drawer for Mobile*/}
       <Drawer anchor="right" open={mobile} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }}
         PaperProps={{ sx: { width: 'auto' } }}>
         {drawer}
