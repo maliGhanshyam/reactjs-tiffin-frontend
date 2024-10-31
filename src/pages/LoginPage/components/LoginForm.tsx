@@ -10,6 +10,7 @@ import {
 import { loginUser } from "../../../services/LoginService/loginUser";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   interface LoginData {
@@ -33,7 +34,7 @@ const LoginForm = () => {
         .required("Password is required"),
     });
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (
       loginData: LoginData,
@@ -41,9 +42,11 @@ const LoginForm = () => {
     ) => {
       try {
         const response = await loginUser(loginData.email, loginData.password);
+        console.log(response,"login");
+        
         if (response && (response as { token?: string }).token) {
           setStatus({ success: true });
-          // navigate("/cards");   //SuperAdminDashboard
+           navigate("/dashboard");   //SuperAdminDashboard
         }
       } catch (error) {
         console.error("Login error:", error);
