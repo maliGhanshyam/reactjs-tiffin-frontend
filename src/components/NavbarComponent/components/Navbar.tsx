@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Drawer, List, ListItem, ListItemText, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import tiff3 from '../../../assets/tiff3.png';
+import { loginUser, logoutUser,getToken } from '../../../services/LoginService/loginUser';
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(true); 
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const handleAuthToggle = () => {
-    setLoggedIn(prev => !prev); 
+    if (getToken()) {
+      logoutUser();
+      navigate("/login"); // Redirect to login after logout
+    } else {
+      navigate("/login");
+    }
   };
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ width: 'auto', padding: 2 }}>
       <List>
-        {loggedIn && (
+        {getToken() && (
           <>
             <ListItem component={Link} to="/dashboard">
               <ListItemText primary="Dashboard" />
@@ -28,10 +34,10 @@ const Navbar = () => {
             </ListItem>
           </>
         )}
-        <ListItem component={Link} to={loggedIn ? "#" : "/login"} onClick={loggedIn ? handleAuthToggle : undefined}>
-          <ListItemText primary={loggedIn ? "Logout" : "Login"} />
+        <ListItem component={Link} to={getToken() ? "#" : "/login"} onClick={getToken() ? handleAuthToggle : undefined}>
+          <ListItemText primary={getToken() ? "Logout" : "Login"} />
         </ListItem>
-        {!loggedIn && (
+        {!getToken() && (
           <ListItem component={Link} to="/register">
             <ListItemText primary="Admin Register" />
           </ListItem>
@@ -55,12 +61,12 @@ const Navbar = () => {
 
           {/*for Desktop */}
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, marginLeft: 'auto', gap: 2 }}>
-            {loggedIn && <Button color="inherit" component={Link} to="/dashboard">Dashboard</Button>}
-            {loggedIn && <Button color="inherit" component={Link} to="/approve">Approve</Button>}
-            <Button color="inherit" component={Link} to={loggedIn ? "#" : "/login"} onClick={loggedIn ? handleAuthToggle : undefined}>
-              {loggedIn ? "Logout" : "Login"}
+            {getToken() && <Button color="inherit" component={Link} to="/dashboard">Dashboard</Button>}
+            {getToken() && <Button color="inherit" component={Link} to="/approve">Approve</Button>}
+            <Button color="inherit" component={Link} to={getToken() ? "#" : "/login"} onClick={getToken() ? handleAuthToggle : undefined}>
+              {getToken() ? "Logout" : "Login"}
             </Button>
-            {!loggedIn && <Button color="inherit" component={Link} to="/register">Admin Register</Button>}
+            {!getToken() && <Button color="inherit" component={Link} to="/register">Admin Register</Button>}
           </Box>
 
           {/* Menu Icon */}

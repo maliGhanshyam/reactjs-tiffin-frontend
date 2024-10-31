@@ -9,8 +9,7 @@ export const loginUser = async (email: string, password: string) => {
         "Content-Type": "application/json"
        } }
     );
-    console.log("response",response);
-    
+
     const data = response.data;
     if (data.token) {
       localStorage.setItem("token", data.token); 
@@ -28,6 +27,6 @@ export const logoutUser = () => {
   localStorage.removeItem("token"); 
 };
 
-export const getToken = () => {
-  return localStorage.getItem("token"); 
+export const getToken = (): boolean => {
+  return !!localStorage.getItem("token"); 
 };
