@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { registerAdmin } from '../../../services/RegistrationService';
 import { Link } from 'react-router-dom';
 import { getAllOrganization } from '../../../services/OrganizationService';
-import { Organization } from './rgistration.types';
+import { Organization } from './Registration.types';
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState('');
@@ -42,7 +42,7 @@ const AdminRegistration = () => {
         .matches(/^[0-9]+$/, "Must be a valid contact number")
         .length(10, 'Contact Number must be of 10 digits')
         .required("Contact Number is required"),
-      address: Yup.string().required("Address is required").max(50, 'Upto 50 charatcters long'),
+      address: Yup.string().required("Address is required").min(5, 'At least 5 charatcters be there').max(50, 'Upto 50 charatcters long'),
       password: Yup.string()
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
         .min(6, "Password must be at least 6 characters")
@@ -118,9 +118,16 @@ const AdminRegistration = () => {
                   onBlur={formik.handleBlur}
                   error={formik.touched.organization_id && Boolean(formik.errors.organization_id)}
                   displayEmpty
-                  renderValue={(value) => value ? organization.find(org => org._id === value)?.org_name : <span style={{
-                    color: "#616161"
-                  }}>Organization Name</span>}>
+                  renderValue={(value) => {
+                    if (value) {
+                      return organization.find(org => org._id === value)?.org_name;
+                    }
+                    return (
+                      <span style={{color: formik.touched.organization_id && formik.errors.organization_id ? '#d32f2f' : '#616161'}}>
+                        Organization Name
+                      </span>
+                    );
+                  }}>
                   <MenuItem value="" disabled>Select an organization</MenuItem>
                   {organization.map((org: Organization) => (
                     <MenuItem key={org._id} value={org._id}>{org.org_name}</MenuItem>

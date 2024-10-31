@@ -17,7 +17,7 @@ const childRoutes = [
     element: <AdminRegistrationPage />
   },
   {
-    path: "**",
+    path: "*",
     element: <NotFound></NotFound>,
   },
   {

@@ -6,7 +6,6 @@ export const getAllOrganization = async () => {
         const response= await axios.get(`${API_URL}/api/organizations/getall`);
         return response.data;
     }catch(error){
-        console.error("Fetching organizations error:", error);
         throw error;
     }
 }
