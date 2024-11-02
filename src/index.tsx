@@ -7,7 +7,7 @@ import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-r
 import NotFound from './components/NotFound';
 import AdminRegistrationPage from './pages/AdminRegistrationPage';
 import LoginPage from './pages/LoginPage';
-import theme from './components/materialUI/theme';
+import Theme from './components/materialUI/Theme';
 import { ThemeProvider } from '@mui/material';
 import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
 
@@ -50,7 +50,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <RouterProvider router={router} />
       {/* <App /> */}
     </ThemeProvider>

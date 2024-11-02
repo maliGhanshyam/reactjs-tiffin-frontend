@@ -23,5 +23,5 @@ export const footerStyles: { [key: string]: SxProps<Theme> } = {
   link: {
     ml: 1,
     color: "inherit",
-  }
+  },
 };

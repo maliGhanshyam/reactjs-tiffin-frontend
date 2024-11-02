@@ -11,11 +11,11 @@ const themeOptions: ThemeOptions = {
   },
   typography: {
     button: {
-      textTransform: "none", 
+      textTransform: "none",
     },
   },
 };
 
-const theme = createTheme(themeOptions);
+const Theme = createTheme(themeOptions);
 
-export default theme;
+export default Theme;
