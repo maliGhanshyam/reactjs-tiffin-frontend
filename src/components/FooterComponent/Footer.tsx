@@ -2,6 +2,9 @@ import React, { FC, ReactElement } from "react";
 import { Box, Container, Typography, Link, Grid2 } from "@mui/material";
 import { footerStyles } from "./footer.style";
 import { SOCIAL_MEDIA_LINKS } from "../../constants/SOCIAL_MEDIA_LINKS";
+import { CONTACT_INFO } from "../../constants/contactInfo";
+import { getCurrentYear } from "../../utils/dateUtils";
+
 export const Footer: FC = (): ReactElement => {
   return (
     <Box sx={footerStyles.root}>
@@ -10,16 +13,19 @@ export const Footer: FC = (): ReactElement => {
           {/* Contact Information */}
           <Grid2 size={{ xs: 12, md: 4 }} sx={footerStyles.contact}>
             <Typography variant="body1" color="white">
-              <strong>Contact:</strong> tiffinService@gmail.com | Phone: (123)
-              456-7890
+              <strong>Contact:</strong>
+            </Typography>
+            <Typography variant="body1" color="white">
+              {CONTACT_INFO.EMAIL}
+            </Typography>
+            <Typography variant="body1" color="white">
+              Phone: {CONTACT_INFO.PHONE}
             </Typography>
           </Grid2>
 
           <Grid2 size={{ xs: 12, md: 4 }} sx={footerStyles.title}>
             <Typography variant="h5">Neo-Tiffins</Typography>
-            <Typography variant="subtitle1">
-              {`@${new Date().getFullYear()} `}
-            </Typography>
+            <Typography variant="subtitle1">@{getCurrentYear()}</Typography>
           </Grid2>
 
           {/* Social Media Links */}

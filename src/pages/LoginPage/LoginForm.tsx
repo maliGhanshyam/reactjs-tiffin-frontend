@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, TextField, Grid2, Typography, Container } from "@mui/material";
-import { loginUser } from "../../../services/LoginService/loginUser";
+import { loginUser } from "../../services/LoginService/loginUser";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -61,9 +61,7 @@ const LoginForm = () => {
             color: "primary.main",
             padding: 2,
           }}
-        >
-          Login
-        </Typography>
+        ></Typography>
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
@@ -122,7 +120,7 @@ const LoginForm = () => {
                     fullWidth
                     disabled={isSubmitting}
                   >
-                    Login
+                    Sign In
                   </Button>
                 </Grid2>
               </Grid2>

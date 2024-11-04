@@ -5,9 +5,10 @@ import "./App.css";
 import NavbarComponent from "./components/NavbarComponent";
 import FooterComponent from "./components/FooterComponent";
 import { Outlet } from "react-router-dom";
+import { Box } from "@mui/material";
 function App() {
   return (
-    <div
+    <Box
       className="App"
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
@@ -16,7 +17,7 @@ function App() {
         <Outlet />
       </main>
       <FooterComponent />
-    </div>
+    </Box>
   );
 }
 
