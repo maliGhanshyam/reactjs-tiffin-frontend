@@ -21,7 +21,7 @@ import {
 
 export const Footer: FC = (): ReactElement => {
   return (
-    <Box sx={footerStyles.root}>
+    <Box sx={{ ...footerStyles.root, gap: "20px" }}>
       <Container maxWidth="lg">
         <Grid2 container justifyContent="space-between" alignItems="center">
           {/* Contact Information */}
@@ -29,7 +29,11 @@ export const Footer: FC = (): ReactElement => {
             <Typography
               variant="body1"
               color="white"
-              sx={{ display: "flex", alignItems: "center" }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Email sx={{ mr: 1 }} />
               {CONTACT_INFO.EMAIL}
@@ -37,7 +41,11 @@ export const Footer: FC = (): ReactElement => {
             <Typography
               variant="body1"
               color="white"
-              sx={{ display: "flex", alignItems: "center" }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Phone sx={{ mr: 1 }} />
               Phone: {CONTACT_INFO.PHONE}
