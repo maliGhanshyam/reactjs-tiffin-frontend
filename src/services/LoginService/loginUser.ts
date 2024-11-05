@@ -9,7 +9,7 @@ export const loginUser = async (email: string, password: string) => {
         "Content-Type": "application/json"
        } }
     );
-
+    
     const data = response.data;
     if (data.token) {
       localStorage.setItem("token", data.token); 
