@@ -16,6 +16,9 @@ import { ThemeProvider } from "@mui/material";
 import SuperAdminDashboard from "./pages/dashboard/SuperAdminDashboard";
 import { Provider } from "react-redux";
 import Store from "./store/Store";
+import AuthGuard from "./components/RouteGuard/AuthGuard";
+import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "./constants/ROLES";
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
 const childRoutes = [
   {
     path: "register",
@@ -26,8 +29,20 @@ const childRoutes = [
     element: <NotFound></NotFound>,
   },
   {
-    path: "dashboard",
-    element: <SuperAdminDashboard />,
+    path: "superadmin",
+    element: (
+      <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
+        <SuperAdminDashboard />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: "admin",
+    element: (
+      <AuthGuard requiredRole={ADMIN_ROLE_ID}>
+        <AdminDashboard />
+      </AuthGuard>
+    ),
   },
   {
     path: "login",

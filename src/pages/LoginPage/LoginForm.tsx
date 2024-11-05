@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "../../store/authSlice";
+import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 
 const LoginForm = () => {
   interface LoginData {
@@ -40,7 +41,7 @@ const LoginForm = () => {
       const response = await loginUser(loginData.email, loginData.password);
       console.log(response, "login");
       if (
-        response &&
+        response.success &&
         (response as { token?: string }).token &&
         (response as { _id?: string })._id &&
         (response as { role?: string }).role
@@ -53,7 +54,11 @@ const LoginForm = () => {
         );
         setStatus({ success: true });
         alert("login successful");
-        navigate("/dashboard"); //SuperAdminDashboard
+        if (response.role === SUPERADMIN_ROLE_ID) {
+          navigate("/superadmin");
+        } else if (response.role === ADMIN_ROLE_ID) {
+          navigate("/admin");
+        }
       }
     } catch (error) {
       console.error("Login error:", error);

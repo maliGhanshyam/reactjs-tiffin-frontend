@@ -30,6 +30,5 @@ export const getOrganizations = async (): Promise<Organization[]> => {
   const response = await axios.get<OrganizationsResponse>(
     `${API_URL}/api/superadmin/organizations/getallorganization`
   );
-  console.log("org crud", response.data);
   return response.data.data;
 };
