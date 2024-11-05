@@ -25,11 +25,29 @@ interface OrganizationsResponse {
   statuscode: number;
   data: Organization[];
 }
+// Define the expected response structure for adding an organization
+interface CreateOrganizationResponse {
+  statuscode: number;
+  message: string;
+  data: Organization;
+}
 // Fetch all organizations
 export const getOrganizations = async (): Promise<Organization[]> => {
     const response = await axios.get<OrganizationsResponse>(
-      `${API_URL}/api/organizations/getall`
+      `${API_URL}/api/superadmin/organizations/getallorganization`
     );
     console.log(response.data);
+  return response.data.data;
+};
+
+// Add a new organization
+export const createOrganization = async (
+  organization: Omit<Organization, "_id" | "org_created_at" | "org_updated_at" | "__v">
+): Promise<Organization> => {
+  const response = await axios.post<CreateOrganizationResponse>(
+    `${API_URL}/api/superadmin/organizations/addOrganization`,
+    organization
+  );
+  console.log(response.data);
   return response.data.data;
 };

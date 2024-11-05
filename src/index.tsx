@@ -10,6 +10,7 @@ import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
 import LoginPage from './pages/LoginPage';
 import theme from './components/materialUI/theme';
 import { ThemeProvider } from '@mui/material';
+import AddOrganisationForm from './components/Forms';
 
 const childRoutes = [
   {
@@ -28,8 +29,11 @@ const childRoutes = [
     path: 'login',
     element: <LoginPage />
   },
-  
-]
+  {
+    path: "addOrganization",
+    element: <AddOrganisationForm />,
+  },
+];
 const router = createBrowserRouter([
   {
     path: "/",
