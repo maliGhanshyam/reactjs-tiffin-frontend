@@ -5,7 +5,7 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAuthData, clearAuthData } from "../../store/authSlice";
+import { setAuthData } from "../../store/authSlice";
 
 const LoginForm = () => {
   interface LoginData {
@@ -54,7 +54,7 @@ const LoginForm = () => {
         );
         setStatus({ success: true });
         alert("login successful");
-        // navigate("/dashboard"); //SuperAdminDashboard
+        navigate("/dashboard"); //SuperAdminDashboard
       }
     } catch (error) {
       console.error("Login error:", error);
