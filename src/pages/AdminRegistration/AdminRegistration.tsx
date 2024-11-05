@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IOrganization, ISnackbar } from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
 import { ADMIN_ID } from "../../constants/Constants";
@@ -23,8 +23,12 @@ import getAllOrganization from "../../services/Organization";
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [organization, setOrganization] = useState<IOrganization[]>([]);
-  const [snackbar, setSnackbar] = useState<ISnackbar>({ open: false, message: "", severity: "success" });
-
+  const [snackbar, setSnackbar] = useState<ISnackbar>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchOrganization = async () => {
       try {
@@ -83,12 +87,16 @@ const AdminRegistration = () => {
       console.log(values);
       try {
         const res = await registerAdmin(values);
+        console.log(res);
         if (res.data.message === "User registered successfully") {
           setSnackbar({
             open: true,
             message: "Admin registered successfully.",
             severity: "success",
           });
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
         } else {
           setSnackbar({
             open: true,
@@ -115,7 +123,15 @@ const AdminRegistration = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Box sx={styles.container}>
-        <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 2 }}>
+        <Typography component="h1" variant="h5">
+          Sign Up
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={formik.handleSubmit}
+          noValidate
+          sx={{ mt: 2 }}
+        >
           <Grid2 container spacing={2}>
             <Grid2 size={12}>
               <TextField
@@ -128,7 +144,9 @@ const AdminRegistration = () => {
                 value={formik.values.username}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.username && Boolean(formik.errors.username)}
+                error={
+                  formik.touched.username && Boolean(formik.errors.username)
+                }
                 helperText={formik.touched.username && formik.errors.username}
               />
             </Grid2>
@@ -158,8 +176,13 @@ const AdminRegistration = () => {
                 value={formik.values.contact_number}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.contact_number && Boolean(formik.errors.contact_number)}
-                helperText={formik.touched.contact_number && formik.errors.contact_number}
+                error={
+                  formik.touched.contact_number &&
+                  Boolean(formik.errors.contact_number)
+                }
+                helperText={
+                  formik.touched.contact_number && formik.errors.contact_number
+                }
               />
             </Grid2>
             <Grid2 size={12}>
@@ -192,16 +215,26 @@ const AdminRegistration = () => {
                     formik.setFieldValue("organization_id", selectedId);
                   }}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.organization_id && Boolean(formik.errors.organization_id)}
+                  error={
+                    formik.touched.organization_id &&
+                    Boolean(formik.errors.organization_id)
+                  }
                   displayEmpty
                   renderValue={(value) => {
                     if (value) {
-                      return organization.find((org) => org._id === value)?.org_name;
+                      return organization.find((org) => org._id === value)
+                        ?.org_name;
                     }
                     return (
-                      <span style={{
-                        color: formik.touched.organization_id && formik.errors.organization_id ? "#d32f2f" : "#616161",
-                      }}>
+                      <span
+                        style={{
+                          color:
+                            formik.touched.organization_id &&
+                            formik.errors.organization_id
+                              ? "#d32f2f"
+                              : "#616161",
+                        }}
+                      >
                         Organization Name
                       </span>
                     );
@@ -217,11 +250,16 @@ const AdminRegistration = () => {
                   ))}
                 </Select>
 
-                {formik.touched.organization_id && formik.errors.organization_id && (
-                  <Typography color="error" variant="caption" sx={styles.errorText}>
-                    {formik.errors.organization_id}
-                  </Typography>
-                )}
+                {formik.touched.organization_id &&
+                  formik.errors.organization_id && (
+                    <Typography
+                      color="error"
+                      variant="caption"
+                      sx={styles.errorText}
+                    >
+                      {formik.errors.organization_id}
+                    </Typography>
+                  )}
               </Box>
             </Grid2>
             <Grid2 size={12}>
@@ -236,7 +274,9 @@ const AdminRegistration = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.password && Boolean(formik.errors.password)}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
                 helperText={formik.touched.password && formik.errors.password}
               />
             </Grid2>
@@ -252,12 +292,24 @@ const AdminRegistration = () => {
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                error={
+                  formik.touched.confirmPassword &&
+                  Boolean(formik.errors.confirmPassword)
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                }
               />
             </Grid2>
           </Grid2>
-          <Button type="submit" fullWidth variant="contained" color="primary" sx={styles.button}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={styles.button}
+          >
             Sign Up
           </Button>
         </Box>
@@ -270,9 +322,13 @@ const AdminRegistration = () => {
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
