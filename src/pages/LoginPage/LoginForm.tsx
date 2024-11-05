@@ -39,7 +39,6 @@ const LoginForm = () => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
       console.log(response, "login");
-
       if (
         response &&
         (response as { token?: string }).token &&

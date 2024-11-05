@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from "react";
 import { Box, Container, Typography, Link, Grid2 } from "@mui/material";
 import { footerStyles } from "./footer.style";
 import { SOCIAL_MEDIA_LINKS } from "../../constants/SOCIAL_MEDIA_LINKS";
-import { CONTACT_INFO } from "../../constants/contactInfo";
+import { CONTACT_INFO } from "../../constants/CONTACT_INFO.ts";
 import { getCurrentYear } from "../../utils/dateUtils";
 
 export const Footer: FC = (): ReactElement => {
