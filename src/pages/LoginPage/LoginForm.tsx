@@ -4,12 +4,15 @@ import { loginUser } from "../../services/LoginService/loginUser";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAuthData, clearAuthData } from "../../store/authSlice";
 
 const LoginForm = () => {
   interface LoginData {
     email: string;
     password: string;
   }
+  const dispatch = useDispatch();
 
   // Validation schema using Yup
   const validationSchema = Yup.object().shape({
@@ -37,9 +40,21 @@ const LoginForm = () => {
       const response = await loginUser(loginData.email, loginData.password);
       console.log(response, "login");
 
-      if (response && (response as { token?: string }).token) {
+      if (
+        response &&
+        (response as { token?: string }).token &&
+        (response as { _id?: string })._id &&
+        (response as { role?: string }).role
+      ) {
+        dispatch(
+          setAuthData({
+            userRoleId: response.role,
+            userId: response._id,
+          })
+        );
         setStatus({ success: true });
-        navigate("/dashboard"); //SuperAdminDashboard
+        alert("login successful");
+        // navigate("/dashboard"); //SuperAdminDashboard
       }
     } catch (error) {
       console.error("Login error:", error);
