@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhost:5000';
+export const ADMIN_ID="671f84ea0e680b5e9e186082";

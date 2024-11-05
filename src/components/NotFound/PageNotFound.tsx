@@ -1,11 +1,9 @@
-import { Box, Typography } from '@mui/material'
 import React from 'react'
+import { Typography } from '@mui/material'
 
 const PageNotFound = () => {
   return (
-    <Box>
         <Typography>Not Found</Typography>
-    </Box>
   )
 }
 

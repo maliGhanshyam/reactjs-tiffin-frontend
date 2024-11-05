@@ -6,5 +6,5 @@ export interface registerData{
     password: string,
     confirmPassword: string,
     organization_id: string,
-    role: string
+    role_id: string
 }
