@@ -16,7 +16,7 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { IOrganization, ISnackbar } from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
-import { ADMIN_ID } from "../../constants/Constants";
+import { ADMIN_ROLE_ID } from "../../constants/ROLES";
 import registerAdmin from "../../services/Auth";
 import getAllOrganization from "../../services/Organization";
 
@@ -50,7 +50,7 @@ const AdminRegistration = () => {
       password: "",
       confirmPassword: "",
       organization_id: "",
-      role_id: ADMIN_ID,
+      role_id: ADMIN_ROLE_ID,
     },
     validationSchema: Yup.object({
       username: Yup.string()

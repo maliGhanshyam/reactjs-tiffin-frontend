@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Theme from "./components/materialUI/Theme";
 import { ThemeProvider } from "@mui/material";
 import childRoutes from "./routes/Routes";
+import { Provider } from "react-redux";
+import Store from "./store/Store";
 
 const router = createBrowserRouter([
   {
@@ -21,8 +23,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={Theme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <Provider store={Store}>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
