@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Theme from "./components/materialUI/Theme";
 import { ThemeProvider } from "@mui/material";
 import childRoutes from "./routes/Routes";
 import { Provider } from "react-redux";
 import Store from "./store/Store";
+import Theme from "./components/materialUI";
 
 const router = createBrowserRouter([
   {
