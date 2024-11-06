@@ -1,1 +1,0 @@
-export const ADMIN_ID="672775e4f2a1e38ef52c63c6";

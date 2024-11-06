@@ -16,11 +16,13 @@ import { Link, useNavigate } from "react-router-dom";
 import tiff3 from "../../assets/tiff3.png";
 import { getToken, logoutUser } from "../../services/LoginService/loginUser";
 import { logoStyle, styles } from "./Navbar.styles";
+import { useDispatch } from "react-redux";
+import { clearAuthData } from "../../store/authSlice";
 
 const Navbar = () => {
   const [Open, setOpen] = useState(false);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleDrawerToggle = () => {
     setOpen(!Open);
   };
@@ -28,6 +30,7 @@ const Navbar = () => {
   const handleAuthToggle = () => {
     if (getToken()) {
       logoutUser();
+      dispatch(clearAuthData());
       navigate("/login");
     } else {
       navigate("/login");

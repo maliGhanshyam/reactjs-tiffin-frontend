@@ -19,9 +19,10 @@ export const footerStyles: { [key: string]: SxProps<Theme> } = {
   },
   social: {
     textAlign: { xs: "center", md: "right" },
+    alignItems: "center",
   },
   link: {
     ml: 1,
     color: "inherit",
-  }
+  },
 };

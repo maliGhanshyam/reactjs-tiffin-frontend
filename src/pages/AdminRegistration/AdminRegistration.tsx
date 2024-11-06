@@ -22,7 +22,7 @@ import {
   ISnackbar,
 } from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
-import { ADMIN_ID } from "../../constants/Constants";
+import { ADMIN_ROLE_ID } from "../../constants/ROLES";
 import { registerAdmin } from "../../services/Auth";
 import { getOrganizations } from "../../services/Organization";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -60,7 +60,7 @@ const AdminRegistration = () => {
       password: "",
       confirmPassword: "",
       organization_id: "",
-      role_id: ADMIN_ID,
+      role_id: ADMIN_ROLE_ID,
     },
     validationSchema: Yup.object({
       username: Yup.string()

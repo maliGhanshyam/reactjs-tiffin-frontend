@@ -1,64 +1,75 @@
 import React from "react";
-import {
-  Button,
-  TextField,
-  Grid2,
-  Typography,
-  Container,
-} from "@mui/material";
-// import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../../services/LoginService/loginUser";
+import { Button, TextField, Grid2, Typography, Container } from "@mui/material";
+import { loginUser } from "../../services/LoginService/loginUser";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAuthData } from "../../store/authSlice";
+import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 
 const LoginForm = () => {
   interface LoginData {
     email: string;
     password: string;
   }
+  const dispatch = useDispatch();
 
   // Validation schema using Yup
   const validationSchema = Yup.object().shape({
-      email: Yup.string()
-        .email("Invalid email format")
-        .max(50, "Too Long!")
-        .required("Email is required"),
-      password: Yup.string()
-        .min(8, "Password must be at least 8 characters")
-        .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-        )
-        .max(20, "Too Long!")
-        .required("Password is required"),
-    });
+    email: Yup.string()
+      .email("Invalid email format")
+      .max(50, "Too Long!")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      )
+      .max(20, "Too Long!")
+      .required("Password is required"),
+  });
 
   const navigate = useNavigate();
 
   const handleSubmit = async (
-      loginData: LoginData,
-      { setSubmitting, setStatus }: FormikHelpers<LoginData>
-    ) => {
-      try {
-        const response = await loginUser(loginData.email, loginData.password);
-        console.log(response,"login");
-        
-        if (response && (response as { token?: string }).token) {
-          setStatus({ success: true });
-           navigate("/dashboard");   //SuperAdminDashboard
+    loginData: LoginData,
+    { setSubmitting, setStatus }: FormikHelpers<LoginData>
+  ) => {
+    try {
+      const response = await loginUser(loginData.email, loginData.password);
+      console.log(response, "login");
+      if (
+        response.success &&
+        (response as { token?: string }).token &&
+        (response as { _id?: string })._id &&
+        (response as { role?: string }).role
+      ) {
+        dispatch(
+          setAuthData({
+            userRoleId: response.role,
+            userId: response._id,
+          })
+        );
+        setStatus({ success: true });
+        alert("login successful");
+        if (response.role === SUPERADMIN_ROLE_ID) {
+          navigate("/superadmin");
+        } else if (response.role === ADMIN_ROLE_ID) {
+          navigate("/admin");
         }
-      } catch (error) {
-        console.error("Login error:", error);
-        setStatus({ success: false, message: "Invalid credentials" });
-      } finally {
-        setSubmitting(false);
       }
-    };
+    } catch (error) {
+      console.error("Login error:", error);
+      setStatus({ success: false, message: "Invalid credentials" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
-      {/* <Navbar /> */}
       <Container maxWidth="sm">
         <Typography
           variant="h4"
@@ -69,15 +80,21 @@ const LoginForm = () => {
             color: "primary.main",
             padding: 2,
           }}
-        >
-          Login
-        </Typography>
+        ></Typography>
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting, handleChange, handleBlur, values, errors, touched, status }) => (
+          {({
+            isSubmitting,
+            handleChange,
+            handleBlur,
+            values,
+            errors,
+            touched,
+            status,
+          }) => (
             <Form>
               <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
                 <Grid2 size={12}>
@@ -122,7 +139,7 @@ const LoginForm = () => {
                     fullWidth
                     disabled={isSubmitting}
                   >
-                    Login
+                    Sign In
                   </Button>
                 </Grid2>
               </Grid2>
@@ -130,8 +147,7 @@ const LoginForm = () => {
           )}
         </Formik>
       </Container>
-      </>
-    
+    </>
   );
 };
 
