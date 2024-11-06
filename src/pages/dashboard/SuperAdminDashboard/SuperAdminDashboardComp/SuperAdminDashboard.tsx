@@ -1,9 +1,8 @@
-import React, { useEffect, useState }  from "react";
-//import { Grid2 } from "@mui/material"; // Import the experimental Grid2 component
+import React, { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
 // import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
-import {getOrganizations} from "../../../../services/OrganisationService/OrgCRUD"
+import { getOrganizations } from "../../../../services/OrganisationService/OrgCRUD";
 // Define a TypeScript interface for the organization data structure
 interface OrgLocation {
   loc: string;
@@ -25,46 +24,20 @@ interface Organization {
 }
 
 const SuperAdminDashboard: React.FC = () => {
-  // const organisations: Organisation[] = [
-  //   {
-  //     title: "First Organization",
-  //     description: "This is my first try to add a new data",
-  //     location: "Mumbai",
-  //     status: "Active",
-  //   },
-  //   {
-  //     title: "Second Organization",
-  //     description: "Exploring new data here",
-  //     location: "Pune",
-  //     status: "Pending",
-  //   },
-  //   {
-  //     title: "Third Organization",
-  //     description: "Adding another org to the list",
-  //     location: "Delhi",
-  //     status: "Active",
-  //   },
-  //   {
-  //     title: "Fourth Organization",
-  //     description: "Continuing with more orgs",
-  //     location: "Bangalore",
-  //     status: "Inactive",
-  //   },
-  // ];
-   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
 
-   useEffect(() => {
-     const fetchOrganizations = async () => {
-       try {
-         const data = await getOrganizations();
-         setOrganizations(data);
-       } catch (error) {
-         console.error("Error fetching organizations:", error);
-       }
-     };
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      try {
+        const data = await getOrganizations();
+        setOrganizations(data);
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+      }
+    };
 
-     fetchOrganizations();
-   }, []);
+    fetchOrganizations();
+  }, []);
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -85,9 +58,6 @@ const SuperAdminDashboard: React.FC = () => {
                 ).toLocaleDateString()}`}
                 locations={org.org_location} // Pass the entire array of locations
                 status={org.isActive ? "Active" : "Inactive"}
-                // You can also pass extra fields if needed, e.g.:
-                // extraField1={someValue1}
-                // extraField2={someValue2}
               />
             </Box>
           ))}

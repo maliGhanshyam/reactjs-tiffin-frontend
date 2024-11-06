@@ -4,7 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider"; // Import Divider
+import Divider from "@mui/material/Divider";
 import React from "react";
 
 interface OrgLocation {
@@ -17,10 +17,10 @@ interface OrgLocation {
 interface OrganisationCardProps {
   title: string;
   description: string;
-  locations: OrgLocation[]; // Updated to handle multiple addresses
+  locations: OrgLocation[];
   status: string;
-  extraField1?: string; // Optional additional field
-  extraField2?: string; // Optional additional field
+  extraField1?: string;
+  extraField2?: string;
 }
 
 const OrganisationCard: React.FC<OrganisationCardProps> = ({
@@ -31,6 +31,11 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
   extraField1,
   extraField2,
 }) => {
+  const extraFields = [
+    { label: "Extra Field 1", value: extraField1 },
+    { label: "Extra Field 2", value: extraField2 },
+  ];
+
   return (
     <Card>
       <CardMedia
@@ -45,22 +50,22 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
+
         {locations.map((loc, index) => (
           <div key={index}>
-            <Typography variant="body2" color="text.secondary">
-              <strong>Location ({loc.loc}):</strong> {loc.address}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              <strong>Contact:</strong> {loc.loc_contact}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              <strong>Email:</strong> {loc.loc_email}
-            </Typography>
-            {index < locations.length - 1 && ( // Only add a divider if it's not the last location
-              <Divider sx={{ my: 1 }} /> // Add spacing around the divider
-            )}
+            {[
+              { label: `Location (${loc.loc}):`, value: loc.address },
+              { label: "Contact:", value: loc.loc_contact },
+              { label: "Email:", value: loc.loc_email },
+            ].map((field, i) => (
+              <Typography key={i} variant="body2" color="text.secondary">
+                <strong>{field.label}</strong> {field.value}
+              </Typography>
+            ))}
+            {index < locations.length - 1 && <Divider sx={{ my: 1 }} />}
           </div>
         ))}
+
         <Typography
           variant="body2"
           sx={{
@@ -75,17 +80,22 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
         >
           Status: {status}
         </Typography>
-        {extraField1 && (
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            <strong>Extra Field 1:</strong> {extraField1}
-          </Typography>
-        )}
-        {extraField2 && (
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            <strong>Extra Field 2:</strong> {extraField2}
-          </Typography>
+
+        {extraFields.map(
+          (field, index) =>
+            field.value && (
+              <Typography
+                key={index}
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 1 }}
+              >
+                <strong>{field.label}</strong> {field.value}
+              </Typography>
+            )
         )}
       </CardContent>
+
       <CardActions>
         <Button size="small" color="primary">
           Update

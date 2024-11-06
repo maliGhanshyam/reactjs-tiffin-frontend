@@ -1,12 +1,3 @@
-import React from 'react'
-import PageNotFound from './components/PageNotFound'
+import PageNotFound from "./PageNotFound";
 
-const NotFound = () => {
-  return (
-    <div>
-      <PageNotFound></PageNotFound>
-    </div>
-  )
-}
-
-export default NotFound
+export default PageNotFound

@@ -1,6 +1,8 @@
 import axios from "axios";
+const API_URL = process.env.REACT_APP_API_URL;
 
-const API_URL = "http://localhost:5000";
+// const API_URL = "http://localhost:5000";
+// console.log("API URL:", process.env.REACT_APP_API_URL);
 
 export interface OrgLocation {
   loc: string;
@@ -33,11 +35,17 @@ interface CreateOrganizationResponse {
 }
 // Fetch all organizations
 export const getOrganizations = async (): Promise<Organization[]> => {
+  try {
+    console.log(`${API_URL}/api/organizations/getall`);
     const response = await axios.get<OrganizationsResponse>(
       `${API_URL}/api/superadmin/organizations/getallorganization`
     );
     console.log(response.data);
-  return response.data.data;
+    return response.data.data; // Automatically wrapped in a Promise
+  } catch (error) {
+    console.error("Failed to fetch organizations:", error);
+    throw error; // Also automatically wrapped in a rejected Promise
+  }
 };
 
 // Add a new organization

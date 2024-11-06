@@ -1,10 +1,12 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import React from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  CardActions,
+  Button,
+  Typography,
+} from "@mui/material";
 
 interface OrganisationCardProps {
   title: string;

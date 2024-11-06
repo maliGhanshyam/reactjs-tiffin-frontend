@@ -1,56 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import NotFound from './components/NotFound';
-import AdminRegistrationPage from './pages/AdminRegistrationPage';
-import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
-import LoginPage from './pages/LoginPage';
-import theme from './components/materialUI/theme';
-import { ThemeProvider } from '@mui/material';
-import AddOrganisationForm from './components/Forms';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Theme from "./components/materialUI/Theme";
+import { ThemeProvider } from "@mui/material";
+import childRoutes from "./routes/Routes";
+import { Provider } from "react-redux";
+import Store from "./store/Store";
 
-const childRoutes = [
-  {
-    path: 'register',
-    element: <AdminRegistrationPage />
-  },
-  {
-    path: "**",
-    element: <NotFound></NotFound>,
-  },
-  {
-    path: "dashboard",
-    element: <SuperAdminDashboard />,
-  },
-  {
-    path: 'login',
-    element: <LoginPage />
-  },
-  {
-    path: "addOrganization",
-    element: <AddOrganisationForm />,
-  },
-];
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App></App>,
-    children: childRoutes
-  }
+    children: childRoutes,
+  },
 ]);
+
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
-      {/* <App /> */}
-    </ThemeProvider>
+    <Provider store={Store}>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
-reportWebVitals();
