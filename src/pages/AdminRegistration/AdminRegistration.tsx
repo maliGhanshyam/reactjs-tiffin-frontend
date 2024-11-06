@@ -60,7 +60,7 @@ const AdminRegistration = () => {
       password: "",
       confirmPassword: "",
       organization_id: "",
-      role_id: ADMIN_ID,
+      role_id: ADMIN_ROLE_ID,
     },
     validationSchema: Yup.object({
       username: Yup.string()
