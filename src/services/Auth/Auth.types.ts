@@ -1,8 +1,4 @@
-export interface IRole {
-  organization_id: string;
-  approval_status: string;
-}
-export interface IRegisterData {
+export interface RegisterData {
   username: string;
   email: string;
   contact_number: string;
@@ -12,22 +8,8 @@ export interface IRegisterData {
   organization_id: string;
   role_id: string;
 }
-export interface IData{
-    username:string
-    email:string
-    contact_number:string
-    address:string
-    password:string
-    role_specific_details:IRole
-    role_id:string
-}
-export interface IAuthResponse {
+export interface RegisterResponse {
   statuscode: number;
   message: string;
-  token: string;
-  _id: string;
-}
-export interface IRegisterResponse{
-    data:IAuthResponse,
-    status:number
+  token?: string;
 }

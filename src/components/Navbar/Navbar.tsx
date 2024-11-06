@@ -54,7 +54,7 @@ const Navbar = () => {
         </ListItem>
         {!getToken() && (
           <ListItem component={Link} to="/register">
-            <ListItemText primary="Admin Register" />
+            <ListItemText primary="Register" />
           </ListItem>
         )}
       </List>
@@ -85,7 +85,7 @@ const Navbar = () => {
             sx={{
               display: { xs: "none", sm: "flex" },
               marginLeft: "auto",
-              gap: 2,
+              gap:1
             }}
           >
             <Button
@@ -93,12 +93,13 @@ const Navbar = () => {
               component={Link}
               to={getToken() ? "#" : "/login"}
               onClick={getToken() ? handleAuthToggle : undefined}
+              sx={styles.button2}
             >
               {getToken() ? "Logout" : "Login"}
             </Button>
             {!getToken() && (
-              <Button color="inherit" component={Link} to="/register">
-                Admin Register
+              <Button color="inherit" component={Link} to="/register" sx={styles.button2}>
+                Register
               </Button>
             )}
           </Box>

@@ -5,6 +5,8 @@ import {
   Button,
   Container,
   Grid2,
+  IconButton,
+  InputAdornment,
   MenuItem,
   Select,
   Snackbar,
@@ -14,11 +16,17 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { IOrganization, ISnackbar } from "./AdminRegistration.types";
+import {
+  IOrganization,
+  IRegisterResponse,
+  ISnackbar,
+} from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
 import { ADMIN_ROLE_ID } from "../../constants/ROLES";
-import registerAdmin from "../../services/Auth";
-import getAllOrganization from "../../services/Organization";
+import { registerAdmin } from "../../services/Auth";
+import { getOrganizations } from "../../services/Organization";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
@@ -28,11 +36,13 @@ const AdminRegistration = () => {
     message: "",
     severity: "success",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchOrganization = async () => {
       try {
-        const response = await getAllOrganization();
+        const response = await getOrganizations();
         setOrganization(response);
       } catch (error) {
         console.error("Error fetching organizations:", error);
@@ -50,7 +60,7 @@ const AdminRegistration = () => {
       password: "",
       confirmPassword: "",
       organization_id: "",
-      role_id: ADMIN_ROLE_ID,
+      role_id: ADMIN_ID,
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -61,7 +71,11 @@ const AdminRegistration = () => {
         .required("Username is required"),
       email: Yup.string()
         .email("Invalid email address")
-        .required("Email is required"),
+        .required("Email is required")
+        .matches(
+          /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+          "Invalid email format"
+        ),
       contact_number: Yup.string()
         .matches(/^[0-9]+$/, "Must be a valid contact number")
         .length(10, "Contact Number must be of 10 digits")
@@ -75,8 +89,8 @@ const AdminRegistration = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
           "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
         )
-        .min(6, "Password must be at least 6 characters")
-        .max(20, "Password can be at most 20 characters long")
+        .min(8, "Password must be at least 8 characters")
+        .max(20, "Too long password!")
         .required("Password is required"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords must match")
@@ -86,9 +100,9 @@ const AdminRegistration = () => {
     onSubmit: async (values, actions) => {
       console.log(values);
       try {
-        const res = await registerAdmin(values);
+        const res: IRegisterResponse = await registerAdmin(values);
         console.log(res);
-        if (res.data.message === "User registered successfully") {
+        if (res.statuscode === 201) {
           setSnackbar({
             open: true,
             message: "Admin registered successfully.",
@@ -123,8 +137,13 @@ const AdminRegistration = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Box sx={styles.container}>
-        <Typography component="h1" variant="h5">
-          Sign Up
+        <Typography
+          component="h1"
+          variant="h5"
+          align="center"
+          sx={styles.heading}
+        >
+          Admin Registration
         </Typography>
         <Box
           component="form"
@@ -226,17 +245,16 @@ const AdminRegistration = () => {
                         ?.org_name;
                     }
                     return (
-                      <span
-                        style={{
-                          color:
-                            formik.touched.organization_id &&
-                            formik.errors.organization_id
-                              ? "#d32f2f"
-                              : "#616161",
-                        }}
+                      <Typography
+                        sx={
+                          formik.touched.organization_id &&
+                          formik.errors.organization_id
+                            ? styles.organizationError
+                            : styles.organizationPlaceholder
+                        }
                       >
                         Organization Name
-                      </span>
+                      </Typography>
                     );
                   }}
                 >
@@ -267,7 +285,7 @@ const AdminRegistration = () => {
                 fullWidth
                 label="Password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="off"
                 size="small"
@@ -278,6 +296,22 @@ const AdminRegistration = () => {
                   formik.touched.password && Boolean(formik.errors.password)
                 }
                 helperText={formik.touched.password && formik.errors.password}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid2>
             <Grid2 size={12}>
@@ -286,7 +320,7 @@ const AdminRegistration = () => {
                 label="Confirm Password"
                 name="confirmPassword"
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 autoComplete="off"
                 size="small"
                 value={formik.values.confirmPassword}
@@ -300,6 +334,24 @@ const AdminRegistration = () => {
                   formik.touched.confirmPassword &&
                   formik.errors.confirmPassword
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid2>
           </Grid2>
