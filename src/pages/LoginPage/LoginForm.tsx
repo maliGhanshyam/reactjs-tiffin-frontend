@@ -73,7 +73,9 @@ const LoginForm = () => {
         });
         setTimeout(() => {
           navigate(
-            response.role === SUPERADMIN_ROLE_ID ? "/superadmin" : "/admin"
+            response.role === SUPERADMIN_ROLE_ID
+              ? "/superAdminDashboard"
+              : "/adminDashboard"
           );
         }, 1000);
       } else {

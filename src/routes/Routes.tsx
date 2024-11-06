@@ -16,7 +16,7 @@ const childRoutes = [
     element: <NotFound />,
   },
   {
-    path: "superadmin",
+    path: "superAdminDashboard",
     element: (
       <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
         <SuperAdminDashboard />
@@ -24,7 +24,7 @@ const childRoutes = [
     ),
   },
   {
-    path: "admin",
+    path: "adminDashboard",
     element: (
       <AuthGuard requiredRole={ADMIN_ROLE_ID}>
         <AdminDashboard />
