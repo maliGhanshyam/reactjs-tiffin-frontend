@@ -11,7 +11,7 @@ function App() {
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
       <Navbar />
-      <main>
+      <main style={{ flex: 1 }}>
         <Outlet />
       </main>
       <FooterComponent />
