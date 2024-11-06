@@ -3,8 +3,8 @@ import { Theme } from '@mui/material/styles';
 
 export const styles: { [key: string]: SxProps<Theme> } = {
   container: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 3,
+    marginBottom: 3,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -12,6 +12,11 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     backgroundColor: '#fff',
     borderRadius: 2,
     boxShadow: 3,
+  },
+  heading:{
+      fontWeight: "bold",
+      color: "primary.main",
+      fontSize: { xs: '1.4rem', sm: '1.5rem' },
   },
   button: {
     mt: 3,
@@ -22,5 +27,11 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     textAlign: 'left',
     mt: 0.5,
     ml: 2,
+  },
+  organizationPlaceholder: {
+    color: '#616161', 
+  },
+  organizationError: {
+    color: '#d32f2f', 
   },
 };

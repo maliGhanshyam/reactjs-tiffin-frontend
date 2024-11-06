@@ -16,7 +16,11 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { IOrganization, IRegisterResponse, ISnackbar } from "./AdminRegistration.types";
+import {
+  IOrganization,
+  IRegisterResponse,
+  ISnackbar,
+} from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
 import { ADMIN_ID } from "../../constants/Constants";
 import { registerAdmin } from "../../services/Auth";
@@ -67,7 +71,11 @@ const AdminRegistration = () => {
         .required("Username is required"),
       email: Yup.string()
         .email("Invalid email address")
-        .required("Email is required"),
+        .required("Email is required")
+        .matches(
+          /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+          "Invalid email format"
+        ),
       contact_number: Yup.string()
         .matches(/^[0-9]+$/, "Must be a valid contact number")
         .length(10, "Contact Number must be of 10 digits")
@@ -81,8 +89,8 @@ const AdminRegistration = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
           "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
         )
-        .min(6, "Password must be at least 6 characters")
-        .max(20, "Password can be at most 20 characters long")
+        .min(8, "Password must be at least 8 characters")
+        .max(20, "Too long password!")
         .required("Password is required"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords must match")
@@ -92,7 +100,7 @@ const AdminRegistration = () => {
     onSubmit: async (values, actions) => {
       console.log(values);
       try {
-        const res: IRegisterResponse = await registerAdmin(values);        
+        const res: IRegisterResponse = await registerAdmin(values);
         console.log(res);
         if (res.statuscode === 201) {
           setSnackbar({
@@ -129,8 +137,13 @@ const AdminRegistration = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Box sx={styles.container}>
-        <Typography component="h1" variant="h5">
-          Sign Up
+        <Typography
+          component="h1"
+          variant="h5"
+          align="center"
+          sx={styles.heading}
+        >
+          Admin Registration
         </Typography>
         <Box
           component="form"
@@ -232,17 +245,16 @@ const AdminRegistration = () => {
                         ?.org_name;
                     }
                     return (
-                      <span
-                        style={{
-                          color:
-                            formik.touched.organization_id &&
-                            formik.errors.organization_id
-                              ? "#d32f2f"
-                              : "#616161",
-                        }}
+                      <Typography
+                        sx={
+                          formik.touched.organization_id &&
+                          formik.errors.organization_id
+                            ? styles.organizationError
+                            : styles.organizationPlaceholder
+                        }
                       >
                         Organization Name
-                      </span>
+                      </Typography>
                     );
                   }}
                 >

@@ -22,6 +22,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     marginLeft: 4,
     display: { xs: "none", sm: "block" },
   },
+  button2: {
+    fontSize: "1.05rem",
+    display: { xs: "none", sm: "block" },
+  },
   drawerBox: {
     width: "auto",
     padding: 2,
