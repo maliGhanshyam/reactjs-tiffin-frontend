@@ -5,6 +5,8 @@ import {
   Button,
   Container,
   Grid2,
+  IconButton,
+  InputAdornment,
   MenuItem,
   Select,
   Snackbar,
@@ -14,11 +16,13 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { IOrganization, ISnackbar } from "./AdminRegistration.types";
+import { IOrganization, IRegisterResponse, ISnackbar } from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
 import { ADMIN_ID } from "../../constants/Constants";
-import registerAdmin from "../../services/Auth";
-import getAllOrganization from "../../services/Organization";
+import { registerAdmin } from "../../services/Auth";
+import { getOrganizations } from "../../services/Organization";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
@@ -28,11 +32,13 @@ const AdminRegistration = () => {
     message: "",
     severity: "success",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchOrganization = async () => {
       try {
-        const response = await getAllOrganization();
+        const response = await getOrganizations();
         setOrganization(response);
       } catch (error) {
         console.error("Error fetching organizations:", error);
@@ -86,9 +92,9 @@ const AdminRegistration = () => {
     onSubmit: async (values, actions) => {
       console.log(values);
       try {
-        const res = await registerAdmin(values);
+        const res: IRegisterResponse = await registerAdmin(values);        
         console.log(res);
-        if (res.data.message === "User registered successfully") {
+        if (res.statuscode === 201) {
           setSnackbar({
             open: true,
             message: "Admin registered successfully.",
@@ -267,7 +273,7 @@ const AdminRegistration = () => {
                 fullWidth
                 label="Password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="off"
                 size="small"
@@ -278,6 +284,22 @@ const AdminRegistration = () => {
                   formik.touched.password && Boolean(formik.errors.password)
                 }
                 helperText={formik.touched.password && formik.errors.password}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid2>
             <Grid2 size={12}>
@@ -286,7 +308,7 @@ const AdminRegistration = () => {
                 label="Confirm Password"
                 name="confirmPassword"
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 autoComplete="off"
                 size="small"
                 value={formik.values.confirmPassword}
@@ -300,6 +322,24 @@ const AdminRegistration = () => {
                   formik.touched.confirmPassword &&
                   formik.errors.confirmPassword
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid2>
           </Grid2>

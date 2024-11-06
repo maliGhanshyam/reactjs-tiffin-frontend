@@ -1,3 +1,1 @@
-import { registerAdmin } from "./Auth";
-
-export default registerAdmin
+export { registerAdmin } from "./Auth";

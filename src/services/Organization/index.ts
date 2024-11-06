@@ -1,3 +1,1 @@
-import { getOrganizations } from "./Organization";
-
-export default getOrganizations
+export { getOrganizations } from "./Organization";
