@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import AdminRegistration from "../pages/AdminRegistration";
+import { AdminRegistration } from "../pages/AdminRegistration";
 import NotFound from "../components/NotFound";
 import LoginPage from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
