@@ -55,9 +55,9 @@ const LoginForm = () => {
         setStatus({ success: true });
         alert("login successful");
         if (response.role === SUPERADMIN_ROLE_ID) {
-          navigate("/superadmin");
+          navigate("/superAdminDashboard");
         } else if (response.role === ADMIN_ROLE_ID) {
-          navigate("/admin");
+          navigate("/adminDashboard");
         }
       }
     } catch (error) {
