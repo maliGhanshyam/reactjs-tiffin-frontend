@@ -1,21 +1,38 @@
-import React from "react";
-import { Button, TextField, Grid2, Typography, Container } from "@mui/material";
-import { loginUser } from "../../services/LoginService/loginUser";
+import React, { useState } from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Grid2,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "../../store/authSlice";
-import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
+import { loginUser } from "../../services/LoginService/loginUser";
+import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
+import { styles } from "./Login.style";
 
 const LoginForm = () => {
-  interface LoginData {
-    email: string;
-    password: string;
-  }
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [snackbar, setSnackbar] = useState<ISnackbar>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
-  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email format")
@@ -31,15 +48,12 @@ const LoginForm = () => {
       .required("Password is required"),
   });
 
-  const navigate = useNavigate();
-
   const handleSubmit = async (
-    loginData: LoginData,
-    { setSubmitting, setStatus }: FormikHelpers<LoginData>
+    loginData: { email: string; password: string },
+    { setSubmitting }: FormikHelpers<{ email: string; password: string }>
   ) => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
-      console.log(response, "login");
       if (
         response.success &&
         (response as { token?: string }).token &&
@@ -52,35 +66,46 @@ const LoginForm = () => {
             userId: response._id,
           })
         );
-        setStatus({ success: true });
-        alert("login successful");
-        if (response.role === SUPERADMIN_ROLE_ID) {
-          navigate("/superadmin");
-        } else if (response.role === ADMIN_ROLE_ID) {
-          navigate("/admin");
-        }
+        setSnackbar({
+          open: true,
+          message: "Login successful",
+          severity: "success",
+        });
+        setTimeout(() => {
+          navigate(
+            response.role === SUPERADMIN_ROLE_ID
+              ? "/superAdminDashboard"
+              : "/adminDashboard"
+          );
+        }, 1000);
+      } else {
+        setSnackbar({
+          open: true,
+          message: "Invalid credentials",
+          severity: "error",
+        });
       }
     } catch (error) {
-      console.error("Login error:", error);
-      setStatus({ success: false, message: "Invalid credentials" });
+      setSnackbar({
+        open: true,
+        message: "Login error. Please try again.",
+        severity: "error",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   return (
-    <>
-      <Container maxWidth="sm">
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{
-            fontWeight: "bold",
-            color: "primary.main",
-            padding: 2,
-          }}
-        ></Typography>
+    <Container component="main" maxWidth="xs">
+      <Box sx={styles.container}>
+        <Typography component="h1" variant="h5" sx={styles.heading}>
+          Sign In
+        </Typography>
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
@@ -93,7 +118,6 @@ const LoginForm = () => {
             values,
             errors,
             touched,
-            status,
           }) => (
             <Form>
               <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
@@ -101,53 +125,75 @@ const LoginForm = () => {
                   <TextField
                     fullWidth
                     label="Email"
-                    variant="outlined"
                     name="email"
+                    size="small"
+                    value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
-                    helperText={touched.email && errors.email}
                     error={touched.email && Boolean(errors.email)}
+                    helperText={touched.email && errors.email}
                   />
                 </Grid2>
                 <Grid2 size={12}>
                   <TextField
                     fullWidth
                     label="Password"
-                    variant="outlined"
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
+                    size="small"
+                    value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.password}
-                    helperText={touched.password && errors.password}
                     error={touched.password && Boolean(errors.password)}
+                    helperText={touched.password && errors.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                          >
+                            {showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid2>
-                {status?.message && (
-                  <Grid2 size={12}>
-                    <Typography color="error" align="center">
-                      {status.message}
-                    </Typography>
-                  </Grid2>
-                )}
                 <Grid2 size={12}>
                   <Button
                     type="submit"
+                    fullWidth
                     variant="contained"
                     color="primary"
-                    fullWidth
                     disabled={isSubmitting}
                   >
-                    Sign In
+                    Submit
                   </Button>
                 </Grid2>
               </Grid2>
+              <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
+                Don’t have an account? <Link to="/register">Sign up here</Link>
+              </Typography>
             </Form>
           )}
         </Formik>
-      </Container>
-    </>
+      </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </Container>
   );
 };
 
