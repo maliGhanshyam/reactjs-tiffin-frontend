@@ -12,7 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import tiff3 from "../../assets/tiff3.png";
 import { getToken, logoutUser } from "../../services/LoginService/loginUser";
 import { logoStyle, styles } from "./Navbar.styles";
@@ -26,7 +26,7 @@ const Navbar = () => {
   const handleDrawerToggle = () => {
     setOpen(!Open);
   };
-
+  const location = useLocation();
   const handleAuthToggle = () => {
     if (getToken()) {
       logoutUser();
@@ -45,13 +45,15 @@ const Navbar = () => {
             <ListItemText primary="Home" />
           </ListItem>
         )}
-        <ListItem
-          component={Link}
-          to={getToken() ? "#" : "/login"}
-          onClick={getToken() ? handleAuthToggle : undefined}
-        >
-          <ListItemText primary={getToken() ? "Logout" : "Login"} />
-        </ListItem>
+        {location.pathname !== "/login" && (
+          <ListItem
+            component={Link}
+            to={getToken() ? "#" : "/login"}
+            onClick={getToken() ? handleAuthToggle : undefined}
+          >
+            <ListItemText primary={getToken() ? "Logout" : "Login"} />
+          </ListItem>
+        )}
         {!getToken() && (
           <ListItem component={Link} to="/register">
             <ListItemText primary="Register" />
@@ -85,20 +87,27 @@ const Navbar = () => {
             sx={{
               display: { xs: "none", sm: "flex" },
               marginLeft: "auto",
-              gap:1
+              gap: 1,
             }}
           >
-            <Button
-              color="inherit"
-              component={Link}
-              to={getToken() ? "#" : "/login"}
-              onClick={getToken() ? handleAuthToggle : undefined}
-              sx={styles.button2}
-            >
-              {getToken() ? "Logout" : "Login"}
-            </Button>
+            {location.pathname !== "/login" && (
+              <Button
+                color="inherit"
+                component={Link}
+                to={getToken() ? "#" : "/login"}
+                onClick={getToken() ? handleAuthToggle : undefined}
+                sx={styles.button2}
+              >
+                {getToken() ? "Logout" : "Login"}
+              </Button>
+            )}
             {!getToken() && (
-              <Button color="inherit" component={Link} to="/register" sx={styles.button2}>
+              <Button
+                color="inherit"
+                component={Link}
+                to="/register"
+                sx={styles.button2}
+              >
                 Register
               </Button>
             )}

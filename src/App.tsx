@@ -6,12 +6,9 @@ import { Box } from "@mui/material";
 
 function App() {
   return (
-    <Box
-      className="App"
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
+    <Box display="flex" flexDirection="column" minHeight="100vh">
       <Navbar />
-      <main style={{ flex: 1 }}>
+      <main className="main-content">
         <Outlet />
       </main>
       <Footer />
