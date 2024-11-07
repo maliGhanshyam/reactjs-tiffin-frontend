@@ -1,4 +1,4 @@
-export interface IOrganization {
+export interface Organization {
   _id: string;
   org_name: string;
 }
@@ -8,7 +8,7 @@ export interface ISnackbar {
   message: string;
   severity: "success" | "error";
 }
-export interface IRegisterResponse {
+export interface RegisterResponse {
   statuscode: number;
   message: string;
 }
