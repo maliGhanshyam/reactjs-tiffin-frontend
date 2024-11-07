@@ -6,6 +6,7 @@ import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
 import AuthGuard from "../components/RouteGuard";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
+import SuperAdminPage from "../pages/SuperAdminPage/SuperAdminPage";
 const childRoutes = [
   {
     path: "register",
@@ -34,6 +35,10 @@ const childRoutes = [
   {
     path: "login",
     element: <LoginPage />,
+  },
+  {
+    path: "supAdmin",
+    element: <SuperAdminPage />,
   },
   {
     path: "",
