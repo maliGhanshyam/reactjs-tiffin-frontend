@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, Grid2 } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
-// import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
+import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
 import { getOrganizations } from "../../../../services/OrganisationService/OrgCRUD";
+
 // Define a TypeScript interface for the organization data structure
 interface OrgLocation {
   loc: string;
@@ -51,13 +52,29 @@ const SuperAdminDashboard: React.FC = () => {
             <Box key={org._id} sx={{ minWidth: 350, mr: 2 }}>
               <OrganisationCard
                 title={org.org_name}
-                description={`Locations: ${
-                  org.org_location.length
-                } | Created: ${new Date(
-                  org.org_created_at
-                ).toLocaleDateString()}`}
-                locations={org.org_location} // Pass the entire array of locations
+                description={``}
+                image="https://via.placeholder.com/400x320"
+                fields={[
+                  ...org.org_location.map((loc, index) => ({
+                    label: `Location ${index + 1}`,
+                    value: loc.loc,
+                  })),
+                  // { label: "Contact", value: org.org_location[0]?.loc_contact },
+                  // { label: "Email", value: org.org_location[0]?.loc_email },
+                ]}
                 status={org.isActive ? "Active" : "Inactive"}
+                actions={[
+                  {
+                    label: "Update",
+                    color: "primary",
+                    onClick: () => console.log("Update"),
+                  },
+                  {
+                    label: "Delete",
+                    color: "error",
+                    onClick: () => console.log("Delete"),
+                  },
+                ]}
               />
             </Box>
           ))}
@@ -65,7 +82,7 @@ const SuperAdminDashboard: React.FC = () => {
 
         {/* Static Organisation Approval Cards Section */}
         <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
-          Pending Organisation Approvals
+          Pending Admins Approvals
         </Typography>
         {/* <Grid2 container spacing={3} size={12}>
           {organisations.map((org) => (

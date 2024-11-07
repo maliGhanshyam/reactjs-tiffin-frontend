@@ -6,43 +6,48 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
+import { SxProps, Theme } from "@mui/material";
 
-interface OrgLocation {
-  loc: string;
-  address: string;
-  loc_contact: number;
-  loc_email: string;
+interface CardField {
+  label: string;
+  value: string | number | undefined;
 }
 
 interface OrganisationCardProps {
   title: string;
   description: string;
-  locations: OrgLocation[];
+  fields: CardField[];
   status: string;
-  extraField1?: string;
-  extraField2?: string;
+  image?: string;
+  actions?: {
+    label: string;
+    color: "primary" | "error";
+    onClick: () => void;
+  }[];
 }
 
 const OrganisationCard: React.FC<OrganisationCardProps> = ({
   title,
   description,
-  locations,
+  fields,
   status,
-  extraField1,
-  extraField2,
+  image,
+  actions,
 }) => {
-  const extraFields = [
-    { label: "Extra Field 1", value: extraField1 },
-    { label: "Extra Field 2", value: extraField2 },
-  ];
-
   return (
-    <Card>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="https://via.placeholder.com/400x320"
-        title={title}
-      />
+    <Card
+      sx={{
+        maxWidth: 345,
+        backgroundColor: "#f9f9f9",
+        transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.03)",
+          boxShadow: 4,
+          backgroundColor: "#f1f1f1",
+        },
+      }}
+    >
+      {image && <CardMedia sx={{ height: 140 }} image={image} title={title} />}
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
@@ -51,18 +56,12 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
           {description}
         </Typography>
 
-        {locations.map((loc, index) => (
+        {fields.map((field, index) => (
           <div key={index}>
-            {[
-              { label: `Location (${loc.loc}):`, value: loc.address },
-              { label: "Contact:", value: loc.loc_contact },
-              { label: "Email:", value: loc.loc_email },
-            ].map((field, i) => (
-              <Typography key={i} variant="body2" color="text.secondary">
-                <strong>{field.label}</strong> {field.value}
-              </Typography>
-            ))}
-            {index < locations.length - 1 && <Divider sx={{ my: 1 }} />}
+            <Typography variant="body2" color="text.secondary">
+              <strong>{field.label}:</strong> {field.value}
+            </Typography>
+            {index < fields.length - 1 && <Divider sx={{ my: 1 }} />}
           </div>
         ))}
 
@@ -80,30 +79,32 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
         >
           Status: {status}
         </Typography>
-
-        {extraFields.map(
-          (field, index) =>
-            field.value && (
-              <Typography
-                key={index}
-                variant="body2"
-                color="text.secondary"
-                sx={{ mt: 1 }}
-              >
-                <strong>{field.label}</strong> {field.value}
-              </Typography>
-            )
-        )}
       </CardContent>
 
-      <CardActions>
-        <Button size="small" color="primary">
-          Update
-        </Button>
-        <Button size="small" color="error">
-          Delete
-        </Button>
-      </CardActions>
+      {actions && (
+        <CardActions>
+          {actions.map((action, index) => (
+            <Button
+              key={index}
+              size="small"
+              color={action.color}
+              onClick={action.onClick}
+              sx={{
+                transition: "background-color 0.2s ease-in-out",
+                "&:hover": {
+                  backgroundColor:
+                    action.color === "primary"
+                      ? "primary.main"
+                      : "primary.dark",
+                  color: "white",
+                },
+              }}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </CardActions>
+      )}
     </Card>
   );
 };
