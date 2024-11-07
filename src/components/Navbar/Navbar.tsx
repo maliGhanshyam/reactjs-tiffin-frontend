@@ -20,11 +20,11 @@ import { useDispatch } from "react-redux";
 import { clearAuthData } from "../../store/authSlice";
 
 const Navbar = () => {
-  const [Open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleDrawerToggle = () => {
-    setOpen(!Open);
+    setOpen(!open);
   };
 
   const handleAuthToggle = () => {
@@ -116,7 +116,7 @@ const Navbar = () => {
       </AppBar>
       <Drawer
         anchor="right"
-        open={Open}
+        open={open}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
         PaperProps={{ sx: { width: "auto" } }}
