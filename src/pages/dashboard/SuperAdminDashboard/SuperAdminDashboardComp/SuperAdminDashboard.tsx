@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Typography, Grid2 } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
-import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
-import { getOrganizations } from "../../../../services/OrganisationService/OrgCRUD";
+// import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
+import {
+  getAdmins,
+  getOrganizations,
+} from "../../../../services/OrganisationService/OrgCRUD";
 
 // Define a TypeScript interface for the organization data structure
 interface OrgLocation {
@@ -23,6 +26,21 @@ interface Organization {
   isActive: boolean;
   __v: number;
 }
+interface RoleSpecificDetails {
+  organization_id: string;
+  organization_name: string;
+  approval_status: string;
+}
+
+interface UserData {
+  _id: string;
+  username: string;
+  email: string;
+  contact_number: string;
+  address: string;
+  role_id: string;
+  role_specific_details: RoleSpecificDetails;
+}
 
 const SuperAdminDashboard: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -38,6 +56,21 @@ const SuperAdminDashboard: React.FC = () => {
     };
 
     fetchOrganizations();
+  }, []);
+  //TODO:
+  const [admins, setAdmins] = useState<UserData[]>([]);
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const data = await getAdmins();
+        setAdmins(data);
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+      }
+    };
+
+    fetchAdmins();
   }, []);
 
   return (
@@ -84,19 +117,40 @@ const SuperAdminDashboard: React.FC = () => {
         <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
           Pending Admins Approvals
         </Typography>
-        {/* <Grid2 container spacing={3} size={12}>
-          {organisations.map((org) => (
-            // eslint-disable-next-line react/jsx-key
-            <Grid2>
-              <OrganisationApprovalCard
-                title={org.title}
-                description={org.description}
-                location={org.location}
-                status={org.status}
+        <Box sx={{ display: "flex", overflowX: "auto", pb: 2 }}>
+          {admins.map((admin) => (
+            <Box key={admin._id} sx={{ minWidth: 350, mr: 2 }}>
+              <OrganisationCard
+                title={admin.username}
+                description={``}
+                image="https://via.placeholder.com/400x320"
+                fields={[
+                  {
+                    label: `Location`,
+                    value: admin.address,
+                  },
+                ]}
+                status={
+                  admin.role_specific_details.approval_status
+                    ? "Active"
+                    : "Inactive"
+                }
+                actions={[
+                  {
+                    label: "Approve",
+                    color: "primary",
+                    onClick: () => console.log("Update"),
+                  },
+                  {
+                    label: "Reject",
+                    color: "error",
+                    onClick: () => console.log("Delete"),
+                  },
+                ]}
               />
-            </Grid2>
+            </Box>
           ))}
-        </Grid2> */}
+        </Box>
       </Container>
     </Box>
   );
