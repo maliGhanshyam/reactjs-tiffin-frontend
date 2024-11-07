@@ -58,11 +58,11 @@ const LoginForm = () => {
         response.success &&
         (response as { token?: string }).token &&
         (response as { _id?: string })._id &&
-        (response as { role?: string }).role
+        (response as { role_id?: string }).role_id
       ) {
         dispatch(
           setAuthData({
-            userRoleId: response.role,
+            userRoleId: response.role_id,
             userId: response._id,
           })
         );
@@ -73,7 +73,7 @@ const LoginForm = () => {
         });
         setTimeout(() => {
           navigate(
-            response.role === SUPERADMIN_ROLE_ID
+            response.role_id === SUPERADMIN_ROLE_ID
               ? "/superAdminDashboard"
               : "/adminDashboard"
           );
