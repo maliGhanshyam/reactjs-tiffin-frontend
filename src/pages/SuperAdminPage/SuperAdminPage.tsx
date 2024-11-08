@@ -12,7 +12,7 @@ import {
   getAdmins,
   getOrganizations,
 } from "../../services/OrganisationService/OrgCRUD";
-
+import { titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
 interface OrgLocation {
   loc: string;
   address: string;
@@ -113,19 +113,30 @@ const SuperAdminPage: React.FC = () => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 3 }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: "bold",
+            fontFamily: "CustomFont, Arial, sans-serif",
+            fontSize: "1.5 rem",
+          }}
+        >
           Super Admin Dashboard
         </Typography>
         <Tabs value={currentTab} onChange={handleTabChange}>
-          <Tab label="Pending Admins" value="pending" />
-          <Tab label="Approved Organizations" value="approved" />
+          <Tab label="Pending Admins" value="pending" sx={titleStyles} />
+          <Tab
+            label="Approved Organizations"
+            value="approved"
+            sx={titleStyles}
+          />
         </Tabs>
         {/* Scrollable Card Section */}
         <Box
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            justifyContent: "center",
+            justifyContent: "left",
             py: 2,
           }}
         >
@@ -203,7 +214,7 @@ const SuperAdminPage: React.FC = () => {
           ))}
         </Box>
         {/* Pagination */}
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "right", mt: 4 }}>
           <Pagination
             count={Math.ceil(displayData.length / rowsPerPage)}
             page={page}
