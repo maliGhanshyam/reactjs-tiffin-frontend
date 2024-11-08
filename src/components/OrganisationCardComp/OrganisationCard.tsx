@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
@@ -5,8 +6,14 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import React from "react";
-import { SxProps, Theme } from "@mui/material";
+import {
+  cardStyles,
+  cardMediaStyles,
+  titleStyles,
+  statusStyles,
+  cardActionsStyles,
+  buttonStyles,
+} from "./OrganisationCardStyles";
 
 interface CardField {
   label: string;
@@ -35,21 +42,10 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
   actions,
 }) => {
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        backgroundColor: "#f9f9f9",
-        transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-        "&:hover": {
-          transform: "scale(1.03)",
-          boxShadow: 4,
-          backgroundColor: "#f1f1f1",
-        },
-      }}
-    >
-      {image && <CardMedia sx={{ height: 140 }} image={image} title={title} />}
+    <Card sx={cardStyles}>
+      {image && <CardMedia sx={cardMediaStyles} image={image} title={title} />}
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div" sx={titleStyles}>
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -65,40 +61,21 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
           </div>
         ))}
 
-        <Typography
-          variant="body2"
-          sx={{
-            mt: 1,
-            color:
-              status.toLowerCase() === "active"
-                ? "success.main"
-                : status.toLowerCase() === "pending"
-                ? "warning.main"
-                : "error.main",
-          }}
-        >
+        <Typography variant="body2" sx={statusStyles(status)}>
           Status: {status}
         </Typography>
       </CardContent>
 
       {actions && (
-        <CardActions>
+        <CardActions sx={cardActionsStyles}>
           {actions.map((action, index) => (
             <Button
               key={index}
               size="small"
               color={action.color}
               onClick={action.onClick}
-              sx={{
-                transition: "background-color 0.2s ease-in-out",
-                "&:hover": {
-                  backgroundColor:
-                    action.color === "primary"
-                      ? "primary.main"
-                      : "primary.dark",
-                  color: "white",
-                },
-              }}
+              sx={buttonStyles(action.color)}
+              variant="contained"
             >
               {action.label}
             </Button>

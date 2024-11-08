@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
-// import OrganisationApprovalCard from "../../../../components/OrganisationCardComp/OrganisationApprovalCard";
 import {
   getAdmins,
   getOrganizations,
 } from "../../../../services/OrganisationService/OrgCRUD";
+import { useNavigate } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import {
+  cardStyles,
+  cardMediaStyles,
+  titleStyles,
+  statusStyles,
+  cardActionsStyles,
+  buttonStyles,
+} from "../../../../components/OrganisationCardComp/OrganisationCardStyles";
 
 // Define a TypeScript interface for the organization data structure
 interface OrgLocation {
@@ -42,8 +54,18 @@ interface UserData {
   role_specific_details: RoleSpecificDetails;
 }
 
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 4,
+};
+
 const SuperAdminDashboard: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [admins, setAdmins] = useState<UserData[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -57,8 +79,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     fetchOrganizations();
   }, []);
-  //TODO:
-  const [admins, setAdmins] = useState<UserData[]>([]);
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -66,7 +86,7 @@ const SuperAdminDashboard: React.FC = () => {
         const data = await getAdmins();
         setAdmins(data);
       } catch (error) {
-        console.error("Error fetching organizations:", error);
+        console.error("Error fetching admins:", error);
       }
     };
 
@@ -77,23 +97,38 @@ const SuperAdminDashboard: React.FC = () => {
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 3 }}>
         {/* Scrollable Organisation Cards Section */}
-        <Typography variant="h5" sx={{ mb: 2 }}>
-          Available Organisations
-        </Typography>
-        <Box sx={{ display: "flex", overflowX: "auto", pb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h5" sx={titleStyles}>
+            Available Organisations
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<VisibilityIcon />}
+            onClick={() => navigate("/supAdmin")}
+          >
+            View More
+          </Button>
+        </Box>
+        <Slider {...settings}>
           {organizations.map((org) => (
-            <Box key={org._id} sx={{ minWidth: 350, mr: 2 }}>
+            <Box key={org._id} sx={{ minWidth: 450, padding: "0 18px" }}>
               <OrganisationCard
                 title={org.org_name}
-                description={``}
+                description=""
                 image="https://via.placeholder.com/400x320"
                 fields={[
                   ...org.org_location.map((loc, index) => ({
                     label: `Location ${index + 1}`,
                     value: loc.loc,
                   })),
-                  // { label: "Contact", value: org.org_location[0]?.loc_contact },
-                  // { label: "Email", value: org.org_location[0]?.loc_email },
                 ]}
                 status={org.isActive ? "Active" : "Inactive"}
                 actions={[
@@ -111,18 +146,36 @@ const SuperAdminDashboard: React.FC = () => {
               />
             </Box>
           ))}
-        </Box>
+        </Slider>
 
         {/* Static Organisation Approval Cards Section */}
-        <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
-          Pending Admins Approvals
-        </Typography>
-        <Box sx={{ display: "flex", overflowX: "auto", pb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "30px",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h5" sx={titleStyles}>
+            Pending Admins Approval
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<VisibilityIcon />}
+            onClick={() => navigate("/supAdmin")}
+          >
+            View More
+          </Button>
+        </Box>
+        <Slider {...settings}>
           {admins.map((admin) => (
-            <Box key={admin._id} sx={{ minWidth: 350, mr: 2 }}>
+            <Box key={admin._id} sx={{ minWidth: 350, padding: "0 18px" }}>
               <OrganisationCard
                 title={admin.username}
-                description={``}
+                description=""
                 image="https://via.placeholder.com/400x320"
                 fields={[
                   {
@@ -139,18 +192,18 @@ const SuperAdminDashboard: React.FC = () => {
                   {
                     label: "Approve",
                     color: "primary",
-                    onClick: () => console.log("Update"),
+                    onClick: () => console.log("Approve"),
                   },
                   {
                     label: "Reject",
                     color: "error",
-                    onClick: () => console.log("Delete"),
+                    onClick: () => console.log("Reject"),
                   },
                 ]}
               />
             </Box>
           ))}
-        </Box>
+        </Slider>
       </Container>
     </Box>
   );
