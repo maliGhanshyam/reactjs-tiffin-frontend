@@ -75,7 +75,7 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
               color={action.color}
               onClick={action.onClick}
               sx={buttonStyles(action.color)}
-              variant="contained"
+              variant="outlined"
             >
               {action.label}
             </Button>

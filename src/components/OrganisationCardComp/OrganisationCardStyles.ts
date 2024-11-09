@@ -3,16 +3,18 @@
 import { SxProps, Theme } from "@mui/material";
 
 export const cardStyles: SxProps<Theme> = {
-  maxWidth: 345,
+  maxWidth: 350,
   height: 400,
   backgroundColor: "#f9f9f9",
+  borderRadius: 5,
+  marginTop: "10px",
   transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
   "&:hover": {
     transform: "scale(1.03)",
     boxShadow: 4,
     backgroundColor: "#f1f1f1",
     // margin: 2,
-    borderRadius: 2,
+    borderRadius: 5,
   },
 };
 
@@ -21,7 +23,7 @@ export const cardMediaStyles: SxProps<Theme> = {
 };
 
 export const titleStyles: SxProps<Theme> = {
-  fontWeight: "bold",
+  fontWeight: "bolder",
   fontFamily: "CustomFont, Arial, sans-serif",
   fontSize: "1.2rem",
 };

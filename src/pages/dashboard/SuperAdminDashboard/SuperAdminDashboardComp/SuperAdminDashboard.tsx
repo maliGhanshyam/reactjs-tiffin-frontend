@@ -10,14 +10,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {
-  cardStyles,
-  cardMediaStyles,
-  titleStyles,
-  statusStyles,
-  cardActionsStyles,
-  buttonStyles,
-} from "../../../../components/OrganisationCardComp/OrganisationCardStyles";
+import { titleStyles } from "./SuperAdminDashboardStyle";
 
 // Define a TypeScript interface for the organization data structure
 interface OrgLocation {
@@ -109,8 +102,9 @@ const SuperAdminDashboard: React.FC = () => {
             Available Organisations
           </Typography>
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
+            size="small"
             startIcon={<VisibilityIcon />}
             onClick={() => navigate("/supAdmin")}
           >
@@ -123,10 +117,10 @@ const SuperAdminDashboard: React.FC = () => {
               <OrganisationCard
                 title={org.org_name}
                 description=""
-                image="https://via.placeholder.com/400x320"
+                image="https://picsum.photos/200/300/?blur"
                 fields={[
                   ...org.org_location.map((loc, index) => ({
-                    label: `Location ${index + 1}`,
+                    label: `Location `,
                     value: loc.loc,
                   })),
                 ]}
@@ -162,7 +156,8 @@ const SuperAdminDashboard: React.FC = () => {
             Pending Admins Approval
           </Typography>
           <Button
-            variant="contained"
+            variant="outlined"
+            size="small"
             color="primary"
             startIcon={<VisibilityIcon />}
             onClick={() => navigate("/supAdmin")}
@@ -176,7 +171,7 @@ const SuperAdminDashboard: React.FC = () => {
               <OrganisationCard
                 title={admin.username}
                 description=""
-                image="https://via.placeholder.com/400x320"
+                image="https://picsum.photos/200/300/?blur"
                 fields={[
                   {
                     label: `Location`,

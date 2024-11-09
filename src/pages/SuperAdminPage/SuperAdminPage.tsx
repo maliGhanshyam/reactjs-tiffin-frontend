@@ -146,7 +146,7 @@ const SuperAdminPage: React.FC = () => {
                 <OrganisationCard
                   title={isUserData(item) ? item.username : ""}
                   description={``}
-                  image="https://via.placeholder.com/400x320"
+                  image="https://picsum.photos/200/300/?blur"
                   fields={
                     isUserData(item)
                       ? [
@@ -180,7 +180,7 @@ const SuperAdminPage: React.FC = () => {
                 <OrganisationCard
                   title={isOrganization(item) ? item.org_name : ""}
                   description={``}
-                  image="https://via.placeholder.com/400x320"
+                  image="https://picsum.photos/200/300/?blur"
                   fields={
                     isOrganization(item)
                       ? item.org_location.map((loc, index) => ({
