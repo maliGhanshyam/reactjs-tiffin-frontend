@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
 import { Navbar } from "./components/Navbar";
 import { Outlet } from "react-router-dom";
-import FooterComponent from "./components/FooterComponent";
+import { Footer } from "./components/FooterComponent";
 import { Box } from "@mui/material";
 
 function App() {
@@ -13,10 +13,10 @@ function App() {
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
       <Navbar />
-      <main>
+      <main style={{ flex: 1 }}>
         <Outlet />
       </main>
-      <FooterComponent />
+      <Footer />
     </Box>
   );
 }

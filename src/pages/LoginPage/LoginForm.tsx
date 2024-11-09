@@ -1,16 +1,28 @@
 import React, { useState } from "react";
-import { Button, TextField, Grid2, Typography, Container, InputAdornment, IconButton, Box, Snackbar, Alert } from "@mui/material";
-import { loginUser } from "../../services/LoginService/loginUser";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Grid2,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "../../store/authSlice";
-import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
-import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
-import { styles } from "./Login.style";
+import { loginUser } from "../../services/LoginService/loginUser";
+import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
+import { styles } from "./Login.style";
+
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,7 +54,6 @@ const LoginForm = () => {
   ) => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
-      
       if (
         response.success 
         
@@ -60,7 +71,7 @@ const LoginForm = () => {
         });
         setTimeout(() => {
           navigate(
-            response.role_id === SUPERADMIN_ROLE_ID
+            response.role === SUPERADMIN_ROLE_ID
               ? "/superAdminDashboard"
               : "/adminDashboard"
           );
