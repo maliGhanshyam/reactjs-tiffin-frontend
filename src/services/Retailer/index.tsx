@@ -4,4 +4,7 @@ export {
   rejectRetailer,
   getApprovedRetailer,
   getRejectedRetailer,
+  getRejectedRetail,
+  getApprovedRetail,
+  getPendingRetail
 } from "./Retailer";

@@ -6,10 +6,8 @@ export interface Approval {
 
 export interface Retailer {
   role_specific_details: {
-    retailer: {
-      gst_no: string;
-      approval: Approval[];
-    };
+    organization_id: string,
+    approval:Approval[]
   };
   _id: string;
   username: string;
