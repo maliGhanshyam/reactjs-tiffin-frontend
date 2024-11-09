@@ -1,11 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
-import NotFound from "../components/NotFound";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
 import AuthGuard from "../components/RouteGuard";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
+import { PageNotFound } from "../components/NotFound";
 const childRoutes = [
   {
     path: "register",
@@ -13,7 +13,7 @@ const childRoutes = [
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <PageNotFound />,
   },
   {
     path: "superAdminDashboard",
@@ -41,7 +41,7 @@ const childRoutes = [
   },
   {
     path: "**",
-    element: <NotFound />,
+    element: <PageNotFound />,
   },
 ];
 
