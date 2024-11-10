@@ -13,40 +13,10 @@ import {
   getOrganizations,
 } from "../../services/OrganisationService/OrgCRUD";
 import { titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
-interface OrgLocation {
-  loc: string;
-  address: string;
-  loc_contact: number;
-  loc_email: string;
-  admin_id: string;
-  _id: string;
-}
-
-interface Organization {
-  _id: string;
-  org_name: string;
-  org_location: OrgLocation[];
-  org_created_at: string;
-  org_updated_at: string;
-  isActive: boolean;
-  __v: number;
-}
-
-interface RoleSpecificDetails {
-  organization_id: string;
-  organization_name: string;
-  approval_status: string;
-}
-
-interface UserData {
-  _id: string;
-  username: string;
-  email: string;
-  contact_number: string;
-  address: string;
-  role_id: string;
-  role_specific_details: RoleSpecificDetails;
-}
+import {
+  Organization,
+  UserData,
+} from "../../Types";
 
 const SuperAdminPage: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);

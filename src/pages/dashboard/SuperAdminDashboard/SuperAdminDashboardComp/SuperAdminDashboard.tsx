@@ -11,41 +11,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { titleStyles } from "./SuperAdminDashboardStyle";
-
-// Define a TypeScript interface for the organization data structure
-interface OrgLocation {
-  loc: string;
-  address: string;
-  loc_contact: number;
-  loc_email: string;
-  admin_id: string;
-  _id: string;
-}
-
-interface Organization {
-  _id: string;
-  org_name: string;
-  org_location: OrgLocation[];
-  org_created_at: string;
-  org_updated_at: string;
-  isActive: boolean;
-  __v: number;
-}
-interface RoleSpecificDetails {
-  organization_id: string;
-  organization_name: string;
-  approval_status: string;
-}
-
-interface UserData {
-  _id: string;
-  username: string;
-  email: string;
-  contact_number: string;
-  address: string;
-  role_id: string;
-  role_specific_details: RoleSpecificDetails;
-}
+import {
+  Organization,
+  UserData,
+} from "../../../../Types";
 
 const settings = {
   dots: true,
@@ -119,7 +88,7 @@ const SuperAdminDashboard: React.FC = () => {
                 description=""
                 image="https://picsum.photos/200/300/?blur"
                 fields={[
-                  ...org.org_location.map((loc, index) => ({
+                  ...org.org_location.map((loc ) => ({
                     label: `Location `,
                     value: loc.loc,
                   })),
