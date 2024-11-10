@@ -17,8 +17,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  IOrganization,
-  IRegisterResponse,
+  Organization,
+  RegisterResponse,
   ISnackbar,
 } from "./AdminRegistration.types";
 import { styles } from "./AdminRegistration.style";
@@ -30,7 +30,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
-  const [organization, setOrganization] = useState<IOrganization[]>([]);
+  const [organization, setOrganization] = useState<Organization[]>([]);
   const [snackbar, setSnackbar] = useState<ISnackbar>({
     open: false,
     message: "",
@@ -100,7 +100,7 @@ const AdminRegistration = () => {
     onSubmit: async (values, actions) => {
       console.log(values);
       try {
-        const res: IRegisterResponse = await registerAdmin(values);
+        const res: RegisterResponse = await registerAdmin(values);
         console.log(res);
         if (res.statuscode === 201) {
           setSnackbar({
@@ -261,7 +261,7 @@ const AdminRegistration = () => {
                   <MenuItem value="" disabled>
                     Select an organization
                   </MenuItem>
-                  {organization.map((org: IOrganization) => (
+                  {organization.map((org: Organization) => (
                     <MenuItem key={org._id} value={org._id}>
                       {org.org_name}
                     </MenuItem>
