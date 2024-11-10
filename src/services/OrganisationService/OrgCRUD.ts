@@ -17,8 +17,8 @@ interface ApiResponse {
   data: UserData[];
 }
 
-// Fetch all organizations
-export const getAdmins = async (): Promise<UserData[]> => {
+// Fetch all pending Admins
+export const getPendingAdmins = async (): Promise<UserData[]> => {
   try {
     console.log(`${API_URL}/api/superadmin/pendingAdminApproval`);
     const response = await axios.get<ApiResponse>(
@@ -27,10 +27,42 @@ export const getAdmins = async (): Promise<UserData[]> => {
     console.log(response.data);
     return response.data.data; // Automatically wrapped in a Promise
   } catch (error) {
-    console.error("Failed to fetch admins:", error);
+    console.error("Failed to fetch pending admins:", error);
     throw error; // Also automatically wrapped in a rejected Promise
   }
 };
+
+
+//Fetch All Approved Admins
+export const getApprovedAdmins = async (): Promise<UserData[]> => { 
+ try {
+   console.log(`${API_URL}/api/superadmin/approvedAdminApproval`);
+   const response = await axios.get<ApiResponse>(
+     `${API_URL}/api/superadmin/approvedAdminApproval`
+   );
+   console.log(response.data);
+   return response.data.data; // Automatically wrapped in a Promise
+ } catch (error) {
+   console.error("Failed to fetch Approved admins:", error);
+   throw error; // Also automatically wrapped in a rejected Promise
+ }
+
+}
+//Fetch All Approved Admins
+export const getRejectedAdmins = async (): Promise<UserData[]> => { 
+ try {
+   console.log(`${API_URL}/api/superadmin/rejectedAdminApproval`);
+   const response = await axios.get<ApiResponse>(
+     `${API_URL}/api/superadmin/rejectedAdminApproval`
+   );
+   console.log(response.data);
+   return response.data.data; // Automatically wrapped in a Promise
+ } catch (error) {
+   console.error("Failed to fetch Rejected admins:", error);
+   throw error; // Also automatically wrapped in a rejected Promise
+ }
+
+}
 
 // Fetch all pending Admins
 export const getOrganizations = async (): Promise<Organization[]> => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import OrganisationCard from "../../../../components/OrganisationCardComp/OrganisationCard";
 import {
-  getAdmins,
+  getPendingAdmins,
   getOrganizations,
 } from "../../../../services/OrganisationService/OrgCRUD";
 import { useNavigate } from "react-router-dom";
@@ -43,16 +43,16 @@ const SuperAdminDashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchAdmins = async () => {
+    const fetchPendingAdmins = async () => {
       try {
-        const data = await getAdmins();
+        const data = await getPendingAdmins();
         setAdmins(data);
       } catch (error) {
         console.error("Error fetching admins:", error);
       }
     };
 
-    fetchAdmins();
+    fetchPendingAdmins();
   }, []);
 
   return (

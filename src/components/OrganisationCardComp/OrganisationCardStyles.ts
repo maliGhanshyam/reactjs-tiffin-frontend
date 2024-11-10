@@ -27,7 +27,11 @@ export const titleStyles: SxProps<Theme> = {
   fontFamily: "CustomFont, Arial, sans-serif",
   fontSize: "1.2rem",
 };
-
+export const subTitleStyles: SxProps<Theme> = {
+  fontWeight: "bold",
+  fontFamily: "CustomFont, Arial, sans-serif",
+  fontSize: "1.1rem",
+};
 export const statusStyles = (status: string): SxProps<Theme> => ({
   mt: 1,
   color:

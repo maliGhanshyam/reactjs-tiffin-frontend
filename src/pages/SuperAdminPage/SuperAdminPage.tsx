@@ -9,21 +9,22 @@ import {
 } from "@mui/material";
 import OrganisationCard from "../../components/OrganisationCardComp/OrganisationCard";
 import {
-  getAdmins,
+  getPendingAdmins,
   getOrganizations,
+  getApprovedAdmins,
+  getRejectedAdmins,
 } from "../../services/OrganisationService/OrgCRUD";
-import { titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
-import {
-  Organization,
-  UserData,
-} from "../../Types";
+import { subTitleStyles as titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
+import { Organization, UserData } from "../../Types";
 
 const SuperAdminPage: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [admins, setAdmins] = useState<UserData[]>([]);
-  const [currentTab, setCurrentTab] = useState<"pending" | "approved">(
-    "pending"
-  );
+  const [pendingAdmins, setPendingAdmins] = useState<UserData[]>([]);
+  const [approvedAdmins, setApprovedAdmins] = useState<UserData[]>([]);
+  const [rejectedAdmins, setRejectedAdmins] = useState<UserData[]>([]);
+  const [currentTab, setCurrentTab] = useState<
+    "pending" | "approved" | "rejected" | "available"
+  >("pending");
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(16);
 
@@ -37,25 +38,45 @@ const SuperAdminPage: React.FC = () => {
       }
     };
 
-    const fetchAdmins = async () => {
+    const fetchPendingAdmins = async () => {
       try {
-        const data = await getAdmins();
-        setAdmins(data);
+        const data = await getPendingAdmins();
+        setPendingAdmins(data);
       } catch (error) {
         console.error("Error fetching admins:", error);
       }
     };
 
+    const fetchApprovedAdmins = async () => {
+      try {
+        const data = await getApprovedAdmins();
+        setApprovedAdmins(data);
+      } catch (error) {
+        console.error("Error fetching Approved admins:", error);
+      }
+    };
+        const fetchRejectedAdmins = async () => {
+          try {
+            const data = await getRejectedAdmins();
+            console.log("rejected",data);
+            setRejectedAdmins(data);
+          } catch (error) {
+            console.error("Error fetching Rejected admins:", error);
+          }
+        };
+
     fetchOrganizations();
-    fetchAdmins();
+    fetchPendingAdmins();
+    fetchApprovedAdmins();
+    fetchRejectedAdmins();
   }, []);
 
   const handleTabChange = (
     event: React.SyntheticEvent,
-    newValue: "pending" | "approved"
+    newValue: "pending" | "approved" | "rejected" | "available"
   ) => {
     setCurrentTab(newValue);
-    setPage(1);
+    setPage(1); // Reset page when tab changes
   };
 
   const handlePageChange = (
@@ -65,7 +86,25 @@ const SuperAdminPage: React.FC = () => {
     setPage(value);
   };
 
-  const displayData = currentTab === "pending" ? admins : organizations;
+  // Determine what data to display based on the currentTab
+  let displayData: (UserData | Organization)[] = [];
+  switch (currentTab) {
+    case "pending":
+      displayData = pendingAdmins;
+      break;
+    case "approved":
+      displayData = approvedAdmins;
+      break;
+    case "rejected":
+      displayData = rejectedAdmins;
+      break;
+    case "available":
+      displayData = organizations;
+      break;
+    default:
+      displayData = [];
+  }
+
   const startIndex = (page - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const displayedData = displayData.slice(startIndex, endIndex);
@@ -83,11 +122,13 @@ const SuperAdminPage: React.FC = () => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 2 }}>
-        <Tabs value={currentTab} onChange={handleTabChange}>
+        <Tabs value={currentTab} sx={titleStyles} onChange={handleTabChange}>
           <Tab label="Pending Admins" value="pending" sx={titleStyles} />
+          <Tab label="Approved Admins" value="approved" sx={titleStyles} />
+          <Tab label="Rejected Admins" value="rejected" sx={titleStyles} />
           <Tab
-            label="Approved Organizations"
-            value="approved"
+            label="Organizations"
+            value="available"
             sx={titleStyles}
           />
         </Tabs>
@@ -102,27 +143,19 @@ const SuperAdminPage: React.FC = () => {
         >
           {displayedData.map((item) => (
             <Box key={item._id} sx={{ m: 1, width: "calc(25% - 16px)" }}>
-              {currentTab === "pending" ? (
+              {isUserData(item) ? (
                 <OrganisationCard
-                  title={isUserData(item) ? item.username : ""}
-                  description={``}
+                  title={item.username}
+                  description=""
                   image="https://picsum.photos/200/300/?blur"
-                  fields={
-                    isUserData(item)
-                      ? [
-                          {
-                            label: `Organization`,
-                            value: item.role_specific_details.organization_name,
-                          },
-                          { label: `Location`, value: item.address },
-                        ]
-                      : []
-                  }
-                  status={
-                    isUserData(item) && item.role_specific_details
-                      ? item.role_specific_details.approval_status
-                      : ""
-                  }
+                  fields={[
+                    {
+                      label: "Organization",
+                      value: item.role_specific_details.organization_name,
+                    },
+                    { label: "Location", value: item.address },
+                  ]}
+                  status={item.role_specific_details.approval_status}
                   actions={[
                     {
                       label: "Approve",
@@ -138,24 +171,14 @@ const SuperAdminPage: React.FC = () => {
                 />
               ) : (
                 <OrganisationCard
-                  title={isOrganization(item) ? item.org_name : ""}
-                  description={``}
+                  title={item.org_name}
+                  description=""
                   image="https://picsum.photos/200/300/?blur"
-                  fields={
-                    isOrganization(item)
-                      ? item.org_location.map((loc, index) => ({
-                          label: `Location ${index + 1}`,
-                          value: loc.loc,
-                        }))
-                      : []
-                  }
-                  status={
-                    isOrganization(item)
-                      ? item.isActive
-                        ? "Active"
-                        : "Inactive"
-                      : ""
-                  }
+                  fields={item.org_location.map((loc, index) => ({
+                    label: `Location ${index + 1}`,
+                    value: loc.loc,
+                  }))}
+                  status={item.isActive ? "Active" : "Inactive"}
                   actions={[
                     {
                       label: "Update",
