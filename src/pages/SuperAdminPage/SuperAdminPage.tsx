@@ -82,17 +82,7 @@ const SuperAdminPage: React.FC = () => {
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <Container sx={{ flexGrow: 1, py: 3 }}>
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: "bold",
-            fontFamily: "CustomFont, Arial, sans-serif",
-            fontSize: "1.5 rem",
-          }}
-        >
-          Super Admin Dashboard
-        </Typography>
+      <Container sx={{ flexGrow: 1, py: 2 }}>
         <Tabs value={currentTab} onChange={handleTabChange}>
           <Tab label="Pending Admins" value="pending" sx={titleStyles} />
           <Tab
@@ -111,7 +101,7 @@ const SuperAdminPage: React.FC = () => {
           }}
         >
           {displayedData.map((item) => (
-            <Box key={item._id} sx={{ m: 2, width: "calc(25% - 16px)" }}>
+            <Box key={item._id} sx={{ m: 1, width: "calc(25% - 16px)" }}>
               {currentTab === "pending" ? (
                 <OrganisationCard
                   title={isUserData(item) ? item.username : ""}
