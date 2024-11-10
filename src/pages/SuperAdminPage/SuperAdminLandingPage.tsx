@@ -20,6 +20,13 @@ import {
 import { subTitleStyles as titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
 import { Organization, UserData } from "../../Types";
 
+// Define the action type
+type ActionType = {
+  label: string;
+  color: "primary" | "error";
+  onClick: () => void;
+};
+
 const SuperAdminLandingPage: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [pendingAdmins, setPendingAdmins] = useState<UserData[]>([]);
@@ -31,47 +38,27 @@ const SuperAdminLandingPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(16);
 
+  const fetchAllData = async () => {
+    try {
+      const [orgsData, pendingData, approvedData, rejectedData] =
+        await Promise.all([
+          getOrganizations(),
+          getPendingAdmins(),
+          getApprovedAdmins(),
+          getRejectedAdmins(),
+        ]);
+
+      setOrganizations(orgsData);
+      setPendingAdmins(pendingData);
+      setApprovedAdmins(approvedData);
+      setRejectedAdmins(rejectedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchOrganizations = async () => {
-      try {
-        const data = await getOrganizations();
-        setOrganizations(data);
-      } catch (error) {
-        console.error("Error fetching organizations:", error);
-      }
-    };
-
-    const fetchPendingAdmins = async () => {
-      try {
-        const data = await getPendingAdmins();
-        setPendingAdmins(data);
-      } catch (error) {
-        console.error("Error fetching admins:", error);
-      }
-    };
-
-    const fetchApprovedAdmins = async () => {
-      try {
-        const data = await getApprovedAdmins();
-        setApprovedAdmins(data);
-      } catch (error) {
-        console.error("Error fetching Approved admins:", error);
-      }
-    };
-    const fetchRejectedAdmins = async () => {
-      try {
-        const data = await getRejectedAdmins();
-        console.log("rejected", data);
-        setRejectedAdmins(data);
-      } catch (error) {
-        console.error("Error fetching Rejected admins:", error);
-      }
-    };
-
-    fetchOrganizations();
-    fetchPendingAdmins();
-    fetchApprovedAdmins();
-    fetchRejectedAdmins();
+    fetchAllData();
   }, []);
 
   const handleTabChange = (
@@ -79,7 +66,7 @@ const SuperAdminLandingPage: React.FC = () => {
     newValue: "pending" | "approved" | "rejected" | "available"
   ) => {
     setCurrentTab(newValue);
-    setPage(1); // Reset page when tab changes
+    setPage(1);
   };
 
   const handlePageChange = (
@@ -88,11 +75,11 @@ const SuperAdminLandingPage: React.FC = () => {
   ) => {
     setPage(value);
   };
+
   const handleApprove = async (id: string) => {
     try {
-      await approveAdmin(id); // Assuming approveAdmin sends a request with _id as a param
-      console.log("From Page Approved admin with ID:", id);
-      // Optionally, update the UI after approval
+      await approveAdmin(id);
+      await fetchAllData();
     } catch (error) {
       console.error("Error approving admin:", error);
     }
@@ -100,9 +87,8 @@ const SuperAdminLandingPage: React.FC = () => {
 
   const handleReject = async (id: string) => {
     try {
-      await rejectAdmin(id); // Assuming rejectAdmin sends a request with _id as a param
-      console.log("Rejected admin with ID:", id);
-      // Optionally, update the UI after rejection
+      await rejectAdmin(id);
+      await fetchAllData();
     } catch (error) {
       console.error("Error rejecting admin:", error);
     }
@@ -110,15 +96,13 @@ const SuperAdminLandingPage: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteOrganization(id); // Assuming rejectAdmin sends a request with _id as a param
-      console.log("Rejected admin with ID:", id);
-      // Optionally, update the UI after rejection
+      await deleteOrganization(id);
+      await fetchAllData();
     } catch (error) {
-      console.error("Error rejecting admin:", error);
+      console.error("Error deleting organization:", error);
     }
   };
 
-  // Determine what data to display based on the currentTab
   let displayData: (UserData | Organization)[] = [];
   switch (currentTab) {
     case "pending":
@@ -151,6 +135,40 @@ const SuperAdminLandingPage: React.FC = () => {
     return (item as Organization).org_name !== undefined;
   };
 
+  const getActions = (item: Organization | UserData): ActionType[] => {
+    if (isOrganization(item)) {
+      return [
+        {
+          label: "Update",
+          color: "primary" as const,
+          onClick: () => console.log("Update"),
+        },
+        {
+          label: "Delete",
+          color: "error" as const,
+          onClick: () => handleDelete(item._id),
+        },
+      ];
+    }
+
+    if (currentTab === "pending") {
+      return [
+        {
+          label: "Approve",
+          color: "primary" as const,
+          onClick: () => handleApprove(item._id),
+        },
+        {
+          label: "Reject",
+          color: "error" as const,
+          onClick: () => handleReject(item._id),
+        },
+      ];
+    }
+
+    return [];
+  };
+
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 2 }}>
@@ -160,7 +178,6 @@ const SuperAdminLandingPage: React.FC = () => {
           <Tab label="Rejected Admins" value="rejected" sx={titleStyles} />
           <Tab label="Organizations" value="available" sx={titleStyles} />
         </Tabs>
-        {/* Scrollable Card Section */}
         <Box
           sx={{
             display: "flex",
@@ -184,18 +201,7 @@ const SuperAdminLandingPage: React.FC = () => {
                     { label: "Location", value: item.address },
                   ]}
                   status={item.role_specific_details.approval_status}
-                  actions={[
-                    {
-                      label: "Approve",
-                      color: "primary",
-                      onClick: () => handleApprove(item._id),
-                    },
-                    {
-                      label: "Reject",
-                      color: "error",
-                      onClick: () => handleReject(item._id),
-                    },
-                  ]}
+                  actions={getActions(item)}
                 />
               ) : (
                 <OrganisationCard
@@ -207,24 +213,12 @@ const SuperAdminLandingPage: React.FC = () => {
                     value: loc.loc,
                   }))}
                   status={item.isActive ? "Active" : "Inactive"}
-                  actions={[
-                    {
-                      label: "Update",
-                      color: "primary",
-                      onClick: () => console.log("Update"),
-                    },
-                    {
-                      label: "Delete",
-                      color: "error",
-                      onClick: () => handleDelete(item._id),
-                    },
-                  ]}
+                  actions={getActions(item)}
                 />
               )}
             </Box>
           ))}
         </Box>
-        {/* Pagination */}
         <Box sx={{ display: "flex", justifyContent: "right", mt: 4 }}>
           <Pagination
             count={Math.ceil(displayData.length / rowsPerPage)}
