@@ -16,8 +16,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import tiff3 from "../../assets/tiff3.png";
 import { getToken, logoutUser } from "../../services/LoginService/loginUser";
 import { logoStyle, styles } from "./Navbar.styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearAuthData } from "../../store/authSlice";
+import { RootState } from "../../store/Store";
+import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 
 const Navbar = () => {
   const [Open, setOpen] = useState(false);
@@ -36,6 +38,7 @@ const Navbar = () => {
       navigate("/login");
     }
   };
+  const userRoleId = useSelector((state: RootState) => state.auth.userRoleId);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={styles.drawerBox}>
@@ -80,6 +83,16 @@ const Navbar = () => {
                 sx={styles.button}
               >
                 Home
+              </Button>
+            )}
+            {getToken() && userRoleId === SUPERADMIN_ROLE_ID && (
+              <Button
+                color="inherit"
+                component={Link}
+                to="/AddOrganization"
+                sx={styles.button}
+              >
+                Add Organization
               </Button>
             )}
           </Box>

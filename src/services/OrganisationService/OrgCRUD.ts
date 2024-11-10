@@ -1,8 +1,10 @@
 import axios from "axios";
+import {
+  AddOrganization1,
+  OrganizationsResponse1,
+} from "./Organization1.types";
 const API_URL = process.env.REACT_APP_API_URL;
-
-// const API_URL = "http://localhost:5000";
-// console.log("API URL:", process.env.REACT_APP_API_URL);
+const token = localStorage.getItem("token");
 
 export interface OrgLocation {
   loc: string;
@@ -27,7 +29,7 @@ interface OrganizationsResponse {
   statuscode: number;
   data: Organization[];
 }
-// Fetch all organizations
+
 export const getOrganizations = async (): Promise<Organization[]> => {
   try {
     console.log(`${API_URL}/api/organizations/getall`);
@@ -35,9 +37,41 @@ export const getOrganizations = async (): Promise<Organization[]> => {
       `${API_URL}/api/superadmin/organizations/getallorganization`
     );
     console.log(response.data);
-    return response.data.data; // Automatically wrapped in a Promise
+    return response.data.data;
   } catch (error) {
     console.error("Failed to fetch organizations:", error);
-    throw error; // Also automatically wrapped in a rejected Promise
+    throw error;
+  }
+};
+
+export const addOrganization = async (
+  organization: AddOrganization1
+): Promise<AddOrganization1[]> => {
+  try {
+    const filteredOrganization = {
+      org_name: organization.org_name,
+      org_location: organization.org_location.map(
+        ({ loc, address, loc_contact, loc_email }) => ({
+          loc,
+          address,
+          loc_contact,
+          loc_email,
+        })
+      ),
+    };
+
+    const response = await axios.post<OrganizationsResponse1>(
+      `${API_URL}/api/superadmin/organizations/addOrganization`,
+      filteredOrganization,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Failed to add organization:", error);
+    throw error;
   }
 };
