@@ -13,11 +13,14 @@ import {
   getOrganizations,
   getApprovedAdmins,
   getRejectedAdmins,
-} from "../../services/OrganisationService/OrgCRUD";
+  approveAdmin,
+  rejectAdmin,
+  deleteOrganization,
+} from "../../services/OrganisationService/OrganizationService";
 import { subTitleStyles as titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
 import { Organization, UserData } from "../../Types";
 
-const SuperAdminPage: React.FC = () => {
+const SuperAdminLandingPage: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [pendingAdmins, setPendingAdmins] = useState<UserData[]>([]);
   const [approvedAdmins, setApprovedAdmins] = useState<UserData[]>([]);
@@ -55,15 +58,15 @@ const SuperAdminPage: React.FC = () => {
         console.error("Error fetching Approved admins:", error);
       }
     };
-        const fetchRejectedAdmins = async () => {
-          try {
-            const data = await getRejectedAdmins();
-            console.log("rejected",data);
-            setRejectedAdmins(data);
-          } catch (error) {
-            console.error("Error fetching Rejected admins:", error);
-          }
-        };
+    const fetchRejectedAdmins = async () => {
+      try {
+        const data = await getRejectedAdmins();
+        console.log("rejected", data);
+        setRejectedAdmins(data);
+      } catch (error) {
+        console.error("Error fetching Rejected admins:", error);
+      }
+    };
 
     fetchOrganizations();
     fetchPendingAdmins();
@@ -84,6 +87,35 @@ const SuperAdminPage: React.FC = () => {
     value: number
   ) => {
     setPage(value);
+  };
+  const handleApprove = async (id: string) => {
+    try {
+      await approveAdmin(id); // Assuming approveAdmin sends a request with _id as a param
+      console.log("From Page Approved admin with ID:", id);
+      // Optionally, update the UI after approval
+    } catch (error) {
+      console.error("Error approving admin:", error);
+    }
+  };
+
+  const handleReject = async (id: string) => {
+    try {
+      await rejectAdmin(id); // Assuming rejectAdmin sends a request with _id as a param
+      console.log("Rejected admin with ID:", id);
+      // Optionally, update the UI after rejection
+    } catch (error) {
+      console.error("Error rejecting admin:", error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteOrganization(id); // Assuming rejectAdmin sends a request with _id as a param
+      console.log("Rejected admin with ID:", id);
+      // Optionally, update the UI after rejection
+    } catch (error) {
+      console.error("Error rejecting admin:", error);
+    }
   };
 
   // Determine what data to display based on the currentTab
@@ -126,11 +158,7 @@ const SuperAdminPage: React.FC = () => {
           <Tab label="Pending Admins" value="pending" sx={titleStyles} />
           <Tab label="Approved Admins" value="approved" sx={titleStyles} />
           <Tab label="Rejected Admins" value="rejected" sx={titleStyles} />
-          <Tab
-            label="Organizations"
-            value="available"
-            sx={titleStyles}
-          />
+          <Tab label="Organizations" value="available" sx={titleStyles} />
         </Tabs>
         {/* Scrollable Card Section */}
         <Box
@@ -160,12 +188,12 @@ const SuperAdminPage: React.FC = () => {
                     {
                       label: "Approve",
                       color: "primary",
-                      onClick: () => console.log("Approve"),
+                      onClick: () => handleApprove(item._id),
                     },
                     {
                       label: "Reject",
                       color: "error",
-                      onClick: () => console.log("Reject"),
+                      onClick: () => handleReject(item._id),
                     },
                   ]}
                 />
@@ -188,7 +216,7 @@ const SuperAdminPage: React.FC = () => {
                     {
                       label: "Delete",
                       color: "error",
-                      onClick: () => console.log("Delete"),
+                      onClick: () => handleDelete(item._id),
                     },
                   ]}
                 />
@@ -209,4 +237,4 @@ const SuperAdminPage: React.FC = () => {
   );
 };
 
-export default SuperAdminPage;
+export default SuperAdminLandingPage;

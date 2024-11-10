@@ -4,17 +4,14 @@ import OrganisationCard from "../../../../components/OrganisationCardComp/Organi
 import {
   getPendingAdmins,
   getOrganizations,
-} from "../../../../services/OrganisationService/OrgCRUD";
+} from "../../../../services/OrganisationService/OrganizationService";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { titleStyles } from "./SuperAdminDashboardStyle";
-import {
-  Organization,
-  UserData,
-} from "../../../../Types";
+import { Organization, UserData } from "../../../../Types";
 
 const settings = {
   dots: true,
@@ -88,7 +85,7 @@ const SuperAdminDashboard: React.FC = () => {
                 description=""
                 image="https://picsum.photos/200/300/?blur"
                 fields={[
-                  ...org.org_location.map((loc ) => ({
+                  ...org.org_location.map((loc) => ({
                     label: `Location `,
                     value: loc.loc,
                   })),
