@@ -281,7 +281,11 @@ export default function OrganizationForm() {
                 )}
               </FieldArray>
               <Box sx={buttonGroup}>
-                <Button variant="outlined" disabled={isSubmitting}>
+                <Button
+                  variant="outlined"
+                  disabled={isSubmitting}
+                  onClick={() => navigate("/SuperAdminDashboard")}
+                >
                   Cancel
                 </Button>
                 <Button

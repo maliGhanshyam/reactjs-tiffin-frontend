@@ -72,14 +72,24 @@ const Navbar = () => {
         <Toolbar sx={styles.toolbar}>
           <Box sx={styles.toolbar}>
             <img src={tiff3} alt="Logo" style={logoStyle} />
-            <Typography variant="h5" sx={styles.title}>
-              Neo-Tiffins
+            <Typography
+              variant="h5"
+              sx={{ ...styles.title, fontFamily: "Futura, Avenir, sans-serif" }}
+            >
+              <span style={{ color: "black", fontWeight: "bold" }}>Neo</span>
+              <span style={{ color: "white", fontWeight: "bold" }}>
+                Tiffins
+              </span>
             </Typography>
             {getToken() && (
               <Button
                 color="inherit"
                 component={Link}
-                to="/dashboard"
+                to={
+                  userRoleId === SUPERADMIN_ROLE_ID
+                    ? "/superAdminDashboard"
+                    : "/adminDashboard"
+                }
                 sx={styles.button}
               >
                 Home
