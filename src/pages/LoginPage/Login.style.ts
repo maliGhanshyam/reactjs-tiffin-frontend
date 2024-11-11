@@ -3,6 +3,8 @@ import { Theme } from "@mui/material/styles";
 
 export const styles: { [key: string]: SxProps<Theme> } = {
   container: {
+    position: "static",
+    flexBasis: "30%",
     marginTop: 3,
     marginBottom: 3,
     display: "flex",
@@ -18,5 +20,15 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     color: "primary.main",
     fontSize: { xs: "1.4rem", sm: "1.5rem" },
     padding: 2,
+  },
+  svgGrid: {
+    display: { xs: "none", sm: "block" },
+    position: "static",
+    flexBasis: "60%",
+  },
+  containerGrid: {
+    display: "flex",
+    width: "100%",
+    alignItems: "center",
   },
 };

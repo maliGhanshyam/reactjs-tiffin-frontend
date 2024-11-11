@@ -22,6 +22,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import { styles } from "./Login.style";
+import login from "../../assets/LoginScreen1.svg";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,8 @@ const LoginForm = () => {
   ) => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
+      console.log(response.role_id);
+
       if (
         response.success &&
         (response as { token?: string }).token &&
@@ -101,88 +104,111 @@ const LoginForm = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box sx={styles.container}>
-        <Typography component="h1" variant="h5" sx={styles.heading}>
-          Sign In
-        </Typography>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-            errors,
-            touched,
-          }) => (
-            <Form>
-              <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    name="email"
-                    size="small"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    size="small"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.password && Boolean(errors.password)}
-                    helperText={touched.password && errors.password}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            edge="end"
-                          >
-                            {showPassword ? (
-                              <VisibilityIcon />
-                            ) : (
-                              <VisibilityOffIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
+    <Container component="main">
+      <Grid2 sx={styles.containerGrid}>
+        <Grid2 size={5} sx={styles.svgGrid}>
+          <Box
+            sx={{
+              width: 600,
+              height: 600,
+              backgroundColor: "#e0e0e0",
+              backgroundImage: `url(${login})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              display: { xs: "none", sm: "block" },
+            }}
+          ></Box>
+        </Grid2>
+        <Grid2 size={{ sm: 4 }}>
+          <Box sx={styles.container}>
+            <Typography component="h1" variant="h5" sx={styles.heading}>
+              Sign In
+            </Typography>
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                values,
+                errors,
+                touched,
+              }) => (
+                <Form>
+                  <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
+                    <Grid2 size={12}>
+                      <TextField
+                        fullWidth
+                        label="Email"
+                        name="email"
+                        size="small"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.email && Boolean(errors.email)}
+                        helperText={touched.email && errors.email}
+                      />
+                    </Grid2>
+                    <Grid2 size={12}>
+                      <TextField
+                        fullWidth
+                        label="Password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        size="small"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.password && Boolean(errors.password)}
+                        helperText={touched.password && errors.password}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityIcon />
+                                ) : (
+                                  <VisibilityOffIcon />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid2>
+                    <Grid2 size={12}>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        disabled={isSubmitting}
+                      >
+                        Submit
+                      </Button>
+                    </Grid2>
+                  </Grid2>
+                  <Typography
+                    variant="body2"
+                    align="center"
+                    sx={{ marginTop: 2 }}
                   >
-                    Submit
-                  </Button>
-                </Grid2>
-              </Grid2>
-              <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
-                Don’t have an account? <Link to="/register">Sign up here</Link>
-              </Typography>
-            </Form>
-          )}
-        </Formik>
-      </Box>
+                    Don’t have an account?{" "}
+                    <Link to="/register">Sign up here</Link>
+                  </Typography>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Grid2>
+      </Grid2>
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
