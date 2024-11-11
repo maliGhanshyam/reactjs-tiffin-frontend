@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
-import NotFound from "../components/NotFound";
+import { PageNotFound } from "../components/NotFound";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
 import AuthGuard from "../components/RouteGuard";
@@ -14,7 +14,7 @@ const childRoutes = [
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <PageNotFound />,
   },
   {
     path: "superAdminDashboard",
@@ -38,10 +38,11 @@ const childRoutes = [
   },
   {
     path: "supAdmin",
-    element:
+    element: (
       <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
-      <SuperAdminLandingPage />
-    </AuthGuard>,
+        <SuperAdminLandingPage />
+      </AuthGuard>
+    ),
   },
   {
     path: "",
@@ -49,7 +50,7 @@ const childRoutes = [
   },
   {
     path: "**",
-    element: <NotFound />,
+    element: <PageNotFound />,
   },
 ];
 
