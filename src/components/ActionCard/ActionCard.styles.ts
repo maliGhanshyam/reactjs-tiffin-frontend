@@ -24,8 +24,6 @@ export const titleStyles: SxProps<Theme> = {
 export const descriptionStyles: SxProps<Theme> = {
   mb: 2,
 };
-
-// Removed the function and made it a static object in the component
 export const fieldsBoxStyles: SxProps<Theme> = {
   mt: 2,
 };
