@@ -55,14 +55,12 @@ const LoginForm = () => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
       if (
-        response.success &&
-        (response as { token?: string }).token &&
-        (response as { _id?: string })._id &&
-        (response as { role?: string }).role
+        response.success 
+        
       ) {
         dispatch(
           setAuthData({
-            userRoleId: response.role,
+            userRoleId: response.role_id,
             userId: response._id,
           })
         );
