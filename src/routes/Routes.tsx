@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
-import AuthGuard from "../components/RouteGuard";
+import ProtectedRoute from "./ProtectedRoute";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
 import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage";
@@ -22,17 +22,17 @@ const childRoutes = [
   {
     path: "superAdminDashboard",
     element: (
-      <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
         <SuperAdminDashboard />
-      </AuthGuard>
+      </ProtectedRoute>
     ),
   },
   {
     path: "adminDashboard",
     element: (
-      <AuthGuard requiredRole={ADMIN_ROLE_ID}>
+      <ProtectedRoute requiredRole={ADMIN_ROLE_ID}>
         <AdminDashboard />
-      </AuthGuard>
+      </ProtectedRoute>
     ),
   },
   {
@@ -42,9 +42,9 @@ const childRoutes = [
   {
     path: "supAdmin",
     element: (
-      <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
         <SuperAdminLandingPage />
-      </AuthGuard>
+      </ProtectedRoute>
     ),
   },
   {

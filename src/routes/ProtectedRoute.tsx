@@ -1,16 +1,16 @@
 import { ReactNode, FC, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/Store";
+import { RootState } from "../store/Store";
 import axios from "axios";
-import { setAuthData } from "../../store/authSlice";
+import { setAuthData } from "../store/authSlice";
 const API_URL = "http://localhost:5000";
 interface AuthGuardProps {
   children: ReactNode;
   requiredRole: string; // SuperAdmin or Admin role ID
 }
 
-const AuthGuard: FC<AuthGuardProps> = ({ children, requiredRole }) => {
+const ProtectedRoute: FC<AuthGuardProps> = ({ children, requiredRole }) => {
   const userRoleId = useSelector((state: RootState) => state.auth.userRoleId);
   const userId = useSelector((state: RootState) => state.auth.userId);
   const token = localStorage.getItem("token");
@@ -48,4 +48,4 @@ const AuthGuard: FC<AuthGuardProps> = ({ children, requiredRole }) => {
   return <>{children}</>;
 };
 
-export default AuthGuard;
+export default ProtectedRoute;
