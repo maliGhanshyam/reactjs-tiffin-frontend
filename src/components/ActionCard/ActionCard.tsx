@@ -30,7 +30,8 @@ const ActionCard: React.FC<Props> = ({
   fields = [],
   onApprove,
   onReject,
-  onTrendy
+  onTrendy,
+  isTrendy = false,
 }) => {
   return (
     <Card sx={cardStyles}>
@@ -108,6 +109,7 @@ const ActionCard: React.FC<Props> = ({
             startIcon={<LocalFireDepartmentIcon />}
             sx={trendyButtonStyles}
             onClick={onTrendy}
+            disabled={isTrendy}
           >Trendy
           </Button>
         )}

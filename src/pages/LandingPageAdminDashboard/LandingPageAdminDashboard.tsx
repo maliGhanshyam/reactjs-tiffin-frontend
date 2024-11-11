@@ -189,6 +189,9 @@ const LandingPageAdminDashboard = () => {
   const handleTrendy = async (retailerId: string) => {
     try {
       const res: ApiResponse = await makeTrendy(retailerId);
+      await fetchRetailers(page);
+      await fetchApprovedRetailers(approvedPage);
+      await fetchRejectedRetailers(rejectedPage);
       if (res.acknowledged === true) {
         setSnackbar({
           open: true,
@@ -413,6 +416,7 @@ const LandingPageAdminDashboard = () => {
                     { label: "Contact", value: ret.contact_number },
                     { label: "Address", value: truncateAddress(ret.address) },
                   ]}
+                  istrendy={ret.role_specific_details?.approval[0]?.istrendy}
                   onApprove={() => openConfirmationModal(ret, "approve")}
                   onReject={() => openConfirmationModal(ret, "reject")}
                   onTrendy={() => openConfirmationModal(ret, "trendy")}
@@ -482,8 +486,8 @@ const LandingPageAdminDashboard = () => {
               actionType === "approve"
                 ? "success"
                 : actionType === "reject"
-                ? "warning"
-                : "primary"
+                ? "primary"
+                : "warning"
             }
             variant="contained"
             sx={modalButton}

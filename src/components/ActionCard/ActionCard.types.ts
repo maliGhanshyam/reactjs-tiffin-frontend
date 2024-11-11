@@ -6,4 +6,5 @@ export interface Props {
   onApprove?: () => void;
   onReject?: () => void;
   onTrendy?: () => void;
+  isTrendy?: boolean;
 }
