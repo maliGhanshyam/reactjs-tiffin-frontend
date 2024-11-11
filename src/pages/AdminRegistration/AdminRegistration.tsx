@@ -21,12 +21,13 @@ import {
   RegisterResponse,
   ISnackbar,
 } from "./AdminRegistration.types";
-import { styles } from "./AdminRegistration.style";
+import { MenuProps, styles } from "./AdminRegistration.style";
 import { ADMIN_ROLE_ID } from "../../constants/ROLES";
 import { registerAdmin } from "../../services/Auth";
 import { getOrganizations } from "../../services/Organization";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import login from "../../assets/LoginScreen.svg";
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
@@ -98,10 +99,8 @@ const AdminRegistration = () => {
       organization_id: Yup.string().required("Organization is required"),
     }),
     onSubmit: async (values, actions) => {
-      console.log(values);
       try {
         const res: RegisterResponse = await registerAdmin(values);
-        console.log(res);
         if (res.statuscode === 201) {
           setSnackbar({
             open: true,
@@ -135,246 +134,273 @@ const AdminRegistration = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box sx={styles.container}>
-        <Typography
-          component="h1"
-          variant="h5"
-          align="center"
-          sx={styles.heading}
-        >
-          Admin Registration
-        </Typography>
+    <Container component="main">
+      <Grid2 container size={12}>
+      <Grid2 size={7} sx={styles.svgGrid}>
         <Box
-          component="form"
-          onSubmit={formik.handleSubmit}
-          noValidate
-          sx={{ mt: 2 }}
-        >
-          <Grid2 container spacing={2}>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Username"
-                name="username"
-                id="username"
-                autoComplete="off"
-                size="small"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.username && Boolean(formik.errors.username)
-                }
-                helperText={formik.touched.username && formik.errors.username}
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Email"
-                name="email"
-                id="email"
-                autoComplete="off"
-                size="small"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Contact Number"
-                name="contact_number"
-                id="contact_number"
-                autoComplete="off"
-                size="small"
-                value={formik.values.contact_number}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.contact_number &&
-                  Boolean(formik.errors.contact_number)
-                }
-                helperText={
-                  formik.touched.contact_number && formik.errors.contact_number
-                }
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Address"
-                name="address"
-                id="address"
-                autoComplete="off"
-                size="small"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.address && Boolean(formik.errors.address)}
-                helperText={formik.touched.address && formik.errors.address}
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <Box sx={{ width: "100%" }}>
-                <Select
-                  sx={{ textAlign: "left" }}
+          sx={{
+            width: 600,
+            height: 600,
+            backgroundColor: "#e0e0e0",
+            backgroundImage: `url(${login})`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            display: { xs: 'none', sm: 'block' }
+          }}
+        ></Box>
+      </Grid2>
+      <Grid2 size={{ xs: 12, sm: 4 }}>
+        <Box sx={styles.container}>
+          <Typography
+            component="h1"
+            variant="h5"
+            align="center"
+            sx={styles.heading}
+          >
+            Admin Registration
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{ mt: 2 }}
+          >
+            <Grid2 container spacing={2}>
+              <Grid2 size={12}>
+                <TextField
                   fullWidth
+                  label="Username"
+                  name="username"
+                  id="username"
+                  autoComplete="off"
                   size="small"
-                  labelId="organization"
-                  id="organisationName"
-                  value={selectedOrganization}
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    setSelectedOrganization(selectedId);
-                    formik.setFieldValue("organization_id", selectedId);
-                  }}
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.organization_id &&
-                    Boolean(formik.errors.organization_id)
+                    formik.touched.username && Boolean(formik.errors.username)
                   }
-                  displayEmpty
-                  renderValue={(value) => {
-                    if (value) {
-                      return organization.find((org) => org._id === value)
-                        ?.org_name;
+                  helperText={formik.touched.username && formik.errors.username}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  id="email"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  fullWidth
+                  label="Contact Number"
+                  name="contact_number"
+                  id="contact_number"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.contact_number}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.contact_number &&
+                    Boolean(formik.errors.contact_number)
+                  }
+                  helperText={
+                    formik.touched.contact_number &&
+                    formik.errors.contact_number
+                  }
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  fullWidth
+                  label="Address"
+                  name="address"
+                  id="address"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.address && Boolean(formik.errors.address)
+                  }
+                  helperText={formik.touched.address && formik.errors.address}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <Box sx={{ width: "100%" }}>
+                  <Select
+                    sx={{ textAlign: "left" }}
+                    fullWidth
+                    size="small"
+                    labelId="organization"
+                    id="organisationName"
+                    value={selectedOrganization}
+                    MenuProps={MenuProps}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      setSelectedOrganization(selectedId);
+                      formik.setFieldValue("organization_id", selectedId);
+                    }}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.organization_id &&
+                      Boolean(formik.errors.organization_id)
                     }
-                    return (
-                      <Typography
-                        sx={
-                          formik.touched.organization_id &&
-                          formik.errors.organization_id
-                            ? styles.organizationError
-                            : styles.organizationPlaceholder
-                        }
-                      >
-                        Organization Name
-                      </Typography>
-                    );
-                  }}
-                >
-                  <MenuItem value="" disabled>
-                    Select an organization
-                  </MenuItem>
-                  {organization.map((org: Organization) => (
-                    <MenuItem key={org._id} value={org._id}>
-                      {org.org_name}
+                    displayEmpty
+                    renderValue={(value) => {
+                      if (value) {
+                        return organization.find((org) => org._id === value)
+                          ?.org_name;
+                      }
+                      return (
+                        <Typography
+                          sx={
+                            formik.touched.organization_id &&
+                            formik.errors.organization_id
+                              ? styles.organizationError
+                              : styles.organizationPlaceholder
+                          }
+                        >
+                          Organization Name
+                        </Typography>
+                      );
+                    }}
+                  >
+                    <MenuItem value="" disabled>
+                      Select an organization
                     </MenuItem>
-                  ))}
-                </Select>
+                    {organization.map((org: Organization) => (
+                      <MenuItem
+                        key={org._id}
+                        value={org._id}
+                        sx={{ overflowY: "auto" }}
+                      >
+                        {org.org_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
 
-                {formik.touched.organization_id &&
-                  formik.errors.organization_id && (
-                    <Typography
-                      color="error"
-                      variant="caption"
-                      sx={styles.errorText}
-                    >
-                      {formik.errors.organization_id}
-                    </Typography>
-                  )}
-              </Box>
-            </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                id="password"
-                autoComplete="off"
-                size="small"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
+                  {formik.touched.organization_id &&
+                    formik.errors.organization_id && (
+                      <Typography
+                        color="error"
+                        variant="caption"
+                        sx={styles.errorText}
                       >
-                        {showPassword ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+                        {formik.errors.organization_id}
+                      </Typography>
+                    )}
+                </Box>
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                  }
+                  helperText={formik.touched.password && formik.errors.password}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  fullWidth
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          edge="end"
+                        >
+                          {showConfirmPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
             </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Confirm Password"
-                name="confirmPassword"
-                id="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
-                autoComplete="off"
-                size="small"
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.confirmPassword &&
-                  Boolean(formik.errors.confirmPassword)
-                }
-                helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        edge="end"
-                      >
-                        {showConfirmPassword ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-          </Grid2>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={styles.button}
-          >
-            Sign Up
-          </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={styles.button}
+            >
+              Sign Up
+            </Button>
+          </Box>
+          <Typography variant="body2" align="center">
+            Already have an account?&nbsp;
+            <Link to={"/login"}>click here to login</Link>
+          </Typography>
         </Box>
-        <Typography variant="body2" align="center">
-          Already have an account?&nbsp;
-          <Link to={"/login"}>click here to login</Link>
-        </Typography>
-      </Box>
+      </Grid2>
+      </Grid2>
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ mt: 4 }}
       >
         <Alert
           onClose={handleSnackbarClose}

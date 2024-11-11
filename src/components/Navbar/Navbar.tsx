@@ -91,7 +91,7 @@ const Navbar = () => {
             sx={{
               display: { xs: "none", sm: "flex" },
               marginLeft: "auto",
-              gap:1
+              gap: 1,
             }}
           >
             <Button
@@ -100,11 +100,18 @@ const Navbar = () => {
               to={getToken() ? "#" : "/login"}
               onClick={getToken() ? handleAuthToggle : undefined}
               sx={styles.button2}
+              variant="outlined"
             >
               {getToken() ? "Logout" : "Login"}
             </Button>
             {!getToken() && (
-              <Button color="inherit" component={Link} to="/register" sx={styles.button2}>
+              <Button
+                color="inherit"
+                component={Link}
+                to="/register"
+                sx={styles.button2}
+                variant="outlined"
+              >
                 Register
               </Button>
             )}

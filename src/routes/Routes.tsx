@@ -1,12 +1,14 @@
+import React from 'react';
 import { Navigate } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
-import { PageNotFound } from "../components/NotFound";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
 import AuthGuard from "../components/RouteGuard";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
 import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage";
+import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
+import { PageNotFound } from "../components/PageNotFound";
 const childRoutes = [
   {
     path: "register",
@@ -20,8 +22,8 @@ const childRoutes = [
     path: "superAdminDashboard",
     element: (
       <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
-        <SuperAdminDashboard />
-      </AuthGuard>
+        <SuperAdminDashboard /> 
+        </AuthGuard>
     ),
   },
   {
@@ -50,7 +52,14 @@ const childRoutes = [
   },
   {
     path: "**",
-    element: <PageNotFound />,
+    element: <PageNotFound />
+  },
+   { path: "approved-retailers",
+    element: <LandingPageAdminDashboard/>
+  },
+  {
+    path: "",
+    element: <Navigate to="login" />,
   },
 ];
 
