@@ -51,7 +51,7 @@ export const sliderItem: SxProps<Theme> = {
 
 export const sectionTitle: SxProps<Theme> = {
   mt: 3,
-  mx: 3,
+  mx:2,
   fontWeight: "bold",
   fontSize: "1.4rem",
   display: "flex",

@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { Retailer } from "./AdminDashboard.types";
 import {
-  getApprovedRetail,
-  getPendingRetail,
-  getRejectedRetail,
+  getApproved,
+  getPending,
+  getRejected,
 } from "../../../services/Retailer";
 import { ActionCard } from "../../../components/ActionCard";
 import { useNavigate } from "react-router-dom";
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
 
   const fetchRetailers = async () => {
     try {
-      const data = await getPendingRetail();
+      const data = await getPending();
       setPendingCount(data.length);
     } catch (error) {
       console.error("Error fetching pending retailers:", error);
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
 
   const fetchApprovedRetailers = async () => {
     try {
-      const data = await getApprovedRetail();
+      const data = await getApproved();
       setApproveRetailer(data);
       setApprovedCount(data.length);
     } catch (error) {
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
 
   const fetchRejectedRetailers = async () => {
     try {
-      const data = await getRejectedRetail();
+      const data = await getRejected();
       setRejectedCount(data.length);
     } catch (error) {
       console.error("Error fetching rejected retailers:", error);

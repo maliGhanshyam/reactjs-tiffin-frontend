@@ -4,8 +4,8 @@ export {
   rejectRetailer,
   getApprovedRetailer,
   getRejectedRetailer,
-  getRejectedRetail,
-  getApprovedRetail,
-  getPendingRetail,
+  getRejected,
+  getApproved,
+  getPending,
   makeTrendy
 } from "./Retailer";

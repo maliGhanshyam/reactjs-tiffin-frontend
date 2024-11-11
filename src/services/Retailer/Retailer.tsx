@@ -122,7 +122,7 @@ export const makeTrendy = async (retailerId: string): Promise<ApiResponse> => {
 
 // ============Admin==========
 
-export const getPendingRetail = async (): Promise<Retailer[]> => {
+export const getPending = async (): Promise<Retailer[]> => {
   try {
     const token = getToken();
     const response = await axios.get<RetailersResponse>(
@@ -138,7 +138,7 @@ export const getPendingRetail = async (): Promise<Retailer[]> => {
   }
 };
 
-export const getApprovedRetail = async (): Promise<Retailer[]> => {
+export const getApproved = async (): Promise<Retailer[]> => {
   try {
     const token = getToken();
     const response = await axios.get<RetailersResponse>(
@@ -153,7 +153,7 @@ export const getApprovedRetail = async (): Promise<Retailer[]> => {
   }
 };
 
-export const getRejectedRetail = async (): Promise<Retailer[]> => {
+export const getRejected = async (): Promise<Retailer[]> => {
   try {
     const token = getToken();
     const response = await axios.get<RetailersResponse>(
