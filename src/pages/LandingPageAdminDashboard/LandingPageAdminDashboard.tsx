@@ -416,7 +416,7 @@ const LandingPageAdminDashboard = () => {
                     { label: "Contact", value: ret.contact_number },
                     { label: "Address", value: truncateAddress(ret.address) },
                   ]}
-                  istrendy={ret.role_specific_details?.approval[0]?.istrendy}
+                  isTrendy={ret.role_specific_details?.approval[0]?.istrendy}
                   onApprove={() => openConfirmationModal(ret, "approve")}
                   onReject={() => openConfirmationModal(ret, "reject")}
                   onTrendy={() => openConfirmationModal(ret, "trendy")}
