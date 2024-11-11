@@ -1,11 +1,14 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
-import NotFound from "../components/NotFound";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
 import AuthGuard from "../components/RouteGuard";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
+import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage";
+import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
+import { PageNotFound } from "../components/PageNotFound";
 import { AddOrganizationForm } from "../pages/AddOrganizationPage";
 const childRoutes = [
   {
@@ -14,7 +17,7 @@ const childRoutes = [
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <PageNotFound />,
   },
   {
     path: "superAdminDashboard",
@@ -37,6 +40,14 @@ const childRoutes = [
     element: <LoginForm />,
   },
   {
+    path: "supAdmin",
+    element: (
+      <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
+        <SuperAdminLandingPage />
+      </AuthGuard>
+    ),
+  },
+  {
     path: "AddOrganization",
     element: <AddOrganizationForm />,
   },
@@ -46,7 +57,12 @@ const childRoutes = [
   },
   {
     path: "**",
-    element: <NotFound />,
+    element: <PageNotFound />,
+  },
+  { path: "approved-retailers", element: <LandingPageAdminDashboard /> },
+  {
+    path: "",
+    element: <Navigate to="login" />,
   },
 ];
 
