@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Retailer, RetailersResponse } from "./Retailer.types";
+import { ApiResponse, Retailer, RetailersResponse } from "./Retailer.types";
 
 const API_URL = process.env.REACT_APP_API_URL! || "http://localhost:5000";
 
@@ -71,7 +71,7 @@ export const getRejectedRetailer = async (
 };
 
 // Approve a retailer
-export const approveRetailer = async (retailerId: string): Promise<void> => {
+export const approveRetailer = async (retailerId: string): Promise<ApiResponse> => {
   try {
     await axios.put(
       `${API_URL}/api/admin/approveRetailer/${retailerId}`,
@@ -82,13 +82,14 @@ export const approveRetailer = async (retailerId: string): Promise<void> => {
         },
       }
     );
+    return { acknowledged: true };
   } catch (error) {
     throw error;
   }
 };
 
 // Reject a retailer
-export const rejectRetailer = async (retailerId: string): Promise<void> => {
+export const rejectRetailer = async (retailerId: string): Promise<ApiResponse> => {
   try {
     await axios.put(
       `${API_URL}/api/admin/rejectRetailer/${retailerId}`,
@@ -99,6 +100,21 @@ export const rejectRetailer = async (retailerId: string): Promise<void> => {
         },
       }
     );
+    return { acknowledged: true };
+  } catch (error) {
+    throw error;
+  }
+};
+export const makeTrendy = async (retailerId: string): Promise<ApiResponse> => {
+  try {
+    await axios.put(`${API_URL}/api/admin/makeretailertrendy/${retailerId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        }
+      });
+      return { acknowledged: true };
   } catch (error) {
     throw error;
   }

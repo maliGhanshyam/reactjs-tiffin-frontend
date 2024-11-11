@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Retailer } from "../dashboard/AdminDashboard/AdminDashboard.types";
 import {
@@ -16,6 +18,7 @@ import {
   getApprovedRetailer,
   getPendingRetailers,
   getRejectedRetailer,
+  makeTrendy,
   rejectRetailer,
 } from "../../services/Retailer";
 import { ActionCard } from "../../components/ActionCard";
@@ -26,11 +29,19 @@ import {
   containerStyle,
   dialogActionsStyle,
   innerCardContainerStyle,
+  modalActions,
+  modalButton,
+  modalContent,
   modalContentStyle,
+  modalTitle,
   paginationStyle,
   tabButtonStyle,
   titleStyle,
 } from "./LandingPageAdminDashboard.styles";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { ApiResponse, ISnackbar } from "./LandingPageAdminDashboard.types";
 
 const LandingPageAdminDashboard = () => {
   const [pendingRetailer, setPendingRetailer] = useState<Retailer[]>([]);
@@ -41,9 +52,10 @@ const LandingPageAdminDashboard = () => {
   const [selectedRetailer, setSelectedRetailer] = useState<Retailer | null>(
     null
   );
-  const [actionType, setActionType] = useState<"approve" | "reject" | null>(
-    null
-  );
+  // for dialog box
+  const [actionType, setActionType] = useState<
+    "approve" | "reject" | "trendy" | null
+  >(null);
   //pagination
   const [page, setPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
@@ -53,6 +65,12 @@ const LandingPageAdminDashboard = () => {
   const [totalRejectedPages, setTotalRejectedPages] = useState(1);
   const itemsPerPage = 3; // Items per page
   const location = useLocation();
+  //snacbar
+  const [snackbar, setSnackbar] = useState<ISnackbar>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     if (location.state?.viewTab) {
@@ -72,7 +90,7 @@ const LandingPageAdminDashboard = () => {
         itemsPerPage
       );
       setPendingRetailer(data);
-      setTotalPages(Math.ceil(totalPages / itemsPerPage)); // Set total pages for pending
+      setTotalPages(totalPages); // Set total pages for pending
     } catch (error) {
       console.error("Error fetching pending retailers:", error);
     }
@@ -85,8 +103,9 @@ const LandingPageAdminDashboard = () => {
         page,
         itemsPerPage
       );
+      console.log(data);
       setApprovedRetailers(data);
-      setTotalApprovedPages(Math.ceil(totalPages / itemsPerPage));
+      setTotalApprovedPages(totalPages);
     } catch (error) {
       console.error("Error fetching approved retailers:", error);
     }
@@ -106,33 +125,97 @@ const LandingPageAdminDashboard = () => {
     }
   };
 
+  // Approve, reject and trendy actions
   const handleApprove = async (retailerId: string) => {
     try {
-      await approveRetailer(retailerId);
+      const res: ApiResponse = await approveRetailer(retailerId);
       // working on this
-      // await fetchRetailers();
-      // await fetchApprovedRetailers();
-      // await fetchRejectedRetailers();
+      await fetchRetailers(page);
+      await fetchApprovedRetailers(approvedPage);
+      await fetchRejectedRetailers(rejectedPage);
+
+      //snacbar
+      if (res.acknowledged === true) {
+        setSnackbar({
+          open: true,
+          message: "Retailer approved successfully.",
+          severity: "success",
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: "Retailer approved failed",
+          severity: "error",
+        });
+      }
     } catch (error) {
-      console.error("Error approving pendingRetailer:", error);
+      setSnackbar({
+        open: true,
+        message: "Error while approving",
+        severity: "error",
+      });
     }
   };
 
   const handleReject = async (retailerId: string) => {
     try {
-      await rejectRetailer(retailerId);
-      // await fetchRetailers();
-      // await fetchApprovedRetailers();
-      // await fetchRejectedRetailers();
+      const res: ApiResponse = await rejectRetailer(retailerId);
+      await fetchRetailers(page);
+      await fetchApprovedRetailers(approvedPage);
+      await fetchRejectedRetailers(rejectedPage);
+      //snackbar
+      if (res.acknowledged === true) {
+        setSnackbar({
+          open: true,
+          message: "Retailer rejected successfully.",
+          severity: "success",
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: "Retailer rejection failed",
+          severity: "error",
+        });
+      }
     } catch (error) {
-      console.error("Error rejecting pendingRetailer:", error);
+      setSnackbar({
+        open: true,
+        message: "Error while rejecting",
+        severity: "error",
+      });
     }
   };
 
+  const handleTrendy = async (retailerId: string) => {
+    try {
+      const res: ApiResponse = await makeTrendy(retailerId);
+      if (res.acknowledged === true) {
+        setSnackbar({
+          open: true,
+          message: "Marked Trendy successfully.",
+          severity: "success",
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: "Trendy marking failed",
+          severity: "error",
+        });
+      }
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Error marking trendy",
+        severity: "error",
+      });
+    }
+  };
+  // Dialog box model
   const openConfirmationModal = (
     pendingRetailer: Retailer,
-    action: "approve" | "reject"
+    action: "approve" | "reject" | "trendy"
   ) => {
+    console.log(action);
     setSelectedRetailer(pendingRetailer);
     setActionType(action); // Set action type (approve or reject)
     setOpenModal(true);
@@ -150,10 +233,13 @@ const LandingPageAdminDashboard = () => {
       handleApprove(selectedRetailer._id);
     } else if (actionType === "reject") {
       handleReject(selectedRetailer._id);
+    } else if (actionType === "trendy") {
+      handleTrendy(selectedRetailer._id);
     }
     closeConfirmationModal();
   };
 
+  // pagination change
   const handleChangePage = (event: React.ChangeEvent<any>, value: number) => {
     setPage(value);
     fetchRetailers(value);
@@ -179,6 +265,11 @@ const LandingPageAdminDashboard = () => {
     return address.length > 30 ? address.slice(0, 30) : address;
   };
 
+  //snackbar close handle
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   return (
     <Container sx={containerStyle}>
       <Box sx={buttonGroupStyle}>
@@ -187,7 +278,16 @@ const LandingPageAdminDashboard = () => {
             variant="outlined"
             color="primary"
             onClick={() => setActiveTab("approved")} // Switch to approved retailers
-            sx={tabButtonStyle}
+            sx={{
+              ...tabButtonStyle,
+              backgroundColor:
+                activeTab === "approved" ? "#e43e38" : "transparent", // red for approved
+              color: activeTab === "approved" ? "#fff" : "primary.main",
+              "&:hover": {
+                backgroundColor:
+                  activeTab === "approved" ? "#e43e38" : "transparent", // red on hover
+              },
+            }}
           >
             Approved Retailers
           </Button>
@@ -195,7 +295,16 @@ const LandingPageAdminDashboard = () => {
             variant="outlined"
             color="primary"
             onClick={() => setActiveTab("pending")} // Switch to pending retailers
-            sx={tabButtonStyle}
+            sx={{
+              ...tabButtonStyle,
+              backgroundColor:
+                activeTab === "pending" ? "#e43e38" : "transparent",
+              color: activeTab === "pending" ? "#fff" : "primary.main",
+              "&:hover": {
+                backgroundColor:
+                  activeTab === "pending" ? "#e43e38" : "transparent",
+              },
+            }}
           >
             Pending Retailers
           </Button>
@@ -203,35 +312,51 @@ const LandingPageAdminDashboard = () => {
             variant="outlined"
             color="primary"
             onClick={() => setActiveTab("rejected")} //Switch to rejected retailers
-            sx={tabButtonStyle}
+            sx={{
+              ...tabButtonStyle,
+              backgroundColor:
+                activeTab === "rejected" ? "#e43e38" : "transparent",
+              color: activeTab === "rejected" ? "#fff" : "primary.main",
+              "&:hover": {
+                backgroundColor:
+                  activeTab === "rejected" ? "#e43e38" : "transparent",
+              },
+            }}
           >
             Rejected Retailers
           </Button>
         </Box>
       </Box>
 
+      {/* Actual screens */}
       {activeTab === "approved" && (
         <>
-          <Typography variant="h5" sx={titleStyle}>
-            Approved Retailers
-          </Typography>
           <Box sx={cardContainerStyle}>
-            {approvedRetailers.map((ret) => (
-              <Box key={ret._id} sx={innerCardContainerStyle}>
-                <ActionCard
-                  title={ret.username}
-                  description={`Email: ${ret.email}`}
-                  status={
-                    ret.role_specific_details?.approval[0].approval_status
-                  }
-                  fields={[
-                    { label: "Contact", value: ret.contact_number },
-                    { label: "Address", value: truncateAddress(ret.address) },
-                  ]}
-                />
-              </Box>
-            ))}
+            {approvedRetailers.map((ret) => {
+              const word = ret.role_specific_details?.approval[0]?.istrendy
+                ? "(*Trendy*)"
+                : "";
+              return (
+                <Box key={ret._id} sx={innerCardContainerStyle}>
+                  <ActionCard
+                    title={ret.username}
+                    description={`Email: ${ret.email}`}
+                    status={
+                      ret.role_specific_details?.approval[0].approval_status
+                    }
+                    fields={[
+                      {
+                        label: "Contact",
+                        value: `${ret.contact_number}${" "}${word}`,
+                      },
+                      { label: "Address", value: truncateAddress(ret.address) },
+                    ]}
+                  />
+                </Box>
+              );
+            })}
           </Box>
+
           <Pagination
             count={totalApprovedPages}
             page={approvedPage}
@@ -245,9 +370,6 @@ const LandingPageAdminDashboard = () => {
 
       {activeTab === "rejected" && (
         <>
-          <Typography variant="h5" sx={titleStyle}>
-            Rejected Retailers
-          </Typography>
           <Box sx={cardContainerStyle}>
             {rejectedRetailers.map((ret) => (
               <Box key={ret._id} sx={innerCardContainerStyle}>
@@ -278,9 +400,6 @@ const LandingPageAdminDashboard = () => {
 
       {activeTab === "pending" && (
         <>
-          <Typography variant="h5" sx={titleStyle}>
-            Pending Retailers
-          </Typography>
           <Box sx={cardContainerStyle}>
             {pendingRetailer.map((ret) => (
               <Box key={ret._id} sx={innerCardContainerStyle}>
@@ -296,6 +415,7 @@ const LandingPageAdminDashboard = () => {
                   ]}
                   onApprove={() => openConfirmationModal(ret, "approve")}
                   onReject={() => openConfirmationModal(ret, "reject")}
+                  onTrendy={() => openConfirmationModal(ret, "trendy")}
                 />
               </Box>
             ))}
@@ -310,24 +430,87 @@ const LandingPageAdminDashboard = () => {
           />
         </>
       )}
-      <Dialog open={openModal} onClose={closeConfirmationModal}>
-        <DialogTitle>Confirm Action</DialogTitle>
+      {/* Dialog box */}
+      <Dialog
+        open={openModal}
+        onClose={closeConfirmationModal}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={modalTitle}>
+          {actionType === "approve" ? (
+            <CheckCircleOutlineIcon color="success" />
+          ) : actionType === "reject" ? (
+            <WarningAmberIcon color="warning" />
+          ) : (
+            <TrendingUpIcon color="primary" />
+          )}
+          Confirm Action
+        </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" sx={modalContentStyle}>
-            Are you sure you want to{" "}
-            {actionType === "approve" ? "approve" : "reject"} this
-            pendingRetailer?
-          </Typography>
+          <Box sx={modalContent}>
+            <Typography variant="h6" color="textPrimary" gutterBottom>
+              {actionType === "approve"
+                ? "Are you sure you want to approve this retailer?"
+                : actionType === "reject"
+                ? "Are you sure you want to reject this retailer?"
+                : actionType === "trendy"
+                ? "Are you sure you want to mark this retailer as trendy?"
+                : null}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {actionType === "approve"
+                ? "This action is beneficial and will approve the retailer."
+                : actionType === "reject"
+                ? "This action is irreversible and will reject the retailer."
+                : "This action will mark the retailer as trendy."}
+            </Typography>
+          </Box>
         </DialogContent>
-        <DialogActions sx={dialogActionsStyle}>
-          <Button onClick={closeConfirmationModal} color="primary">
+        <DialogActions sx={modalActions}>
+          <Button
+            onClick={closeConfirmationModal}
+            color="inherit"
+            variant="outlined"
+            sx={modalButton}
+          >
             Cancel
           </Button>
-          <Button onClick={confirmAction} color="primary">
-            Confirm
+          <Button
+            onClick={confirmAction}
+            color={
+              actionType === "approve"
+                ? "success"
+                : actionType === "reject"
+                ? "warning"
+                : "primary"
+            }
+            variant="contained"
+            sx={modalButton}
+          >
+            {actionType === "approve"
+              ? "Approve"
+              : actionType === "reject"
+              ? "Reject"
+              : "Mark Trendy"}
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ mt: 5 }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

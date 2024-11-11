@@ -6,5 +6,6 @@ export {
   getRejectedRetailer,
   getRejectedRetail,
   getApprovedRetail,
-  getPendingRetail
+  getPendingRetail,
+  makeTrendy
 } from "./Retailer";

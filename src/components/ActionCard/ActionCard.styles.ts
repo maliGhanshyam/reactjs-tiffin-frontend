@@ -32,7 +32,7 @@ export const fieldsBoxStyles: SxProps<Theme> = {
 
 export const cardActionsStyles: SxProps<Theme> = {
   justifyContent: "center",
-  gap: 2,
+  gap: 0.5,
   mb: 1,
 };
 
@@ -49,5 +49,12 @@ export const rejectButtonStyles: SxProps<Theme> = {
   ...buttonStyles,
   "&:hover": {
     backgroundColor: "error.dark",
+  },
+};
+
+export const trendyButtonStyles: SxProps<Theme> = {
+  ...buttonStyles,
+  "&:hover": {
+    backgroundColor: "warning.dark",
   },
 };

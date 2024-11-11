@@ -1,6 +1,7 @@
 export interface Approval {
   approval_status: string;
   organization_id: string;
+  istrendy?:boolean;
   _id: string;
 }
 

@@ -6,14 +6,15 @@ export const containerStyle: SxProps<Theme> = {
 
 export const buttonGroupStyle: SxProps<Theme> = {
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "center",
   mb: 4,
   alignItems: "center",
 };
 
 export const tabButtonStyle: SxProps<Theme> = {
-  borderRadius: 2,
+  borderRadius: "1.2rem",
   mr: 2,
+  fontWeight:"bold"
 };
 
 export const paginationStyle: SxProps<Theme> = {
@@ -46,3 +47,29 @@ export const innerCardContainerStyle: SxProps<Theme> = {
    mr: 2
 };
 
+export const modalTitle: SxProps<Theme> = {
+  display: "flex", alignItems: "center", gap: 1 
+};
+
+export const modalActions: SxProps<Theme> = {
+  padding: "12px"
+};
+
+export const sectionTitle: SxProps<Theme> = {
+  mt:3,
+  mx: 3,
+  fontWeight: "bold",
+  fontSize: "1.4rem",
+  display: "flex", 
+  justifyContent: "space-between"
+};
+
+export const modalContent: SxProps<Theme> = {
+  padding: "8px",
+  backgroundColor: "#f9f9f9",
+  borderRadius: 2,
+};
+
+export const modalButton: SxProps<Theme> = {
+  minWidth: "100px"
+};

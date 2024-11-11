@@ -5,4 +5,5 @@ export interface Props {
   fields?: { label: string; value: string }[];
   onApprove?: () => void;
   onReject?: () => void;
+  onTrendy?: () => void;
 }

@@ -1,6 +1,7 @@
 export interface Approval {
     approval_status: string;
     organization_id: string;
+    istrendy?:boolean;
     _id: string;
   }
   
@@ -25,4 +26,8 @@ export interface Approval {
   export interface RetailersResponse {
     statusCode: number;
     data: Retailer[];
+  }
+
+  export interface ApiResponse {
+    acknowledged: boolean;
   }

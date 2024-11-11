@@ -17,7 +17,11 @@ import {
   cardActionsStyles,
   buttonStyles,
   rejectButtonStyles,
+  trendyButtonStyles,
 } from "./ActionCard.styles"; 
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const ActionCard: React.FC<Props> = ({
   title,
@@ -26,6 +30,7 @@ const ActionCard: React.FC<Props> = ({
   fields = [],
   onApprove,
   onReject,
+  onTrendy
 }) => {
   return (
     <Card sx={cardStyles}>
@@ -75,6 +80,7 @@ const ActionCard: React.FC<Props> = ({
             size="small"
             variant="contained"
             color="success"
+            startIcon={<CheckCircleOutlineIcon />}
             sx={buttonStyles}
             onClick={onApprove}
           >
@@ -87,10 +93,22 @@ const ActionCard: React.FC<Props> = ({
             size="small"
             variant="contained"
             color="error"
+            startIcon={<DeleteIcon />}
             sx={rejectButtonStyles}
             onClick={onReject}
           >
             Reject
+          </Button>
+        )}
+        {onTrendy && (
+          <Button
+            size="small"
+            variant="contained"
+            color="warning"
+            startIcon={<LocalFireDepartmentIcon />}
+            sx={trendyButtonStyles}
+            onClick={onTrendy}
+          >Trendy
           </Button>
         )}
       </CardActions>
