@@ -18,28 +18,11 @@ import { ActionCard } from "../../../components/ActionCard";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {
-  boyLogoStyle,
-  buttonStyle,
-  buttonStyle2,
-  cardTypography,
-  girlLogoStyle,
-  innerContainerStyle,
-  innerGridA,
-  outerGrid,
-  paperStyle,
-  pendingCountStyle,
-  roundedCardStyle,
-  sectionTitle,
-  taskBox,
-  taskButton,
-  taskContainer,
-  taskHeader,
-  tooltipStyle,
-} from "./AdminDashboard.styles";
 import { CardSlider } from "../../../components/CardSlider";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { styles, tooltipStyle } from "./AdminDashboard.styles";
+import { useSnackbar } from "../../../context";
 
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
@@ -47,6 +30,7 @@ const AdminDashboard = () => {
   const [approvedCount, setApprovedCount] = useState(0);
   const [rejectedCount, setRejectedCount] = useState(0);
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchRejectedRetailers();
@@ -59,6 +43,7 @@ const AdminDashboard = () => {
       const data = await getPending();
       setPendingCount(data.length);
     } catch (error) {
+      showSnackbar("Error fetching pending retailers", "error");
       console.error("Error fetching pending retailers:", error);
     }
   };
@@ -69,6 +54,7 @@ const AdminDashboard = () => {
       setApproveRetailer(data);
       setApprovedCount(data.length);
     } catch (error) {
+      showSnackbar("Error fetching pending retailers", "error");
       console.error("Error fetching approved retailers:", error);
     }
   };
@@ -78,6 +64,7 @@ const AdminDashboard = () => {
       const data = await getRejected();
       setRejectedCount(data.length);
     } catch (error) {
+      showSnackbar("Error fetching rejected retailers", "error");
       console.error("Error fetching rejected retailers:", error);
     }
   };
@@ -94,10 +81,10 @@ const AdminDashboard = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Container sx={innerContainerStyle}>
-        <Grid2 container size={{ sm: 12, xs: 8 }} sx={outerGrid}>
+      <Container sx={styles.innerContainerStyle}>
+        <Grid2 container size={{ sm: 12, xs: 8 }} sx={styles.outerGrid}>
           <Grid2 size={{ sm: 4 }}>
-            <Box sx={innerGridA}>
+            <Box sx={styles.innerGridA}>
               {/* Piechart */}
               <PieChart width={300} height={240}>
                 <Pie
@@ -127,23 +114,23 @@ const AdminDashboard = () => {
             </Box>
           </Grid2>
           <Grid2 size={{ sm: 6 }}>
-            <Box sx={taskBox}>
-              <Box sx={boyLogoStyle}></Box>
-              <Box sx={taskContainer}>
-                <Typography variant="h5" sx={taskHeader}>
+            <Box sx={styles.taskBox}>
+              <Box sx={styles.boyLogoStyle}></Box>
+              <Box sx={styles.taskContainer}>
+                <Typography variant="h5" sx={styles.taskHeader}>
                   Task Box
                 </Typography>
-                <Paper sx={paperStyle}>
+                <Paper sx={styles.paperStyle}>
                   <Typography variant="body2">
                     Pending Retailers:&nbsp;&nbsp;{" "}
                   </Typography>
-                  <Typography variant="h6" sx={pendingCountStyle}>
+                  <Typography variant="h6" sx={styles.pendingCountStyle}>
                     {pendingCount}
                   </Typography>
                 </Paper>
                 <Button
                   variant="outlined"
-                  sx={taskButton}
+                  sx={styles.taskButton}
                   onClick={() =>
                     navigate("/approved-retailers", {
                       state: { viewTab: "pending" },
@@ -154,18 +141,18 @@ const AdminDashboard = () => {
                   View More
                 </Button>
               </Box>
-              <Box sx={girlLogoStyle}></Box>
+              <Box sx={styles.girlLogoStyle}></Box>
             </Box>
           </Grid2>
         </Grid2>
-        <Box sx={sectionTitle}>
-          <Card sx={roundedCardStyle}>
-            <Typography variant="h6" sx={cardTypography}>
+        <Grid2 sx={styles.sectionTitle}>
+          <Card sx={styles.roundedCardStyle}>
+            <Typography variant="h6" sx={styles.cardTypography}>
               Approved Retailers
             </Typography>
           </Card>
           <Button
-            sx={buttonStyle2}
+            sx={styles.buttonStyle2}
             variant="outlined"
             onClick={() =>
               navigate("/approved-retailers", {
@@ -176,22 +163,49 @@ const AdminDashboard = () => {
           >
             See all
           </Button>
-        </Box>
+        </Grid2>
 
-        <CardSlider
-          data={approveRetailers}
-          renderCard={(ret) => (
+        <CardSlider data={approveRetailers}>
+          {(ret) => (
             <ActionCard
-              title={ret.username}
-              description={`Email: ${ret.email}`}
-              status={ret.role_specific_details?.approval[0].approval_status}
-              fields={[
-                { label: "Contact", value: ret.contact_number },
-                { label: "Address", value: truncateAddress(ret.address) },
-              ]}
-            />
+              sx={styles.cardStyles}
+              imageUrl="https://via.placeholder.com/400x320"
+              imageStyles={styles.cardMediaStyles}
+            >
+              <Typography variant="h6" sx={styles.titleStyles}>
+                {ret.username}
+              </Typography>
+              <Typography variant="body2" sx={styles.descriptionStyles}>
+                {`Email: ${ret.email}`}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  ...styles.typographyStyle,
+                  color:
+                    ret.role_specific_details?.approval[0]?.approval_status?.toLowerCase() ===
+                    "approved"
+                      ? "success.main"
+                      : ret.role_specific_details?.approval[0]?.approval_status?.toLowerCase() ===
+                          "pending"
+                        ? "warning.main"
+                        : "error.main",
+                }}
+              >
+                Status:{" "}
+                {ret.role_specific_details?.approval[0]?.approval_status}
+              </Typography>
+              <Box sx={styles.fieldsBoxStyles}>
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Contact:</strong> {ret.contact_number}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Address:</strong> {truncateAddress(ret.address)}
+                </Typography>
+              </Box>
+            </ActionCard>
           )}
-        />
+        </CardSlider>
       </Container>
     </Box>
   );

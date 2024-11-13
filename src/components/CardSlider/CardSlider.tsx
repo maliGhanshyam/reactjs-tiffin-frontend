@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
 import Slider from "react-slick";
 import { CardSliderProps } from "./CardSlider.types";
-import { boxContainerStyles, sliderItemStyles } from "./CardSlider.styles";
+import { styles } from "./CardSlider.styles";
 
-const CardSlider: React.FC<CardSliderProps> = ({ data, renderCard }) => {
+const CardSlider = <T extends { _id: string }>({ data, children, settings }: CardSliderProps<T>) => {
   const defaultSettings = {
     infinite: false,
-    speed: 100,
+    speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     dots: true,
     centerMode: false,
     responsive: [
@@ -27,14 +27,15 @@ const CardSlider: React.FC<CardSliderProps> = ({ data, renderCard }) => {
         },
       },
     ],
+    ...settings,
   };
 
   return (
-    <Box sx={boxContainerStyles}>
+    <Box sx={styles.boxContainerStyles}>
       <Slider {...defaultSettings}>
         {data.map((item) => (
-          <Box key={item._id} sx={sliderItemStyles}>
-            {renderCard(item)}
+          <Box key={item._id} sx={styles.sliderItemStyles}>
+            {typeof children === 'function' ? children(item) : children}
           </Box>
         ))}
       </Slider>
@@ -43,3 +44,6 @@ const CardSlider: React.FC<CardSliderProps> = ({ data, renderCard }) => {
 };
 
 export default CardSlider;
+
+
+

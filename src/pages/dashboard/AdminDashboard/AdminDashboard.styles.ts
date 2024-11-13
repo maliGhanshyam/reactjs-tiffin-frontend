@@ -2,25 +2,26 @@ import { SxProps, Theme } from "@mui/material";
 import boyLogo from "../../../assets/boy.svg";
 import girlLogo from "../../../assets/Girl.svg";
 
-export const innerContainerStyle: SxProps<Theme> = {
+export const styles: { [key: string]: SxProps<Theme> } = {
+innerContainerStyle:{
   flexGrow: 1,
   py: 3,
-};
+},
 
-export const gridItem: SxProps<Theme> = {
+gridItem: {
   p: 2,
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-};
+},
 
-export const titleTypography: SxProps<Theme> = {
+titleTypography:{
   mx: 3,
   fontWeight: "bold",
   fontSize: "1.4rem",
-};
+},
 
-export const paperStyle: SxProps<Theme> = {
+paperStyle:{
   padding: 1,
   display: "flex",
   justifyContent: "center",
@@ -30,8 +31,8 @@ export const paperStyle: SxProps<Theme> = {
   width: "100%",
   textAlign: "center",
   boxShadow: 3,
-};
-export const buttonStyle: SxProps<Theme> = {
+},
+buttonStyle: {
   variant: "contained",
   borderRadius: "1.2rem",
   borderColor: "primary.main",
@@ -43,13 +44,13 @@ export const buttonStyle: SxProps<Theme> = {
     backgroundColor: "#e43e38",
     color: "#fff",
   },
-};
+},
 
-export const sliderItem: SxProps<Theme> = {
+sliderItem: {
   padding: 1,
-};
+},
 
-export const sectionTitle: SxProps<Theme> = {
+sectionTitle: {
   mt: 3,
   mx:2,
   fontWeight: "bold",
@@ -57,13 +58,13 @@ export const sectionTitle: SxProps<Theme> = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-};
+},
 
-export const outerGrid: SxProps<Theme> = {
+outerGrid:{
   display: "flex",
   gap: 2,
-};
-export const innerGridA: SxProps<Theme> = {
+},
+innerGridA:{
   boxShadow: 3,
   display: "flex",
   justifyContent: "center",
@@ -71,8 +72,8 @@ export const innerGridA: SxProps<Theme> = {
   borderRadius: "1.2rem",
   alignItems: "center",
   marginLeft:2
-};
-export const taskBox: SxProps<Theme> = {
+},
+taskBox:{
   marginRight: 3,
   boxShadow: 3,
   padding: 2,
@@ -81,8 +82,8 @@ export const taskBox: SxProps<Theme> = {
   justifyContent: "space-between",
   backgroundColor: "#ecf0f1",
   gap: 3,
-};
-export const boyLogoStyle: SxProps<Theme> = {
+},
+boyLogoStyle:{
   width: 150,
   height: 150,
   backgroundColor: "#ecf0f1",
@@ -92,8 +93,8 @@ export const boyLogoStyle: SxProps<Theme> = {
   backgroundPosition: "center",
   display: { xs: "none", sm: "block" },
   marginTop: 5,
-};
-export const taskContainer: SxProps<Theme> = {
+},
+taskContainer: {
   backgroundColor: "#ecf0f1",
   borderRadius: "1.2rem",
   boxShadow: 1,
@@ -105,13 +106,13 @@ export const taskContainer: SxProps<Theme> = {
   width: "100%",
   maxWidth: 400,
   margin: "auto",
-};
-export const taskHeader: SxProps<Theme> = {
+},
+taskHeader: {
   fontWeight: 600,
   marginBottom: 1,
   color: "#333333",
-};
-export const taskButton: SxProps<Theme> = {
+},
+taskButton: {
   borderRadius: "1.2rem",
   borderColor: "primary.main",
   color: "primary.main",
@@ -122,8 +123,8 @@ export const taskButton: SxProps<Theme> = {
     backgroundColor: "#e43e38",
     color: "#fff",
   },
-};
-export const girlLogoStyle: SxProps<Theme> = {
+},
+girlLogoStyle: {
   width: 200,
   height: 200,
   backgroundColor: "#ecf0f1",
@@ -133,18 +134,11 @@ export const girlLogoStyle: SxProps<Theme> = {
   backgroundPosition: "center",
   display: { xs: "none", sm: "block" },
   marginTop: 1,
-};
-export const pendingCountStyle: SxProps<Theme> = {
+},
+pendingCountStyle: {
   fontWeight: "bold",
-};
-
-export const tooltipStyle = {
-  backgroundColor: "#ecf0f1",
-  borderRadius: "15px",
-  padding: "10px",
-  color: "white",
-};
-export const roundedCardStyle: SxProps<Theme> = {
+},
+roundedCardStyle: {
   borderRadius: "16px",
   backgroundColor: "#2195e1", 
   pl:5,
@@ -155,8 +149,8 @@ export const roundedCardStyle: SxProps<Theme> = {
   justifyContent: "center",
   pt:0.5,
   pb:0.5
-};
-export const buttonStyle2: SxProps<Theme> = {
+},
+buttonStyle2:{
   variant: "contained",
   borderRadius: "1.2rem",
   borderColor: "primary.main",
@@ -167,7 +161,44 @@ export const buttonStyle2: SxProps<Theme> = {
     backgroundColor: "#e43e38",
     color: "#fff",
   },
-};
-export const cardTypography: SxProps<Theme> = {
+},
+cardTypography:{
   color: "#fff"
+},
+// new
+cardMediaStyles: {
+  height: 140,
+  borderTopLeftRadius: 2,
+  borderTopRightRadius: 2,
+},
+cardStyles: {
+  maxWidth: 350,
+  margin: 2,
+  borderRadius: 2,
+  boxShadow: 3,
+  transition: "transform 0.3s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
+}, 
+titleStyles: {
+  fontWeight: 600,
+},
+descriptionStyles: {
+  mb: 2,
+},
+fieldsBoxStyles: {
+  mt: 2,
+},
+typographyStyle: {
+  mt: 1,
+  fontWeight: 500,
+},
+}
+
+export const tooltipStyle = {
+  backgroundColor: "#ecf0f1",
+  borderRadius: "15px",
+  padding: "10px",
+  color: "white",
 };

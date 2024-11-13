@@ -1,5 +1,5 @@
-export interface CardSliderProps {
-  data: any[];
-  renderCard: (item: any) => JSX.Element;
+export interface CardSliderProps<T extends { _id: string }> {
+  data: T[];
+  children: ((item: T) => React.ReactNode) | React.ReactNode;
   settings?: any;
 }

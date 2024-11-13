@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  Alert,
   Box,
   Button,
   Container,
@@ -9,7 +8,6 @@ import {
   InputAdornment,
   MenuItem,
   Select,
-  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,7 +17,6 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Organization,
   RegisterResponse,
-  ISnackbar,
 } from "./AdminRegistration.types";
 import { MenuProps, styles } from "./AdminRegistration.style";
 import { ADMIN_ROLE_ID } from "../../constants/ROLES";
@@ -28,18 +25,16 @@ import { getOrganizations } from "../../services/Organization";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import login from "../../assets/LoginScreen.svg";
+import { useSnackbar } from "../../context";
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [organization, setOrganization] = useState<Organization[]>([]);
-  const [snackbar, setSnackbar] = useState<ISnackbar>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
+
   useEffect(() => {
     const fetchOrganization = async () => {
       try {
@@ -87,12 +82,9 @@ const AdminRegistration = () => {
         .max(50, "Upto 50 characters long"),
       password: Yup.string()
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-        )
-        .min(8, "Password must be at least 8 characters")
-        .max(20, "Too long password!")
-        .required("Password is required"),
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
+          "Length(8,20) char and must contain at least one uppercase, one lowercase letter, one number, and one special character"
+        ).required("Password is required"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords must match")
         .required("Confirm Password is required"),
@@ -102,36 +94,16 @@ const AdminRegistration = () => {
       try {
         const res: RegisterResponse = await registerAdmin(values);
         if (res.statuscode === 201) {
-          setSnackbar({
-            open: true,
-            message: "Admin registered successfully.",
-            severity: "success",
-          });
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
-        } else {
-          setSnackbar({
-            open: true,
-            message: "Registration failed.",
-            severity: "error",
-          });
-        }
+          showSnackbar("Admin registered successfully.", "success");
+          navigate("/login");
+        } 
         actions.resetForm();
         setSelectedOrganization("");
-      } catch (error) {
-        setSnackbar({
-          open: true,
-          message: "Registration failed.",
-          severity: "error",
-        });
+      } catch (error:any) {
+        showSnackbar("Registration failed (Duplicate email)", "error");
       }
     },
   });
-
-  const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   return (
     <Container component="main">
@@ -395,21 +367,6 @@ const AdminRegistration = () => {
         </Box>
       </Grid2>
       </Grid2>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        sx={{ mt: 4 }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };
