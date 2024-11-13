@@ -13,7 +13,11 @@ import { AddOrganizationForm } from "../pages/AddOrganizationPage";
 const childRoutes = [
   {
     path: "register",
-    element: <AdminRegistration />,
+    element: (
+      <ProtectedRoute guestOnly={true}>
+        <AdminRegistration />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",
@@ -37,7 +41,11 @@ const childRoutes = [
   },
   {
     path: "login",
-    element: <LoginForm />,
+    element: (
+      <ProtectedRoute guestOnly={true}>
+        <LoginForm />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "supAdmin",
@@ -49,7 +57,11 @@ const childRoutes = [
   },
   {
     path: "AddOrganization",
-    element: <AddOrganizationForm />,
+    element: (
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
+        <AddOrganizationForm />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "",
@@ -59,7 +71,14 @@ const childRoutes = [
     path: "**",
     element: <PageNotFound />,
   },
-  { path: "approved-retailers", element: <LandingPageAdminDashboard /> },
+  {
+    path: "approved-retailers",
+    element: (
+      <ProtectedRoute requiredRole={ADMIN_ROLE_ID}>
+        <LandingPageAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: "",
     element: <Navigate to="login" />,

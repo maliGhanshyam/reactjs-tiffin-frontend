@@ -25,12 +25,16 @@ const Navbar = () => {
   const [Open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation().pathname;
+  const userRoleId = useSelector((state: RootState) => state.auth.userRoleId);
+  const token = getToken();
+
   const handleDrawerToggle = () => {
     setOpen(!Open);
   };
-  const location = useLocation();
+
   const handleAuthToggle = () => {
-    if (getToken()) {
+    if (token) {
       logoutUser();
       dispatch(clearAuthData());
       navigate("/login");
@@ -38,26 +42,25 @@ const Navbar = () => {
       navigate("/login");
     }
   };
-  const userRoleId = useSelector((state: RootState) => state.auth.userRoleId);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={styles.drawerBox}>
       <List>
-        {getToken() && (
+        {token && (
           <ListItem component={Link} to="/dashboard">
             <ListItemText primary="Home" />
           </ListItem>
         )}
-        {location.pathname !== "/login" && (
+        {location !== "/login" && (
           <ListItem
             component={Link}
-            to={getToken() ? "#" : "/login"}
-            onClick={getToken() ? handleAuthToggle : undefined}
+            to={token ? "#" : "/login"}
+            onClick={token ? handleAuthToggle : undefined}
           >
-            <ListItemText primary={getToken() ? "Logout" : "Login"} />
+            <ListItemText primary={token ? "Logout" : "Login"} />
           </ListItem>
         )}
-        {!getToken() && (
+        {location !== "/register" && !token && (
           <ListItem component={Link} to="/register">
             <ListItemText primary="Register" />
           </ListItem>
@@ -81,7 +84,7 @@ const Navbar = () => {
                 Tiffins
               </span>
             </Typography>
-            {getToken() && (
+            {token && (
               <Button
                 color="inherit"
                 component={Link}
@@ -95,7 +98,7 @@ const Navbar = () => {
                 Home
               </Button>
             )}
-            {getToken() && userRoleId === SUPERADMIN_ROLE_ID && (
+            {token && userRoleId === SUPERADMIN_ROLE_ID && (
               <Button
                 color="inherit"
                 component={Link}
@@ -113,18 +116,18 @@ const Navbar = () => {
               gap: 1,
             }}
           >
-            {location.pathname !== "/login" && (
+            {location !== "/login" && (
               <Button
                 color="inherit"
                 component={Link}
-                to={getToken() ? "#" : "/login"}
-                onClick={getToken() ? handleAuthToggle : undefined}
+                to={token ? "#" : "/login"}
+                onClick={token ? handleAuthToggle : undefined}
                 sx={styles.button2}
               >
-                {getToken() ? "Logout" : "Login"}
+                {token ? "Logout" : "Login"}
               </Button>
             )}
-            {!getToken() && (
+            {location !== "/register" && !token && (
               <Button
                 color="inherit"
                 component={Link}

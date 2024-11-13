@@ -4,13 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/Store";
 import axios from "axios";
 import { setAuthData } from "../store/authSlice";
+import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "../constants/ROLES";
 const API_URL = "http://localhost:5000";
 interface AuthGuardProps {
   children: ReactNode;
-  requiredRole: string; // SuperAdmin or Admin role ID
+  requiredRole?: string;
+  guestOnly?: boolean;
 }
 
-const ProtectedRoute: FC<AuthGuardProps> = ({ children, requiredRole }) => {
+const ProtectedRoute: FC<AuthGuardProps> = ({
+  children,
+  requiredRole,
+  guestOnly,
+}) => {
   const userRoleId = useSelector((state: RootState) => state.auth.userRoleId);
   const userId = useSelector((state: RootState) => state.auth.userId);
   const token = localStorage.getItem("token");
@@ -37,11 +43,22 @@ const ProtectedRoute: FC<AuthGuardProps> = ({ children, requiredRole }) => {
       console.error("Error fetching user by token:", error);
     }
   };
-  if (!token) {
+
+  // Redirect logic for guest-only routes
+  if (guestOnly && token) {
+    if (userRoleId === SUPERADMIN_ROLE_ID) {
+      return <Navigate to="/superAdminDashboard" replace />;
+    } else if (userRoleId === ADMIN_ROLE_ID) {
+      return <Navigate to="/adminDashboard" replace />;
+    }
+  }
+
+  // Redirect logic for protected routes
+  if (!guestOnly && !token) {
     return <Navigate to="/login" replace />;
   }
 
-  if (userRoleId && userRoleId !== requiredRole) {
+  if (!guestOnly && userRoleId && requiredRole && userRoleId !== requiredRole) {
     return <Navigate to="*" replace />;
   }
 
