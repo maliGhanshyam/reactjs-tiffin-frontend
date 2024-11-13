@@ -22,7 +22,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import { styles } from "./Login.style";
-import login from "../../assets/LoginScreen1.svg";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -104,21 +103,13 @@ const LoginForm = () => {
   };
 
   return (
-    <Container component="main">
+    <Container component="div">
       <Grid2 sx={styles.containerGrid}>
         <Grid2 size={5} sx={styles.svgGrid}>
-          <Box
-            sx={{
-              width: 600,
-              height: 600,
-              backgroundColor: "#e0e0e0",
-              backgroundImage: `url(${login})`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              display: { xs: "none", sm: "block" },
-            }}
-          ></Box>
+          <img
+            src="https://emp.neosofttech.com/assets/a9ba8aa/assets/images/login/login_bg.svg"
+            alt="Loginpic"
+          />
         </Grid2>
         <Grid2 size={{ sm: 4 }}>
           <Box sx={styles.container}>

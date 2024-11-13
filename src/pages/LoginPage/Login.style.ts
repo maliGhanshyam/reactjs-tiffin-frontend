@@ -4,7 +4,7 @@ import { Theme } from "@mui/material/styles";
 export const styles: { [key: string]: SxProps<Theme> } = {
   container: {
     position: "static",
-    flexBasis: "30%",
+    flexBasis: "45%",
     marginTop: 3,
     marginBottom: 3,
     display: "flex",
@@ -24,11 +24,13 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   svgGrid: {
     display: { xs: "none", sm: "block" },
     position: "static",
-    flexBasis: "60%",
+    flexBasis: "55%",
   },
   containerGrid: {
     display: "flex",
     width: "100%",
     alignItems: "center",
+    marginTop: "50px",
+    gap: "30px",
   },
 };
