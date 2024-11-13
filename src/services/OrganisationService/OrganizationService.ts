@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Organization, UserData } from "../../Types";
+import axiosInstance from "./axiosInstance";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -25,15 +26,8 @@ function getToken() {
 // Fetch all pending Admins
 export const getPendingAdmins = async (): Promise<UserData[]> => {
   try {
-    console.log(`${API_URL}/api/superadmin/pendingAdminApproval`);
-    const response = await axios.get<ApiResponse>(
-      `${API_URL}/api/superadmin/pendingAdminApproval`,
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    );
+    console.log(`${API_URL}/superadmin/pendingAdminApproval`);
+    const response = await axiosInstance.get<ApiResponse>("/superadmin/pendingAdminApproval");
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -41,19 +35,11 @@ export const getPendingAdmins = async (): Promise<UserData[]> => {
     throw error;
   }
 };
-
 // Fetch all approved Admins
 export const getApprovedAdmins = async (): Promise<UserData[]> => {
   try {
-    console.log(`${API_URL}/api/superadmin/approvedAdminApproval`);
-    const response = await axios.get<ApiResponse>(
-      `${API_URL}/api/superadmin/approvedAdminApproval`,
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    );
+    console.log(`${API_URL}/superadmin/approvedAdminApproval`);
+    const response = await axiosInstance.get<ApiResponse>("/superadmin/approvedAdminApproval");
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -61,19 +47,11 @@ export const getApprovedAdmins = async (): Promise<UserData[]> => {
     throw error;
   }
 };
-
 // Fetch all rejected Admins
 export const getRejectedAdmins = async (): Promise<UserData[]> => {
   try {
-    console.log(`${API_URL}/api/superadmin/rejectedAdminApproval`);
-    const response = await axios.get<ApiResponse>(
-      `${API_URL}/api/superadmin/rejectedAdminApproval`,
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    );
+    console.log(`${API_URL}/superadmin/rejectedAdminApproval`);
+    const response = await axiosInstance.get<ApiResponse>("/superadmin/rejectedAdminApproval");
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -85,15 +63,8 @@ export const getRejectedAdmins = async (): Promise<UserData[]> => {
 // Fetch all organizations
 export const getOrganizations = async (): Promise<Organization[]> => {
   try {
-    console.log(`${API_URL}/api/organizations/getall`);
-    const response = await axios.get<OrganizationsResponse>(
-      `${API_URL}/api/superadmin/organizations/getallorganization`,
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    );
+    console.log(`${API_URL}/superadmin/organizations/getallorganization`);
+    const response = await axiosInstance.get<OrganizationsResponse>("/superadmin/organizations/getallorganization");
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -104,57 +75,38 @@ export const getOrganizations = async (): Promise<Organization[]> => {
 // Approve an admin
 export const approveAdmin = async (admin_id: string): Promise<void> => {
   try {
-    const url = `${API_URL}/api/superadmin/approveadmin/${admin_id}`;
+    const url = `${API_URL}/superadmin/approveadmin/${admin_id}`;
     console.log("Approving admin with URL:", url);
-    await axios.put(
-      url,
-      {}, // Empty body for the PUT request
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`, // Add the token here
-        },
-      }
-    );
+    await axiosInstance.put(url, {}); // Empty body for PUT request
     console.log(`Admin with ID ${admin_id} approved successfully`);
   } catch (error) {
     console.error("Failed to approve admin:", error);
-    throw error; // Rethrow the error for handling in the calling code
+    throw error;
   }
 };
 
 // Reject an admin
 export const rejectAdmin = async (admin_id: string): Promise<void> => {
   try {
-    const url = `${API_URL}/api/superadmin/rejectadmin/${admin_id}`;
+    const url = `${API_URL}/superadmin/rejectadmin/${admin_id}`;
     console.log("Rejected admin with URL:", url);
-    await axios.put(
-      url,
-      {}, // Empty body for the PUT request
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`, // Add the token here
-        },
-      }
-    );
+    await axiosInstance.put(url, {}); // Empty body for PUT request
     console.log(`Admin with ID ${admin_id} rejected successfully`);
   } catch (error) {
     console.error("Failed to reject admin:", error);
-    throw error; // Rethrow the error for handling in the calling code
+    throw error;
   }
 };
-// Reject an admin
+
+// Delete an organization
 export const deleteOrganization = async (id: string): Promise<void> => {
   try {
-    const url = `${API_URL}/api/superadmin/organizations/deleteorganization/${id}`;
+    const url = `${API_URL}/superadmin/organizations/deleteorganization/${id}`;
     console.log("Deleted Organization with URL:", url);
-    await axios.delete(url, {
-      headers: {
-        Authorization: `Bearer ${getToken()}`, // Add the token here
-      },
-    });
+    await axiosInstance.delete(url);
     console.log(`Organization with ID ${id} deleted successfully`);
   } catch (error) {
     console.error("Failed to reject organization:", error);
-    throw error; // Rethrow the error for handling in the calling code
+    throw error;
   }
 };

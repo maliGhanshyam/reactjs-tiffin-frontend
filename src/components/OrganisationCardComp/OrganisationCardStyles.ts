@@ -13,7 +13,6 @@ export const cardStyles: SxProps<Theme> = {
     transform: "scale(1.03)",
     boxShadow: 4,
     backgroundColor: "#f1f1f1",
-    // margin: 2,
     borderRadius: 5,
   },
 };
@@ -24,12 +23,10 @@ export const cardMediaStyles: SxProps<Theme> = {
 
 export const titleStyles: SxProps<Theme> = {
   fontWeight: "bolder",
-  fontFamily: "CustomFont, Arial, sans-serif",
   fontSize: "1.2rem",
 };
 export const subTitleStyles: SxProps<Theme> = {
   fontWeight: "bold",
-  fontFamily: "CustomFont, Arial, sans-serif",
   fontSize: "1.1rem",
 };
 export const statusStyles = (status: string): SxProps<Theme> => ({

@@ -69,6 +69,7 @@ const Navbar = () => {
             <img src={tiff3} alt="Logo" style={logoStyle} />
             <Typography
               variant="h5"
+              //This Font family is used only for Logo Design Purpose
               sx={{ ...styles.title, fontFamily: "Futura, Avenir, sans-serif" }}
             >
               <span style={{ color: "black", fontWeight: "bold" }}>Neo</span>
