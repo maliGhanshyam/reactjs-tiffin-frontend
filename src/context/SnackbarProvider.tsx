@@ -1,11 +1,9 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 import { Snackbar, Alert } from "@mui/material";
 import { AlertColor } from "@mui/material";
 import { SnackbarContextProps } from "./SnackbarProvider.types";
 
-const SnackbarContext = createContext<SnackbarContextProps | undefined>(
-  undefined
-); //undefined bcz it will used later in component
+export const SnackbarContext = createContext<SnackbarContextProps | undefined>(undefined);
 
 export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
   const [snackbar, setSnackbar] = useState<{
@@ -17,7 +15,7 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
     message: "",
     severity: "success",
   });
-  //open:visible, message, severity:type of alert
+
   const showSnackbar = (message: string, severity: "success" | "error") => {
     setSnackbar({ open: true, message, severity });
   };
@@ -42,13 +40,4 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
       </Snackbar>
     </SnackbarContext.Provider>
   );
-};
-
-//This will allow components to access the snackbar context
-export const useSnackbar = () => {
-  const context = useContext(SnackbarContext);
-  if (!context) {
-    throw new Error("useSnackbar not used");
-  }
-  return context;
 };

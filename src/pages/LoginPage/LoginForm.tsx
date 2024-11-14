@@ -56,7 +56,6 @@ const LoginForm = () => {
       const response = await loginUser(loginData.email, loginData.password);
       if (
         response.success 
-        
       ) {
         dispatch(
           setAuthData({
@@ -71,7 +70,7 @@ const LoginForm = () => {
         });
         setTimeout(() => {
           navigate(
-            response.role === SUPERADMIN_ROLE_ID
+            response.role_id === SUPERADMIN_ROLE_ID
               ? "/superAdminDashboard"
               : "/adminDashboard"
           );

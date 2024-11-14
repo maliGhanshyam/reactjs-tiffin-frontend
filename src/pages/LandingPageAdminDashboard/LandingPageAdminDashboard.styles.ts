@@ -2,14 +2,13 @@ import { SxProps, Theme } from "@mui/material";
 
 export const styles: { [key: string]: SxProps<Theme> } = {
   containerStyle: {
-    py: 3,
+    py: 4,
   },
   buttonGroupStyle: {
     display: "flex",
-    justifyContent: "center",
-    mb: 4,
+    mb: 3,
     alignItems: "center",
-    flexDirection: { xs: "column", sm: "row" },
+    flexDirection: { xs: "row", sm: "row" },
   },
   tabButtonStyle: {
     borderRadius: "1.2rem",
@@ -20,10 +19,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     display: "flex",
     justifyContent: "end",
     mt: 3,
-  },
-  cardContainerStyle: {
-    display: "flex",
-    // overflowX: "auto",
   },
   titleStyle: {
     mb: 2,
@@ -78,49 +73,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
       transform: "scale(1.05)",
     },
   },
-  titleStyles: {
-    fontWeight: 600,
-  },
-  descriptionStyles: {
-    mb: 2,
-  },
-  fieldsBoxStyles: {
-    mt: 2,
-  },
-  //new
-  cardActionsStyles: {
-    justifyContent: "center",
-    marginTop: 1,
-  },
-  buttonStyles: {
-    borderRadius: 1,
-    textTransform: "none",
-    fontWeight: 600,
-    "&:hover": {
-      backgroundColor: "success.dark",
-    },
-  },
-
-  rejectButtonStyles: {
-    borderRadius: 1,
-    textTransform: "none",
-    fontWeight: 600,
-    "&:hover": {
-      backgroundColor: "error.dark",
-    },
-  },
-
-  trendyButtonStyles: {
-    borderRadius: 1,
-    textTransform: "none",
-    fontWeight: 600,
-    "&:hover": {
-      backgroundColor: "warning.dark",
-    },
-  },
   activeButton: {
     borderRadius: "1.2rem",
-    mr: 2,
     fontWeight: "bold",
     backgroundColor: "#e43e38",
     color: "#fff",
@@ -130,7 +84,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   },
   inactiveButton: {
     borderRadius: "1.2rem",
-    mr: 2,
     fontWeight: "bold",
     backgroundColor: "transparent",
     color: "primary.main",
@@ -138,4 +91,17 @@ export const styles: { [key: string]: SxProps<Theme> } = {
       backgroundColor: "transparent",
     },
   },
+  searchStyle: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  searchTermStyle: {
+    width: 250,
+    borderRadius: 3,
+    marginRight: 2,
+  },
+  view: {
+    minHeight: "100vh",
+  },
+  content: { justifyContent: "center" },
 };

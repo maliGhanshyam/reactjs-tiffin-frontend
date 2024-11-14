@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Box,
-} from "@mui/material";
+import { Card, CardMedia } from "@mui/material";
 import { ActionCardProps } from "./ActionCard.types";
 
 const ActionCard: React.FC<ActionCardProps> = ({
@@ -15,30 +9,15 @@ const ActionCard: React.FC<ActionCardProps> = ({
   sx = {},
 }: ActionCardProps) => {
   const defaultImageUrl = "https://via.placeholder.com/400x320"; // Default image
+  const imageToDisplay = imageUrl || defaultImageUrl;
   return (
     <Card sx={sx}>
-      {imageUrl && (
         <CardMedia
           sx={{ ...imageStyles }}
-          image={imageUrl || defaultImageUrl}
+          image={imageToDisplay}
           title="Retailer Image"
         />
-      )}
-
-      <CardContent>
-        <Box>{children}</Box>
-      </CardContent>
-
-      <CardActions>
-        {children &&
-          React.Children.toArray(children).some(
-            (child: any) => child?.type.name === "Button"
-          ) && (
-            <Box sx={{ display: "flex", justifyContent: "center", gap: 0.5 }}>
-              {children}
-            </Box>
-          )}
-      </CardActions>
+      {children}
     </Card>
   );
 };

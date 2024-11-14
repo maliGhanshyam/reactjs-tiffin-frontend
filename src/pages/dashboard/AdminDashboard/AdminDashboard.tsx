@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Card,
   Container,
   Grid2,
   Paper,
@@ -22,7 +21,8 @@ import { CardSlider } from "../../../components/CardSlider";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { styles, tooltipStyle } from "./AdminDashboard.styles";
-import { useSnackbar } from "../../../context";
+import { RetailerInfoCard } from "../../../components/RetailerInfoCard";
+import { useSnackbar } from "../../../hook";
 
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
@@ -44,7 +44,6 @@ const AdminDashboard = () => {
       setPendingCount(data.length);
     } catch (error) {
       showSnackbar("Error fetching pending retailers", "error");
-      console.error("Error fetching pending retailers:", error);
     }
   };
 
@@ -55,7 +54,6 @@ const AdminDashboard = () => {
       setApprovedCount(data.length);
     } catch (error) {
       showSnackbar("Error fetching pending retailers", "error");
-      console.error("Error fetching approved retailers:", error);
     }
   };
 
@@ -65,12 +63,7 @@ const AdminDashboard = () => {
       setRejectedCount(data.length);
     } catch (error) {
       showSnackbar("Error fetching rejected retailers", "error");
-      console.error("Error fetching rejected retailers:", error);
     }
-  };
-
-  const truncateAddress = (address: string) => {
-    return address.length > 30 ? address.slice(0, 30) : address;
   };
 
   const chartData = [
@@ -146,11 +139,9 @@ const AdminDashboard = () => {
           </Grid2>
         </Grid2>
         <Grid2 sx={styles.sectionTitle}>
-          <Card sx={styles.roundedCardStyle}>
-            <Typography variant="h6" sx={styles.cardTypography}>
+            <Typography variant="h6">
               Approved Retailers
             </Typography>
-          </Card>
           <Button
             sx={styles.buttonStyle2}
             variant="outlined"
@@ -169,40 +160,10 @@ const AdminDashboard = () => {
           {(ret) => (
             <ActionCard
               sx={styles.cardStyles}
-              imageUrl="https://via.placeholder.com/400x320"
+              imageUrl={ret.user_image}
               imageStyles={styles.cardMediaStyles}
             >
-              <Typography variant="h6" sx={styles.titleStyles}>
-                {ret.username}
-              </Typography>
-              <Typography variant="body2" sx={styles.descriptionStyles}>
-                {`Email: ${ret.email}`}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  ...styles.typographyStyle,
-                  color:
-                    ret.role_specific_details?.approval[0]?.approval_status?.toLowerCase() ===
-                    "approved"
-                      ? "success.main"
-                      : ret.role_specific_details?.approval[0]?.approval_status?.toLowerCase() ===
-                          "pending"
-                        ? "warning.main"
-                        : "error.main",
-                }}
-              >
-                Status:{" "}
-                {ret.role_specific_details?.approval[0]?.approval_status}
-              </Typography>
-              <Box sx={styles.fieldsBoxStyles}>
-                <Typography variant="body2" color="text.secondary">
-                  <strong>Contact:</strong> {ret.contact_number}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  <strong>Address:</strong> {truncateAddress(ret.address)}
-                </Typography>
-              </Box>
+             <RetailerInfoCard retailer={ret} />
             </ActionCard>
           )}
         </CardSlider>

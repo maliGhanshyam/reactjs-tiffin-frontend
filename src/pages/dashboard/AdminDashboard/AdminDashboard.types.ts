@@ -6,6 +6,7 @@ export interface Approval {
 }
 
 export interface Retailer {
+  user_image:string;
   role_specific_details: {
     organization_id: string;
     approval: Approval[];
@@ -22,7 +23,7 @@ export interface Retailer {
 }
 
 export interface RetailersResponse {
-  statuscode: number;  // Matches the API response's lowercase property name
+  statuscode: number; 
   data: Retailer[];
 }
 

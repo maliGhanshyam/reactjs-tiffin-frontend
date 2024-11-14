@@ -16,6 +16,7 @@ const CardSlider = <T extends { _id: string }>({ data, children, settings }: Car
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 2,
           centerMode: false,
         },
       },
@@ -23,6 +24,7 @@ const CardSlider = <T extends { _id: string }>({ data, children, settings }: Car
         breakpoint: 600,
         settings: {
           slidesToShow: 1,
+          slidesToScroll: 1,
           centerMode: false,
         },
       },
