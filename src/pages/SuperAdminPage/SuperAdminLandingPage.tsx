@@ -17,7 +17,7 @@ import {
   rejectAdmin,
   deleteOrganization,
 } from "../../services/OrganisationService/OrganizationService";
-import { subTitleStyles as titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
+import OrganisationCardStyles from "../../components/OrganisationCardComp/OrganisationCardStyles";
 import { Organization, UserData } from "../../Types";
 
 // Define the action type
@@ -172,11 +172,31 @@ const SuperAdminLandingPage: React.FC = () => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 2 }}>
-        <Tabs value={currentTab} sx={titleStyles} onChange={handleTabChange}>
-          <Tab label="Pending Admins" value="pending" sx={titleStyles} />
-          <Tab label="Approved Admins" value="approved" sx={titleStyles} />
-          <Tab label="Rejected Admins" value="rejected" sx={titleStyles} />
-          <Tab label="Organizations" value="available" sx={titleStyles} />
+        <Tabs
+          value={currentTab}
+          sx={OrganisationCardStyles.subTitleStyles}
+          onChange={handleTabChange}
+        >
+          <Tab
+            label="Pending Admins"
+            value="pending"
+            sx={OrganisationCardStyles.subTitleStyles}
+          />
+          <Tab
+            label="Approved Admins"
+            value="approved"
+            sx={OrganisationCardStyles.subTitleStyles}
+          />
+          <Tab
+            label="Rejected Admins"
+            value="rejected"
+            sx={OrganisationCardStyles.subTitleStyles}
+          />
+          <Tab
+            label="Organizations"
+            value="available"
+            sx={OrganisationCardStyles.subTitleStyles}
+          />
         </Tabs>
         <Box
           sx={{
