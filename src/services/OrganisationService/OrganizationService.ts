@@ -4,14 +4,11 @@ import {
   AddOrganization1,
   OrganizationsResponse1,
 } from "./Organization1.types";
+import axiosInstance from "../Organization/axiosInstance";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const token = getToken();
 
-// const API_URL = "http://localhost:5000";
-// console.log("API URL:", process.env.REACT_APP_API_URL);
-
-// Define the expected response structure
 interface OrganizationsResponse {
   statuscode: number;
   data: Organization[];
@@ -169,13 +166,8 @@ export const deleteOrganization = async (id: string): Promise<void> => {
 
 export const getOrganizationById = async (organizationId: string) => {
   try {
-    const response = await axios.get<getByOrganizationsResponse>(
-      `${API_URL}/api/superadmin/organizations/getorganization/${organizationId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+    const response = await axiosInstance.get<getByOrganizationsResponse>(
+      `${API_URL}/api/superadmin/organizations/getorganization/${organizationId}`
     );
     return response.data.data;
   } catch (error) {
@@ -203,14 +195,9 @@ export const addOrganization = async (
       ),
     };
 
-    const response = await axios.post<OrganizationsResponse1>(
+    const response = await axiosInstance.post<OrganizationsResponse1>(
       `${API_URL}/api/superadmin/organizations/addOrganization`,
-      filteredOrganization,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      filteredOrganization
     );
     return response.data.data;
   } catch (error) {
@@ -236,14 +223,9 @@ export const updateOrganization = async (
       ),
     };
 
-    const response = await axios.put<AddOrganization1[]>(
+    const response = await axiosInstance.put<AddOrganization1[]>(
       `${API_URL}/api/superadmin/organizations/updateorganization/${_id}`,
-      filteredOrganization,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      filteredOrganization
     );
     return response.data;
   } catch (error) {

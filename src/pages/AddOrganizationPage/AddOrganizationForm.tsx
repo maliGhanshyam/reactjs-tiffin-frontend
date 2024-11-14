@@ -114,7 +114,7 @@ export default function AddOrganizationForm() {
           severity: "success",
         });
       }
-      setTimeout(() => navigate("/SuperAdminDashboard"), 3000);
+      setTimeout(() => navigate("/SuperAdminDashboard"), 1000);
     } catch (error) {
       setSnackbar({
         open: true,

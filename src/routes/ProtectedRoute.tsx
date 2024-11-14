@@ -5,6 +5,7 @@ import { RootState } from "../store/Store";
 import axios from "axios";
 import { setAuthData } from "../store/authSlice";
 import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "../constants/ROLES";
+import axiosInstance from "../services/Organization/axiosInstance";
 const API_URL = process.env.REACT_APP_API_URL;
 interface AuthGuardProps {
   children: ReactNode;
@@ -30,11 +31,9 @@ const ProtectedRoute: FC<AuthGuardProps> = ({
 
   const getUserByToken = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/auth/getuserbytoken`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosInstance.get(
+        `${API_URL}/api/auth/getuserbytoken`
+      );
       const { _id, role_id } = response.data.data;
       if (_id && role_id) {
         dispatch(setAuthData({ userRoleId: role_id, userId: _id }));
