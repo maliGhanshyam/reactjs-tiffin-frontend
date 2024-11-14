@@ -43,35 +43,3 @@ export const getOrganizations = async (): Promise<Organization[]> => {
     throw error;
   }
 };
-
-export const addOrganization = async (
-  organization: AddOrganization1
-): Promise<AddOrganization1[]> => {
-  try {
-    const filteredOrganization = {
-      org_name: organization.org_name,
-      org_location: organization.org_location.map(
-        ({ loc, address, loc_contact, loc_email }) => ({
-          loc,
-          address,
-          loc_contact,
-          loc_email,
-        })
-      ),
-    };
-
-    const response = await axios.post<OrganizationsResponse1>(
-      `${API_URL}/api/superadmin/organizations/addOrganization`,
-      filteredOrganization,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Failed to add organization:", error);
-    throw error;
-  }
-};

@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
@@ -10,7 +10,7 @@ import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage
 import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
 import { PageNotFound } from "../components/PageNotFound";
 import { AddOrganizationForm } from "../pages/AddOrganizationPage";
-const childRoutes = [
+const childRoutes: RouteObject[] = [
   {
     path: "register",
     element: (
@@ -57,6 +57,14 @@ const childRoutes = [
   },
   {
     path: "AddOrganization",
+    element: (
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
+        <AddOrganizationForm />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/editOrganization/:_id",
     element: (
       <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
         <AddOrganizationForm />

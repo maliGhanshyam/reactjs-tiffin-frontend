@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 
 import * as Yup from "yup";
@@ -17,9 +17,13 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { addOrganization } from "../../services/OrganisationService/OrgCRUD";
+import {
+  addOrganization,
+  getOrganizationById,
+  updateOrganization,
+} from "../../services/OrganisationService/OrganizationService";
 import { AddOrganization1 } from "../../services/OrganisationService/Organization1.types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import {
   mainContainer,
@@ -60,9 +64,30 @@ const validationSchema = Yup.object({
     .min(1, "At least one location is required"),
 });
 
-export default function OrganizationForm() {
+export default function AddOrganizationForm() {
   const navigate = useNavigate();
+  const { _id } = useParams();
+  const [initialValues, setInitialValues] = useState<AddOrganization1 | null>(
+    null
+  );
   const [expanded, setExpanded] = React.useState<number | null>(null);
+
+  useEffect(() => {
+    if (_id) {
+      const fetchData = async () => {
+        const data = await getOrganizationById(_id);
+        if (data) {
+          setInitialValues(data);
+        }
+      };
+      fetchData();
+    } else {
+      setInitialValues({
+        org_name: "",
+        org_location: [{ loc: "", address: "", loc_contact: 0, loc_email: "" }],
+      });
+    }
+  }, [_id]);
 
   const handleExpandClick = (index: number) => {
     setExpanded(expanded === index ? null : index);
@@ -74,52 +99,55 @@ export default function OrganizationForm() {
   });
   const handleSubmit = async (values: AddOrganization1) => {
     try {
-      const response = await addOrganization(values);
-      if (response) {
+      if (_id) {
+        await updateOrganization(_id, values);
         setSnackbar({
           open: true,
-          message: "Add Organization successful",
+          message: "Organization updated successfully",
           severity: "success",
         });
-        setTimeout(() => {
-          navigate("/SuperAdminDashboard");
-        }, 3000);
       } else {
+        await addOrganization(values);
         setSnackbar({
           open: true,
-          message: "Invalid credentials",
-          severity: "error",
+          message: "Organization added successfully",
+          severity: "success",
         });
       }
+      setTimeout(() => navigate("/SuperAdminDashboard"), 3000);
     } catch (error) {
       setSnackbar({
         open: true,
-        message: "Add Organization error. Please try again.",
+        message: "An error occurred. Please try again.",
         severity: "error",
       });
-      console.error("Failed to add organization:", error);
     }
   };
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
-  return (
+  return initialValues ? (
     <Container component="main">
       <Box sx={mainContainer}>
-        <Typography sx={titleTypography}>Add New Organization</Typography>
+        <Typography sx={titleTypography}>
+          {_id ? "Update Organization" : "Add New Organization"}
+        </Typography>
         <Formik
-          initialValues={{
-            org_name: "",
-            org_location: [
-              {
-                loc: "",
-                address: "",
-                loc_contact: 0,
-                loc_email: "",
-              },
-            ],
-          }}
+          initialValues={
+            initialValues || {
+              org_name: "",
+              org_location: [
+                {
+                  loc: "",
+                  address: "",
+                  loc_contact: 0,
+                  loc_email: "",
+                },
+              ],
+            }
+          }
           validationSchema={validationSchema}
+          enableReinitialize
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, isSubmitting, dirty }) => (
@@ -181,6 +209,12 @@ export default function OrganizationForm() {
                                 margin="dense"
                                 variant="outlined"
                                 sx={fieldContainer}
+                                InputProps={{
+                                  readOnly: Boolean(
+                                    _id &&
+                                      initialValues?.org_location[index]?.loc
+                                  ),
+                                }}
                               />
                               <ErrorMessage
                                 name={`org_location[${index}].loc`}
@@ -312,5 +346,7 @@ export default function OrganizationForm() {
         </Alert>
       </Snackbar>
     </Container>
+  ) : (
+    <Typography>Loading...</Typography>
   );
 }

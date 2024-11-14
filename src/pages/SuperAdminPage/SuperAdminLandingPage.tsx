@@ -19,6 +19,7 @@ import {
 } from "../../services/OrganisationService/OrganizationService";
 import { subTitleStyles as titleStyles } from "../../components/OrganisationCardComp/OrganisationCardStyles";
 import { Organization, UserData } from "../../Types";
+import { useNavigate } from "react-router-dom";
 
 // Define the action type
 type ActionType = {
@@ -37,6 +38,7 @@ const SuperAdminLandingPage: React.FC = () => {
   >("pending");
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(16);
+  const navigate = useNavigate();
 
   const fetchAllData = async () => {
     try {
@@ -94,6 +96,10 @@ const SuperAdminLandingPage: React.FC = () => {
     }
   };
 
+  const handleUpdate = (id: string) => {
+    navigate(`/editOrganization/${id}`);
+  };
+
   const handleDelete = async (id: string) => {
     try {
       await deleteOrganization(id);
@@ -140,8 +146,8 @@ const SuperAdminLandingPage: React.FC = () => {
       return [
         {
           label: "Update",
-          color: "primary" as const,
-          onClick: () => console.log("Update"),
+          color: "primary",
+          onClick: () => handleUpdate(item._id),
         },
         {
           label: "Delete",
