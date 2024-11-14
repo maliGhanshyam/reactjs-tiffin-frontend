@@ -79,7 +79,7 @@ const LoginForm = () => {
               ? "/superAdminDashboard"
               : "/adminDashboard"
           );
-        }, 1000);
+        }, 2000);
       } else {
         setSnackbar({
           open: true,

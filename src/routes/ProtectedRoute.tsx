@@ -5,7 +5,7 @@ import { RootState } from "../store/Store";
 import axios from "axios";
 import { setAuthData } from "../store/authSlice";
 import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "../constants/ROLES";
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 interface AuthGuardProps {
   children: ReactNode;
   requiredRole?: string;
