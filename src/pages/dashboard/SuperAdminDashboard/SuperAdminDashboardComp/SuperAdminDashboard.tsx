@@ -12,6 +12,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { titleStyles } from "./SuperAdminDashboardStyle";
 import { Organization, UserData } from "../../../../Types";
+import PieChartComponent from "../../../../components/Charts/PieChartComponent";
 
 const settings = {
   dots: true,
@@ -53,6 +54,8 @@ const SuperAdminDashboard: React.FC = () => {
   }, []);
 
   return (
+    <>
+    <PieChartComponent ></PieChartComponent>
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Container sx={{ flexGrow: 1, py: 3 }}>
         {/* Scrollable Organisation Cards Section */}
@@ -166,7 +169,8 @@ const SuperAdminDashboard: React.FC = () => {
           ))}
         </Slider>
       </Container>
-    </Box>
+      </Box>
+      </>
   );
 };
 
