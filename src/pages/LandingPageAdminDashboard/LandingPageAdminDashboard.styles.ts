@@ -19,6 +19,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     display: "flex",
     justifyContent: "end",
     mt: 3,
+    marginRight:8
   },
   titleStyle: {
     mb: 2,
@@ -30,8 +31,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   modalContentStyle: {
     variant: "body1",
   },
+  innerCardContainerStyleAR: {
+    minWidth: 320,
+    // mr: 2,
+  },
   innerCardContainerStyle: {
-    minWidth: 350,
+    minWidth: 320,
     mr: 2,
   },
   modalTitle: {
@@ -72,6 +77,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       transform: "scale(1.05)",
     },
+    marginRight:"20px"
   },
   activeButton: {
     borderRadius: "1.2rem",
@@ -81,6 +87,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "#e43e38",
     },
+    marginRight:"20px"
   },
   inactiveButton: {
     borderRadius: "1.2rem",
@@ -90,10 +97,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "transparent",
     },
+    marginRight:"20px"
   },
   searchStyle: {
     display: "flex",
     justifyContent: "flex-end",
+    paddingRight:"66px"
   },
   searchTermStyle: {
     width: 250,
@@ -101,7 +110,13 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     marginRight: 2,
   },
   view: {
-    minHeight: "100vh",
+    minHeight:"700px",
+    marginLeft:"50px",
+    marginRight:"30px",
   },
-  content: { justifyContent: "center" },
+  content: { 
+    minHeight:"700px",
+    marginLeft:"50px",
+    marginRight:"30px",
+  },
 };

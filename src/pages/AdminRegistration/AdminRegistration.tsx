@@ -100,7 +100,7 @@ const AdminRegistration = () => {
         actions.resetForm();
         setSelectedOrganization("");
       } catch (error) {
-        showSnackbar("An account with this email already exists", "error");
+        showSnackbar("Email already exists", "error");
       }
     },
   });

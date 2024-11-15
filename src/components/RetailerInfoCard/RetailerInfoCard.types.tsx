@@ -2,7 +2,6 @@ import { Retailer } from "../../pages/dashboard/AdminDashboard/AdminDashboard.ty
 
 export interface RetailerInfoCardProps {
   retailer: Retailer;
-  truncateAddress?: boolean;
   showButtons?: boolean;
   onApprove?: (retailerId: string) => void;
   onReject?: (retailerId: string) => void;

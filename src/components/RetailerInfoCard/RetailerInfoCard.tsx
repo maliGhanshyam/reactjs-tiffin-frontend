@@ -9,7 +9,6 @@ import { styles } from "./RetailerInfo.styles";
 //To avoid repeted code in Retailer cards this component is used 
 const RetailerInfoCard: React.FC<RetailerInfoCardProps> = ({
   retailer,
-  truncateAddress = true,
   showButtons = false, // control whether buttons to be shown or not
   onApprove,
   onReject,
@@ -18,7 +17,7 @@ const RetailerInfoCard: React.FC<RetailerInfoCardProps> = ({
   const truncate = (address: string) => {
     return address.length > 25 ? `${address.slice(0, 24)}...` : address;
   };
-
+  const approvalStatus = retailer.role_specific_details?.approval[0]?.approval_status;
   return (
     <Box sx={styles.boxStyle}>
       <Typography variant="h6" sx={styles.titleStyles}>{retailer.username}</Typography>
@@ -32,14 +31,14 @@ const RetailerInfoCard: React.FC<RetailerInfoCardProps> = ({
           mt: 1,
           fontWeight: 500,
           color:
-            retailer.role_specific_details?.approval[0]?.approval_status?.toLowerCase() === "approved"
+          approvalStatus?.toLowerCase() === "approved"
               ? "success.main"
-              : retailer.role_specific_details?.approval[0]?.approval_status?.toLowerCase() === "pending"
+              : approvalStatus?.toLowerCase() === "pending"
               ? "warning.main"
               : "error.main",
         }}
       >
-        Status: {retailer.role_specific_details?.approval[0]?.approval_status}
+        Status: {approvalStatus}
       </Typography>
       <Box sx={styles.fieldsBoxStyles}>
         <Typography variant="body2" color="text.secondary">
@@ -47,7 +46,7 @@ const RetailerInfoCard: React.FC<RetailerInfoCardProps> = ({
         </Typography>
         <Typography variant="body2" color="text.secondary">
           <strong>Address:</strong>{" "}
-          {truncateAddress ? truncate(retailer.address) : retailer.address}
+          {truncate(retailer.address)}
         </Typography>
       </Box>
       {showButtons && (

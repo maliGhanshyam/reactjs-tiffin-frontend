@@ -7,7 +7,7 @@ const CardSlider = <T extends { _id: string }>({ data, children, settings }: Car
   const defaultSettings = {
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 3,
     dots: true,
     centerMode: false,

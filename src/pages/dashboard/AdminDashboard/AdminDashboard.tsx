@@ -2,17 +2,11 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Container,
   Grid2,
   Paper,
   Typography,
 } from "@mui/material";
 import { Retailer } from "./AdminDashboard.types";
-import {
-  getApproved,
-  getPending,
-  getRejected,
-} from "../../../services/Retailer";
 import { ActionCard } from "../../../components/ActionCard";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
@@ -23,6 +17,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { styles, tooltipStyle } from "./AdminDashboard.styles";
 import { RetailerInfoCard } from "../../../components/RetailerInfoCard";
 import { useSnackbar } from "../../../hook";
+import { fetchRetailersWithPagination } from "../../../services/Retailer";
 
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
@@ -40,8 +35,8 @@ const AdminDashboard = () => {
 
   const fetchRetailers = async () => {
     try {
-      const data = await getPending();
-      setPendingCount(data.length);
+      const {totalItems} = await fetchRetailersWithPagination("pendingRetailers"); 
+      setPendingCount(totalItems);
     } catch (error) {
       showSnackbar("Error fetching pending retailers", "error");
     }
@@ -49,9 +44,9 @@ const AdminDashboard = () => {
 
   const fetchApprovedRetailers = async () => {
     try {
-      const data = await getApproved();
+      const {data,totalItems} = await fetchRetailersWithPagination("getapprovedRetailers");
       setApproveRetailer(data);
-      setApprovedCount(data.length);
+      setApprovedCount(totalItems);
     } catch (error) {
       showSnackbar("Error fetching pending retailers", "error");
     }
@@ -59,8 +54,8 @@ const AdminDashboard = () => {
 
   const fetchRejectedRetailers = async () => {
     try {
-      const data = await getRejected();
-      setRejectedCount(data.length);
+      const {totalItems} = await fetchRetailersWithPagination("getrejectedRetailers");
+      setRejectedCount(totalItems);
     } catch (error) {
       showSnackbar("Error fetching rejected retailers", "error");
     }
@@ -73,10 +68,10 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Container sx={styles.innerContainerStyle}>
-        <Grid2 container size={{ sm: 12, xs: 8 }} sx={styles.outerGrid}>
-          <Grid2 size={{ sm: 4 }}>
+     <Box sx={styles.innerContainerStyle}>
+        <Grid2 container size={{ sm: 12, xs: 8 }} spacing={4} sx={styles.outerGrid}>
+        
+          <Grid2 size={{ sm: 4, xs:11 }}>
             <Box sx={styles.innerGridA}>
               {/* Piechart */}
               <PieChart width={300} height={240}>
@@ -106,7 +101,7 @@ const AdminDashboard = () => {
               </PieChart>
             </Box>
           </Grid2>
-          <Grid2 size={{ sm: 6 }}>
+          <Grid2 size={{ sm: 7, xs:11 }}>
             <Box sx={styles.taskBox}>
               <Box sx={styles.boyLogoStyle}></Box>
               <Box sx={styles.taskContainer}>
@@ -114,7 +109,7 @@ const AdminDashboard = () => {
                   Task Box
                 </Typography>
                 <Paper sx={styles.paperStyle}>
-                  <Typography variant="body2">
+                  <Typography variant="body1">
                     Pending Retailers:&nbsp;&nbsp;{" "}
                   </Typography>
                   <Typography variant="h6" sx={styles.pendingCountStyle}>
@@ -139,11 +134,9 @@ const AdminDashboard = () => {
           </Grid2>
         </Grid2>
         <Grid2 sx={styles.sectionTitle}>
-            <Typography variant="h6">
-              Approved Retailers
-            </Typography>
+          <Typography variant="h6">Approved Retailers</Typography>
           <Button
-            sx={styles.buttonStyle2}
+            sx={styles.buttonStyleSeeAll}
             variant="outlined"
             onClick={() =>
               navigate("/approved-retailers", {
@@ -163,12 +156,11 @@ const AdminDashboard = () => {
               imageUrl={ret.user_image}
               imageStyles={styles.cardMediaStyles}
             >
-             <RetailerInfoCard retailer={ret} />
+              <RetailerInfoCard retailer={ret} />
             </ActionCard>
           )}
         </CardSlider>
-      </Container>
-    </Box>
+     </Box>
   );
 };
 

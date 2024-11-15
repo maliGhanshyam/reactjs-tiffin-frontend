@@ -2,7 +2,7 @@ export interface Approval {
   approval_status: string;
   organization_id: string;
   istrendy?: boolean;
-  _id?: string; // Optional since it might not appear in the response
+  _id?: string;
 }
 
 export interface Retailer {
