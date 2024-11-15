@@ -7,6 +7,8 @@ import AuthGuard from "../components/RouteGuard";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
 import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage";
+import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
+
 const childRoutes = [
   {
     path: "register",
@@ -20,8 +22,8 @@ const childRoutes = [
     path: "superAdminDashboard",
     element: (
       <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
-        <SuperAdminDashboard />
-      </AuthGuard>
+        <SuperAdminDashboard /> 
+        </AuthGuard>
     ),
   },
   {
@@ -35,6 +37,10 @@ const childRoutes = [
   {
     path: "login",
     element: <LoginForm />,
+  },
+  {
+    path: "approved-retailers",
+    element: <LandingPageAdminDashboard/>
   },
   {
     path: "supAdmin",

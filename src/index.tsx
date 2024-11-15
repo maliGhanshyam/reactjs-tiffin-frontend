@@ -7,8 +7,6 @@ import { ThemeProvider } from "@mui/material";
 import childRoutes from "./routes/Routes";
 import { Provider } from "react-redux";
 import Store from "./store/Store";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import Theme from "./components/materialUI/Theme";
 
 const router = createBrowserRouter([
