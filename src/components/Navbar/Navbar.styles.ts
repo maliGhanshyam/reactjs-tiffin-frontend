@@ -10,13 +10,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     alignItems: "center",
     flexGrow: 1,
   },
-  title: {
-    fontWeight: "bold",
-    color: "#caf010",
-    letterSpacing: "0.1em",
-    fontFamily: '"Comic Sans MS", cursive, sans-serif',
-    textShadow: "1px 1px 2px rgba(0, 0, 0, 0.7)",
-  },
   button: {
     fontSize: "1.05rem",
     marginLeft: 4,

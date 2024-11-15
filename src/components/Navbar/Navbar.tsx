@@ -67,8 +67,15 @@ const Navbar = () => {
         <Toolbar sx={styles.toolbar}>
           <Box sx={styles.toolbar}>
             <img src={tiff3} alt="Logo" style={logoStyle} />
-            <Typography variant="h5" sx={styles.title}>
-              Neo-Tiffins
+            <Typography
+              variant="h5"
+              //This Font family is used only for Logo Design Purpose
+              sx={{ ...styles.title, fontFamily: "Futura, Avenir, sans-serif" }}
+            >
+              <span style={{ color: "black", fontWeight: "bold" }}>Neo</span>
+              <span style={{ color: "white", fontWeight: "bold" }}>
+                Tiffins
+              </span>
             </Typography>
             {getToken() && (
               <Button
