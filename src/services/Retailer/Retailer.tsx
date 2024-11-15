@@ -1,5 +1,5 @@
+import axiosInstance from "../OrganisationService/axiosInstance";
 import { ApiResponse, Retailer, RetailersResponse } from "./Retailer.types";
-import axiosInstance from "./axiosInstance"; //interceptor
 
 const API_URL = process.env.REACT_APP_API_URL!;
 
