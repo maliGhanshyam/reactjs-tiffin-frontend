@@ -24,26 +24,22 @@ const styles = {
 
   pendingCount: { fontWeight: "bold", color: "#c0392b" },
 };
-const getGreetingMessage = () => {
-  const currentHour = new Date().getHours();
-  if (currentHour < 12) {
-    return "Good Morning";
-  } else if (currentHour < 18) {
-    return "Good Afternoon";
-  } else {
-    return "Good Evening";
-  }
-};
 
-const chartData = [
-  { name: "Pending", value: 300 },
-  { name: "Approved", value: 500 },
-  { name: "Rejected", value: 200 },
-];
-
-export default function PieChartComponent() {
-  
+export default function PieChartComponent({ chartData }) {
   const navigate = useNavigate();
+
+  // Moved getGreetingMessage logic here
+  const getGreetingMessage = () => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      return "Good Morning";
+    } else if (currentHour < 18) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  };
+
   const pendingCount =
     chartData.find((item) => item.name === "Pending")?.value || 0;
 
@@ -119,11 +115,7 @@ export default function PieChartComponent() {
                 <Button
                   variant="outlined"
                   sx={{ borderRadius: "12px" }}
-                  onClick={() =>
-                    navigate("/approved-retailers", {
-                      state: { viewTab: "pending" },
-                    })
-                  }
+                  onClick={() => navigate("/supAdmin")}
                   startIcon={<VisibilityIcon />}
                 >
                   View More

@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Organization, UserData } from "../../Types";
+import {
+  Organization,
+  UserData,
+  Pagination,
+  OrganizationsResponse,
+  ApiResponse,
+} from "../../Types";
 import axiosInstance from "./axiosInstance";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -8,20 +14,21 @@ const API_URL = process.env.REACT_APP_API_URL;
 // console.log("API URL:", process.env.REACT_APP_API_URL);
 
 // Define the expected response structure
-interface OrganizationsResponse {
-  statuscode: number;
-  data: Organization[];
-}
+// interface OrganizationsResponse {
+//   statuscode: number;
+//   data: Organization[];
+// }
 
-interface ApiResponse {
-  statuscode: number;
-  data: UserData[];
-}
+// interface ApiResponse {
+//   statuscode: number;
+//   data: UserData[];
+//   pagination: Pagination;
+// }
 
 //Get Token
-function getToken() {
-  return localStorage.getItem("token");
-}
+// function getToken() {
+//   return localStorage.getItem("token");
+// }
 
 // Fetch all pending Admins
 export const getPendingAdmins = async (): Promise<UserData[]> => {
@@ -35,6 +42,31 @@ export const getPendingAdmins = async (): Promise<UserData[]> => {
     throw error;
   }
 };
+// Fetch admins with pagination and status
+export const getAdminRequests = async (
+  status: string,
+  page: number,
+  limit: number
+): Promise<{ data: UserData[]; pagination: Pagination }> => {
+  try {
+    const url = `/superadmin/getalladminrequest?status=${status}&page=${page}&limit=${limit}`;
+    console.log(`Request URL: ${url}`);
+
+    const response = await axiosInstance.get<ApiResponse>(url);
+    console.log("Response Data:", response.data);
+
+    // Return data and pagination
+    return {
+      data: response.data.data,
+      pagination: response.data.pagination,
+    };
+  } catch (error) {
+    console.error("Failed to fetch admin requests:", error);
+    throw error;
+  }
+};
+
+
 // Fetch all approved Admins
 export const getApprovedAdmins = async (): Promise<UserData[]> => {
   try {

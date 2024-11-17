@@ -9,10 +9,9 @@ import {
 } from "@mui/material";
 import OrganisationCard from "../../components/OrganisationCardComp/OrganisationCard";
 import {
-  getPendingAdmins,
+  getAdminRequests,
   getOrganizations,
-  getApprovedAdmins,
-  getRejectedAdmins,
+
   approveAdmin,
   rejectAdmin,
   deleteOrganization,
@@ -38,20 +37,44 @@ const SuperAdminLandingPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(16);
 
+  const getAlllData = async () => {
+    try {
+      const statuses = ["pending", "approved", "rejected"];
+      const page = 1;
+      const limit = 12;
+      const results = await Promise.all(
+        statuses.map(async (status) => {
+          const { data, pagination } = await getAdminRequests(
+            status,
+            page,
+            limit
+          );
+          console.log(`Fetched ${status} admins:`, data); // Debug
+          return { status, data, count: pagination.totalItems };
+        })
+      );
+      results.forEach(({ status, data, count }) => {
+        if (status === "pending") {
+          setPendingAdmins(data);
+        }
+        if (status === "approved") setApprovedAdmins(data);
+        if (status === "rejected") setRejectedAdmins(data);
+      });
+    } catch (error) {
+      console.error("Error fetching admins by status:", error);
+    }
+}
+
   const fetchAllData = async () => {
     try {
-      const [orgsData, pendingData, approvedData, rejectedData] =
+      const [orgsData] =
         await Promise.all([
           getOrganizations(),
-          getPendingAdmins(),
-          getApprovedAdmins(),
-          getRejectedAdmins(),
+
         ]);
 
       setOrganizations(orgsData);
-      setPendingAdmins(pendingData);
-      setApprovedAdmins(approvedData);
-      setRejectedAdmins(rejectedData);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -59,6 +82,8 @@ const SuperAdminLandingPage: React.FC = () => {
 
   useEffect(() => {
     fetchAllData();
+    getAlllData();
+
   }, []);
 
   const handleTabChange = (
