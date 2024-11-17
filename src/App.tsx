@@ -11,7 +11,7 @@ function App() {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh">
       <Navbar />
-      <main>
+      <main className="main-content">
         <SnackbarProvider>
           <Outlet />
         </SnackbarProvider>

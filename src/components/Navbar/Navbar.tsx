@@ -77,7 +77,6 @@ const Navbar = () => {
             <img src={tiff3} alt="Logo" style={logoStyle} />
             <Typography
               variant="h5"
-              //This Font family is used only for Logo Design Purpose
               sx={{ ...styles.title, fontFamily: "Futura, Avenir, sans-serif" }}
             >
               <span style={{ color: "black", fontWeight: "bold" }}>Neo</span>
@@ -120,6 +119,8 @@ const Navbar = () => {
             {location !== "/login" && (
               <Button
                 color="inherit"
+                component={Link}
+                to={token ? "#" : "/login"}
                 onClick={token ? handleAuthToggle : undefined}
                 sx={styles.button2}
               >
