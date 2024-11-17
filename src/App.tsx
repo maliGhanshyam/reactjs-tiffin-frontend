@@ -13,12 +13,12 @@ function App() {
       className="App"
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
+      <SnackbarProvider>
       <Navbar />
       <main style={{ flex: 1 }}>
-        <SnackbarProvider>
         <Outlet />
-        </SnackbarProvider>
       </main>
+      </SnackbarProvider>
       <Footer />
     </Box>
   );

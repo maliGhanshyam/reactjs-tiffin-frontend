@@ -26,6 +26,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   iconButton: {
     display: { sm: "none" },
   },
+  listItemStyle: { color: "black", textDecoration: "none" },
 };
 
 export const logoStyle = {
