@@ -1,7 +1,7 @@
-import axios from "axios";
 import { RegisterData, RegisterResponse } from "./Auth.types";
+import axiosInstance from "../OrganisationService/axiosInstance";
 
-const API_URL = process.env.REACT_APP_API_URL! || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL!;
 
 export const registerAdmin = async ({
   username,
@@ -10,15 +10,17 @@ export const registerAdmin = async ({
   address,
   password,
   organization_id,
+  org_location,
   role_id,
 }: RegisterData): Promise<RegisterResponse> => {
   try {
     const role_specific_details = {
       organization_id: organization_id,
       approval_status: "pending",
+      org_location: org_location
     };
 
-    const response = await axios.post(`${API_URL}/api/auth/register`, {
+    const response = await axiosInstance.post(`${API_URL}/auth/register`, {
       username,
       email,
       contact_number,

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  Typography,
   Pagination,
   Button,
   Grid2,
   TextField,
+  InputAdornment,
 } from "@mui/material";
 import { Retailer } from "../dashboard/AdminDashboard/AdminDashboard.types";
 import {
@@ -14,15 +14,15 @@ import {
   rejectRetailer,
   searchRetailerWithStatus,
 } from "../../services/Retailer";
-import { ActionCard } from "../../components/ActionCard";
 import { useLocation } from "react-router-dom";
 import { ApiResponse } from "./LandingPageAdminDashboard.types";
-import { styles } from "./LandingPageAdminDashboard.styles";
-import { RetailerInfoCard } from "../../components/RetailerInfoCard";
+import { getButtonStyles, styles } from "./LandingPageAdminDashboard.styles";
 import { useSnackbar } from "../../hook";
 import noData from "../../assets/noReports.svg";
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
 import RetailerCard from "../../components/RetailerCard/RetailerCard";
+import { NoData } from "../../components/NoData";
+import SearchIcon from '@mui/icons-material/Search';
 
 const LandingPageAdminDashboard = () => {
   const [pendingRetailer, setPendingRetailer] = useState<Retailer[]>([]);
@@ -51,22 +51,38 @@ const LandingPageAdminDashboard = () => {
   const location = useLocation();
   const { showSnackbar } = useSnackbar();
 
-  const fetchRetailersData = async () => {
-    await fetchRetailers(page);
-    await fetchApprovedRetailers(approvedPage);
-    await fetchRejectedRetailers(rejectedPage);
+  const fetchRetailersData = async (page: number) => {
+    switch (activeTab) {
+      case "pending":
+        await fetchRetailers(page);
+        break;
+      case "approved":
+        await fetchApprovedRetailers(approvedPage);
+        break;
+      case "rejected":
+        await fetchRejectedRetailers(rejectedPage);
+        break;
+    }
   };
 
   useEffect(() => {
     if (location.state?.viewTab) {
       setActiveTab(location.state.viewTab); // tab active based on location state
     }
-    if (searchTerm.trim() === "") {
-      fetchRetailersData();
-    }
-  }, [location.state?.viewRejected, page]);
+    setSearchTerm("");
+    setSearchResults([]);
+    fetchRetailersData(1);
+  }, [location.state?.viewRejected]);
 
-  // Fetch Retailers from one function
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setSearchResults([]);
+      fetchRetailersData(page);
+    } else {
+      handleSearch();
+    }
+  }, [searchTerm, activeTab, page]);
+  // Fetch Retailers
   const fetchRetailers = async (page: number) => {
     try {
       const { data, totalPages } = await fetchRetailersWithPagination(
@@ -120,7 +136,7 @@ const LandingPageAdminDashboard = () => {
         action === "approve"
           ? await approveRetailer(retailerId)
           : await rejectRetailer(retailerId);
-      await fetchRetailersData();
+      await fetchRetailersData(page);
 
       if (res.acknowledged === true) {
         showSnackbar(successMessage, "success");
@@ -168,7 +184,7 @@ const LandingPageAdminDashboard = () => {
   const handleSearch = async () => {
     if (searchTerm.trim() === "") {
       setSearchResults([]);
-      fetchRetailersData();
+      fetchRetailersData(page);
       return;
     }
     try {
@@ -177,6 +193,7 @@ const LandingPageAdminDashboard = () => {
       setRejectedPage(1);
       const searchData = await searchRetailerWithStatus(searchTerm, activeTab);
       if (searchData.length === 0) {
+        setSearchResults([]);
         showSnackbar(
           "No retailers found matching the search criteria.",
           "success"
@@ -184,7 +201,8 @@ const LandingPageAdminDashboard = () => {
       }
       setSearchResults(searchData);
     } catch (error) {
-      showSnackbar("Error while searching for retailers", "error");
+      showSnackbar("No such retailer found", "error");
+      setSearchResults([]);
     }
   };
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,16 +234,12 @@ const LandingPageAdminDashboard = () => {
   return (
     <Box sx={styles.containerStyle}>
       <Grid2 container sx={styles.buttonGroupStyle}>
-        <Grid2 size={{ sm: 6, xs: 12 }} sx={{ justifyContent: "flex-start" }}>
-          <Button
+        <Grid2 size={{ sm: 6, xs: 6 }} sx={{ justifyContent: "flex-start" }}>
+        <Button
             variant="outlined"
             color="primary"
             onClick={() => setActiveTab("approved")} // Switch to approved retailers
-            sx={{
-              ...(activeTab === "approved"
-                ? styles.activeButton
-                : styles.inactiveButton),
-            }}
+            sx={getButtonStyles("approved", activeTab, styles)}
           >
             Approved Retailers
           </Button>
@@ -233,23 +247,15 @@ const LandingPageAdminDashboard = () => {
             variant="outlined"
             color="primary"
             onClick={() => setActiveTab("pending")} // Switch to pending retailers
-            sx={{
-              ...(activeTab === "pending"
-                ? styles.activeButton
-                : styles.inactiveButton),
-            }}
+            sx={getButtonStyles("pending", activeTab, styles)}
           >
             Pending Retailers
           </Button>
           <Button
             variant="outlined"
             color="primary"
-            onClick={() => setActiveTab("rejected")} //Switch to rejected retailers
-            sx={{
-              ...(activeTab === "rejected"
-                ? styles.activeButton
-                : styles.inactiveButton),
-            }}
+            onClick={() => setActiveTab("rejected")} // Switch to rejected retailers
+            sx={getButtonStyles("rejected", activeTab, styles)}
           >
             Rejected Retailers
           </Button>
@@ -263,134 +269,125 @@ const LandingPageAdminDashboard = () => {
             value={searchTerm}
             onChange={handleSearchChange}
             sx={styles.searchTermStyle}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSearch}
-            sx={{ height: "100%" }}
-          >
-            Search
-          </Button>
         </Grid2>
       </Grid2>
-      {/* Actual screens */}
-      {searchResults.length > 0
-        ? searchResults.map((ret) => (
-            <Grid2 key={ret._id} sx={styles.innerCardContainerStyle}>
-              <ActionCard
-                sx={styles.cardStyles}
-                imageUrl={ret.user_image}
-                imageStyles={styles.cardMediaStyles}
-              >
-                <RetailerInfoCard retailer={ret} />
-              </ActionCard>
-            </Grid2>
-          ))
-        : activeTab === "approved" && (
-          <>
-            <Grid2 container size={12} sx={styles.content}>
-              {approvedRetailers.map((ret) => {
-                return (
-                  <RetailerCard retailer={ret} />
-                );
-              })}
-            </Grid2>
-              {approvedRetailers.length > 0 && (
-                <Pagination
-                  count={totalApprovedPages}
-                  page={approvedPage}
-                  onChange={handleApprovedPageChange}
-                  variant="outlined"
-                  shape="rounded"
-                  sx={styles.paginationStyle}
-                />
-              )}
-            </>
-          )}
-
-      {searchResults.length > 0 ? (
+      {/* Actual screens for search,pending,rejected,approved and Nodata found for retailers*/}
+      {searchTerm.trim() !== "" && searchResults.length === 0 ? (
+            <NoData
+              message={"No such retailers available"}
+              image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "60%"}}
+            />
+          ):searchResults.length > 0 ? (
         <Grid2 container size={12} sx={styles.content}>
-          {searchResults.map((ret) => (
-            <Grid2 key={ret._id} sx={styles.innerCardContainerStyle}>
-              <ActionCard
-                sx={styles.cardStyles}
-                imageUrl={ret.user_image}
-                imageStyles={styles.cardMediaStyles}
-              >
-                <RetailerInfoCard retailer={ret} />
-              </ActionCard>
-            </Grid2>
-          ))}
-        </Grid2>
-      ) : (
-        activeTab === "rejected" && (
-          <>
-            <Grid2 container size={12} sx={styles.content}>
-              {rejectedRetailers.map((ret) => {
-                return (
-                  <RetailerCard retailer={ret} />
-                );
-              })}
-            </Grid2>
-            {rejectedRetailers.length > 0 && (
-              <Pagination
-                count={totalRejectedPages}
-                page={rejectedPage}
-                onChange={handleRejectedPageChange}
-                variant="outlined"
-                shape="rounded"
-                sx={styles.paginationStyle}
-              />
-            )}
-          </>
-        )
-      )}
-
-      {searchResults.length > 0 ? (
-        searchResults.map((ret) => (
-          <Box key={ret._id} sx={styles.innerCardContainerStyle}>
-            <ActionCard
-              sx={styles.cardStyles}
-              imageUrl={ret.user_image}
-              imageStyles={styles.cardMediaStyles}
-            >
-              <RetailerInfoCard retailer={ret} />
-            </ActionCard>
-          </Box>
-        ))
-      ) : activeTab === "pending" && pendingRetailer.length === 0 ? (
-        <Box sx={{ textAlign: "center", mt: 5, marginY: "180px" }}>
-          <img src={noData} alt="No Data" style={{ width: "60%" }} />
-          <Typography variant="h6" color="textSecondary" sx={{ mt: 2 }}>
-            No pending retailers available
-          </Typography>
-        </Box>
-      ) : (
-        activeTab === "pending" && (
-          <>
-            <Grid2 container size={12} sx={styles.content}>
-              {pendingRetailer.map((ret) => (
+          {searchResults.map((ret) => {
+            const approvalStatus =
+              ret.role_specific_details?.approval?.[0]?.approval_status;
+            if (approvalStatus === "pending") {
+              return (
                 <RetailerCard
                   retailer={ret}
                   showButtons={true}
                   onApprove={() => openConfirmationModal(ret, "approve")}
                   onReject={() => openConfirmationModal(ret, "reject")}
                 />
-              ))}
-            </Grid2>
-            {pendingRetailer.length > 0 && (
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handleChangePage}
-                variant="outlined"
-                shape="rounded"
-                sx={styles.paginationStyle}
-              />
-            )}
-          </>
-        )
+              );
+            } else {
+              return <RetailerCard retailer={ret} />;
+            }
+          })}
+        </Grid2>
+      ) : (
+        <>
+          {activeTab === "approved" && approvedRetailers.length === 0 ? (
+            <NoData
+              message={"No approved retailers available"}
+              image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "60%"}}
+            />
+          ) : (
+            activeTab === "approved" && (
+              <>
+                <Grid2 container size={12} sx={styles.content}>
+                  {approvedRetailers.map((ret) => {
+                    return <RetailerCard retailer={ret} />;
+                  })}
+                </Grid2>
+                {approvedRetailers.length > 0 && (
+                  <Pagination
+                    count={totalApprovedPages}
+                    page={approvedPage}
+                    onChange={handleApprovedPageChange}
+                    variant="outlined"
+                    shape="rounded"
+                    sx={styles.paginationStyle}
+                  />
+                )}
+              </>
+            )
+          )}
+          {activeTab === "rejected" && rejectedRetailers.length === 0 ? (
+            <NoData
+              message={"No rejected retailers available"}
+              image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "60%"}}
+            />
+          ) : (
+            activeTab === "rejected" && (
+              <>
+                <Grid2 container size={12} sx={styles.content}>
+                  {rejectedRetailers.map((ret) => {
+                    return <RetailerCard retailer={ret} />;
+                  })}
+                </Grid2>
+                {rejectedRetailers.length > 0 && (
+                  <Pagination
+                    count={totalRejectedPages}
+                    page={rejectedPage}
+                    onChange={handleRejectedPageChange}
+                    variant="outlined"
+                    shape="rounded"
+                    sx={styles.paginationStyle}
+                  />
+                )}
+              </>
+            )
+          )}
+          {activeTab === "pending" && pendingRetailer.length === 0 ? (
+            <NoData message={"No pending retailers available"} image={noData} 
+            boxStyle={styles.noDataBox} imgStyle={{width: "60%"}} />
+          ) : (
+            activeTab === "pending" && (
+              <>
+                <Grid2 container size={12} sx={styles.content}>
+                  {pendingRetailer.map((ret) => (
+                    <RetailerCard
+                      retailer={ret}
+                      showButtons={true}
+                      onApprove={() => openConfirmationModal(ret, "approve")}
+                      onReject={() => openConfirmationModal(ret, "reject")}
+                    />
+                  ))}
+                </Grid2>
+                {pendingRetailer.length > 0 && (
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handleChangePage}
+                    variant="outlined"
+                    shape="rounded"
+                    sx={styles.paginationStyle}
+                  />
+                )}
+              </>
+            )
+          )}
+        </>
       )}
       {/* Dialog box */}
       <ConfirmationDialog

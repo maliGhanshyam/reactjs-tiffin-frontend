@@ -14,7 +14,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { Organization, RegisterResponse } from "./AdminRegistration.types";
+import { Organization, OrganizationLoc, RegisterResponse } from "./AdminRegistration.types";
 import { MenuProps, styles } from "./AdminRegistration.style";
 import { ADMIN_ROLE_ID } from "../../constants/ROLES";
 import { registerAdmin } from "../../services/Auth";
@@ -23,12 +23,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import login from "../../assets/LoginScreen.svg";
 import { useSnackbar } from "../../hook";
+import { getOrganizationById } from "../../services/Organization/Organization";
 
 const AdminRegistration = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [organization, setOrganization] = useState<Organization[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [selectedOrganizationLoc, setSelectedOrganizationLoc] = useState("");
+  const [organizationLoc, setOrganizationLoc] = useState<OrganizationLoc[]>([]);
   const navigate = useNavigate();
   const { showSnackbar } = useSnackbar();
 
@@ -43,6 +46,26 @@ const AdminRegistration = () => {
     };
     fetchOrganization();
   }, []);
+  //trigger on change of organization
+  useEffect(() => {
+    const fetchOrganizationById = async (organization_id:string) => {
+      try {
+        if (organization_id) {
+        const response = await getOrganizationById(organization_id);
+        setOrganizationLoc(response.org_location);
+        setSelectedOrganizationLoc("");
+        formik.setFieldValue("org_location", "");
+        }
+      } catch (error) {
+        showSnackbar("Error fetching organizations location", "error");
+      }
+    };
+    if(selectedOrganization){
+    fetchOrganizationById(selectedOrganization);
+    }else{
+    setOrganizationLoc([]);
+    }
+  }, [selectedOrganization]);  
 
   const formik = useFormik({
     initialValues: {
@@ -53,6 +76,7 @@ const AdminRegistration = () => {
       password: "",
       confirmPassword: "",
       organization_id: "",
+      org_location:"",
       role_id: ADMIN_ROLE_ID,
     },
     validationSchema: Yup.object({
@@ -81,7 +105,7 @@ const AdminRegistration = () => {
         .min(8, "Password must be at least 8 characters long")
         .max(20, "Password must be at most 20 characters long")
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$/,
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
           "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
         )
         .required("Password is required"),
@@ -89,6 +113,7 @@ const AdminRegistration = () => {
         .oneOf([Yup.ref("password")], "Passwords must match")
         .required("Confirm Password is required"),
       organization_id: Yup.string().required("Organization is required"),
+      org_location: Yup.string().required("Organization location is required"),
     }),
     onSubmit: async (values, actions) => {
       try {
@@ -224,6 +249,9 @@ const AdminRegistration = () => {
                         const selectedId = e.target.value;
                         setSelectedOrganization(selectedId);
                         formik.setFieldValue("organization_id", selectedId);
+                        //Reset the loc if new organization_id selected
+                        setSelectedOrganizationLoc("");
+                        formik.setFieldValue("org_location", "");
                       }}
                       onBlur={formik.handleBlur}
                       error={
@@ -272,6 +300,72 @@ const AdminRegistration = () => {
                           sx={styles.errorText}
                         >
                           {formik.errors.organization_id}
+                        </Typography>
+                      )}
+                  </Box>
+                </Grid2>
+                {/* new Field added org_location */}
+                <Grid2 size={12}>
+                  <Box sx={{ width: "100%" }}>
+                    <Select
+                      sx={{ textAlign: "left" }}
+                      fullWidth
+                      size="small"
+                      labelId="orgnization_location"
+                      id="org_location"
+                      value={selectedOrganizationLoc}
+                      MenuProps={MenuProps}
+                      onChange={(e) => {
+                        const selectedLocation = e.target.value;
+                        setSelectedOrganizationLoc(selectedLocation);
+                        formik.setFieldValue("org_location", selectedLocation);
+                      }}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.org_location &&
+                        Boolean(formik.errors.org_location)
+                      }
+                      displayEmpty
+                      renderValue={(value) => {
+                        if (value) {
+                          return value;
+                        }
+                        return (
+                          <Typography
+                            sx={
+                              formik.touched.org_location &&
+                              formik.errors.org_location
+                                ? styles.organizationError
+                                : styles.organizationPlaceholder
+                            }
+                          >
+                            Organization Location
+                          </Typography>
+                        );
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select a location
+                      </MenuItem>
+                      {organizationLoc.map((orgLoc: OrganizationLoc) => (
+                        <MenuItem
+                          key={orgLoc._id}
+                          value={orgLoc.loc}
+                          sx={{ overflowY: "auto" }}
+                        >
+                          {orgLoc.loc}
+                        </MenuItem>
+                      ))}
+                    </Select>
+
+                    {formik.touched.org_location &&
+                      formik.errors.org_location && (
+                        <Typography
+                          color="error"
+                          variant="caption"
+                          sx={styles.errorText}
+                        >
+                          {formik.errors.org_location}
                         </Typography>
                       )}
                   </Box>

@@ -18,6 +18,8 @@ import { styles, tooltipStyle } from "./AdminDashboard.styles";
 import { RetailerInfoCard } from "../../../components/RetailerInfoCard";
 import { useSnackbar } from "../../../hook";
 import { fetchRetailersWithPagination } from "../../../services/Retailer";
+import { NoData } from "../../../components/NoData";
+import noData from "../../../assets/noReports.svg";
 
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
@@ -66,7 +68,7 @@ const AdminDashboard = () => {
     { name: "Approved", value: approvedCount },
     { name: "Rejected", value: rejectedCount },
   ];
-
+  const showRetailersSlider = approveRetailers.length > 0;
   return (
      <Box sx={styles.innerContainerStyle}>
         <Grid2 container size={{ sm: 12, xs: 8 }} spacing={4} sx={styles.outerGrid}>
@@ -148,7 +150,7 @@ const AdminDashboard = () => {
             See all
           </Button>
         </Grid2>
-
+        {showRetailersSlider ? (
         <CardSlider data={approveRetailers}>
           {(ret) => (
             <ActionCard
@@ -159,7 +161,7 @@ const AdminDashboard = () => {
               <RetailerInfoCard retailer={ret} />
             </ActionCard>
           )}
-        </CardSlider>
+        </CardSlider>):(<NoData message={"No Data"} image={noData}/>)}
      </Box>
   );
 };

@@ -8,7 +8,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     display: "flex",
     mb: 3,
     alignItems: "center",
-    flexDirection: { xs: "row", sm: "row" },
+    flexDirection: { xs: "column", sm: "row" },
   },
   tabButtonStyle: {
     borderRadius: "1.2rem",
@@ -33,7 +33,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   },
   innerCardContainerStyleAR: {
     minWidth: 320,
-    // mr: 2,
   },
   innerCardContainerStyle: {
     minWidth: 320,
@@ -87,7 +86,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "#e43e38",
     },
-    marginRight:"20px"
+    marginRight:{sm:"20px"},
+    marginBottom:{xs:1, sm:0}
   },
   inactiveButton: {
     borderRadius: "1.2rem",
@@ -97,7 +97,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "transparent",
     },
-    marginRight:"20px"
+    marginRight:{sm:"20px"},
+    marginBottom:{xs:1, sm:0}
   },
   searchStyle: {
     display: "flex",
@@ -107,16 +108,26 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   searchTermStyle: {
     width: 250,
     borderRadius: 3,
-    marginRight: 2,
   },
   view: {
     minHeight:"700px",
     marginLeft:"50px",
     marginRight:"30px",
   },
-  content: { 
+  content: {
     minHeight:"700px",
     marginLeft:"50px",
     marginRight:"30px",
   },
+  noDataBox: {
+    textAlign: "center",
+    mt: 5,
+    marginY: "180px",
+  },
+};
+
+export const getButtonStyles = (tab: string, activeTab: string, styles: any) => {
+  return {
+    ...(activeTab === tab ? styles.activeButton : styles.inactiveButton),
+  };
 };

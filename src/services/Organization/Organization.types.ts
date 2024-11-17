@@ -21,3 +21,7 @@ export interface OrgLocation {
     statuscode: number;
     data: Organization[];
   }
+  export interface OrganizationResponse {
+    statuscode: number;
+    data: Organization;
+  }

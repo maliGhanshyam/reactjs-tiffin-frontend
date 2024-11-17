@@ -12,8 +12,8 @@ const API_URL = process.env.REACT_APP_API_URL!;
   ): Promise<{ data: Retailer[]; totalPages: number,totalItems:number }> => {
     try {
       const url=page && limit
-      ? `${API_URL}/api/admin/${endpoint}?page=${page}&limit=${limit}` 
-      : `${API_URL}/api/admin/${endpoint}`;
+      ? `${API_URL}/admin/${endpoint}?page=${page}&limit=${limit}` 
+      : `${API_URL}/admin/${endpoint}`;
       const response = await axiosInstance.get<
         RetailersResponse & { pagination: { totalPages: number,totalItems:number } }
       >(url);
@@ -64,7 +64,7 @@ export const approveRetailer = async (
 ): Promise<ApiResponse> => {
   try {
     await axiosInstance.put(
-      `${API_URL}/api/admin/approveRetailer/${retailerId}`,
+      `${API_URL}/admin/approveRetailer/${retailerId}`,
       {}
     );
     return { acknowledged: true };
@@ -79,7 +79,7 @@ export const rejectRetailer = async (
 ): Promise<ApiResponse> => {
   try {
     await axiosInstance.put(
-      `${API_URL}/api/admin/rejectRetailer/${retailerId}`,
+      `${API_URL}/admin/rejectRetailer/${retailerId}`,
       {}
     );
     return { acknowledged: true };
@@ -95,7 +95,7 @@ export const searchRetailerWithStatus = async (
 ): Promise<Retailer[]> => {
   try {
     const response = await axiosInstance.get<RetailersResponse>(
-      `${API_URL}/api/admin/searchRetailer?query=${encodeURIComponent(
+      `${API_URL}/admin/searchRetailer?query=${encodeURIComponent(
         query
       )}&approval_status=${encodeURIComponent(approval_status)}`
     );

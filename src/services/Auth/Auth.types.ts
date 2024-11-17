@@ -6,6 +6,7 @@ export interface RegisterData {
   password: string;
   confirmPassword: string;
   organization_id: string;
+  org_location: string;
   role_id: string;
 }
 export interface RegisterResponse {

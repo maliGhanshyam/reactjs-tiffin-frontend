@@ -36,7 +36,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     if (actionType === "approve") {
       return (
         <>
-          <DialogContentText variant="body2" >{content}</DialogContentText>
+          <DialogContentText variant="body2" sx={{ paddingY: 1 }}>
+            {content}
+          </DialogContentText>
           <DialogContentText variant="body2">
             This action will approve the retailer and allow them to proceed.
           </DialogContentText>
@@ -46,7 +48,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     if (actionType === "reject") {
       return (
         <>
-          <DialogContentText variant="body2">{content}</DialogContentText>
+          <DialogContentText variant="body2" sx={{ paddingY: 1 }}>
+            {content}
+          </DialogContentText>
           <DialogContentText variant="body2">
             This action is irreversible and will reject the retailer.
           </DialogContentText>
@@ -57,20 +61,32 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth sx={{borderRadius:1}}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: "20px",
+          overflow: "hidden",
+        },
+      }}
+    >
       <DialogTitle sx={styles.modalTitle}>
         {renderIcon()}
         {title}
       </DialogTitle>
       <DialogContent sx={styles.modalContent}>{renderContent()}</DialogContent>
       <DialogActions sx={styles.modalActions}>
-        <Button onClick={onClose} color="primary" sx={styles.modalButton}>
+        <Button onClick={onClose} color="primary" variant="contained" sx={styles.modalButton}>
           {cancelButtonText}
         </Button>
         <Button
           onClick={onConfirm}
           color={actionType === "approve" ? "success" : "error"}
           autoFocus
+          variant="contained"
           sx={styles.modalButton}
         >
           {confirmButtonText}
