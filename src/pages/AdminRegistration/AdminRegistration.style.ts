@@ -10,12 +10,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     alignItems: "center",
     padding: 3,
     backgroundColor: "#ecf0f1",
-    borderRadius: 2,
+    borderRadius: 2,  
     boxShadow: 2,
-    marginLeft:2
+    marginLeft: { sm: 2 },
   },
-  svgGrid:{
-  display: { xs: 'none', sm: 'block'}
+  svgGrid: {
+    display: { xs: "none", sm: "block" },
   },
   heading: {
     fontWeight: "600",
@@ -37,6 +37,9 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   },
   organizationError: {
     color: "#d32f2f",
+  },
+  svgBox:{
+     display: { xs: "none", sm: "block" } 
   },
 };
 

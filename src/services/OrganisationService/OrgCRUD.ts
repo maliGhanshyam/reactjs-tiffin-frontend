@@ -34,7 +34,7 @@ export const getOrganizations = async (): Promise<Organization[]> => {
   try {
     console.log(`${API_URL}/api/organizations/getall`);
     const response = await axios.get<OrganizationsResponse>(
-      `${API_URL}/api/superadmin/organizations/getallorganization`
+      `${API_URL}/superadmin/organizations/getallorganization`
     );
     console.log(response.data);
     return response.data.data;

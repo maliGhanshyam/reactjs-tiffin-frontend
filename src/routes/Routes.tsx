@@ -8,7 +8,7 @@ import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
 import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage";
 import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
-import { PageNotFound } from "../components/PageNotFound";
+import { PageNotFound } from "../components/NotFound";
 import { AddOrganizationForm } from "../pages/AddOrganizationPage";
 const childRoutes: RouteObject[] = [
   {

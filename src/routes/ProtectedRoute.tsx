@@ -32,7 +32,7 @@ const ProtectedRoute: FC<AuthGuardProps> = ({
   const getUserByToken = async () => {
     try {
       const response = await axiosInstance.get(
-        `${API_URL}/api/auth/getuserbytoken`
+        `${API_URL}/auth/getuserbytoken`
       );
       const { _id, role_id } = response.data.data;
       if (_id && role_id) {

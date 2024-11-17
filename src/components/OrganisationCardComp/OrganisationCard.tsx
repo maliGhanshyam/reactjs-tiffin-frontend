@@ -6,14 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import {
-  cardStyles,
-  cardMediaStyles,
-  titleStyles,
-  statusStyles,
-  cardActionsStyles,
-  buttonStyles,
-} from "./OrganisationCardStyles";
+import OrganisationCardStyles from "./OrganisationCardStyles"; // Import the entire styles object
 
 interface CardField {
   label: string;
@@ -42,10 +35,23 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
   actions,
 }) => {
   return (
-    <Card sx={cardStyles}>
-      {image && <CardMedia sx={cardMediaStyles} image={image} title={title} />}
+    <Card sx={OrganisationCardStyles.cardStyles}>
+      {" "}
+      {/* Use the consolidated styles */}
+      {image && (
+        <CardMedia
+          sx={OrganisationCardStyles.cardMediaStyles}
+          image={image}
+          title={title}
+        />
+      )}
       <CardContent>
-        <Typography gutterBottom variant="h6" component="div" sx={titleStyles}>
+        <Typography
+          gutterBottom
+          variant="h6"
+          component="div"
+          sx={OrganisationCardStyles.titleStyles}
+        >
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -61,20 +67,22 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
           </div>
         ))}
 
-        <Typography variant="body2" sx={statusStyles(status)}>
+        <Typography
+          variant="body2"
+          sx={OrganisationCardStyles.statusStyles(status)}
+        >
           Status: {status}
         </Typography>
       </CardContent>
-
       {actions && (
-        <CardActions sx={cardActionsStyles}>
+        <CardActions sx={OrganisationCardStyles.cardActionsStyles}>
           {actions.map((action, index) => (
             <Button
               key={index}
               size="small"
               color={action.color}
               onClick={action.onClick}
-              sx={buttonStyles(action.color)}
+              sx={OrganisationCardStyles.buttonStyles(action.color)} // Use the consolidated styles
               variant="outlined"
             >
               {action.label}

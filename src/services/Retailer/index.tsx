@@ -1,11 +1,6 @@
 export {
-  getPendingRetailers,
+  fetchRetailersWithPagination,
   approveRetailer,
   rejectRetailer,
-  getApprovedRetailer,
-  getRejectedRetailer,
-  getRejected,
-  getApproved,
-  getPending,
-  makeTrendy
+  searchRetailerWithStatus,
 } from "./Retailer";
