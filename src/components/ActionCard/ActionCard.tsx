@@ -8,7 +8,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
   children,
   sx = {},
 }: ActionCardProps) => {
-  const defaultImageUrl = "https://via.placeholder.com/400x320"; // Default image
+  const defaultImageUrl = "https://picsum.photos/200/300/?blur"; // Default image
   const imageToDisplay = imageUrl || defaultImageUrl;
   return (
     <Card sx={sx}>
