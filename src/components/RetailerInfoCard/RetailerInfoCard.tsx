@@ -1,26 +1,31 @@
 import React from "react";
-import { Box, Button, CardActions, Typography } from "@mui/material";
+import { Box, Button, CardActions, Tooltip, Typography } from "@mui/material";
 import { RetailerInfoCardProps } from "./RetailerInfoCard.types";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import { styles } from "./RetailerInfo.styles";
 
-//To avoid repeted code in Retailer cards this component is used 
+//To avoid repeted code in Retailer cards this component is used
 const RetailerInfoCard: React.FC<RetailerInfoCardProps> = ({
   retailer,
   showButtons = false, // control whether buttons to be shown or not
   onApprove,
   onReject,
-  onTrendy
+  onTrendy,
 }) => {
   const truncate = (address: string) => {
     return address.length > 25 ? `${address.slice(0, 24)}...` : address;
   };
-  const approvalStatus = retailer.role_specific_details?.approval[0]?.approval_status;
+  const approvalStatus =
+    retailer.role_specific_details?.approval[0]?.approval_status;
+  const rejectionReason =
+    retailer.role_specific_details?.approval[0]?.rejection_reason;
   return (
     <Box sx={styles.boxStyle}>
-      <Typography variant="h6" sx={styles.titleStyles}>{retailer.username}</Typography>
+      <Typography variant="h6" sx={styles.titleStyles}>
+        {retailer.username}
+      </Typography>
       <Typography
         variant="body2"
         sx={styles.descriptionStyles}
@@ -31,22 +36,31 @@ const RetailerInfoCard: React.FC<RetailerInfoCardProps> = ({
           mt: 1,
           fontWeight: 500,
           color:
-          approvalStatus?.toLowerCase() === "approved"
+            approvalStatus?.toLowerCase() === "approved"
               ? "success.main"
               : approvalStatus?.toLowerCase() === "pending"
               ? "warning.main"
               : "error.main",
         }}
       >
-        Status: {approvalStatus}
+        Status:{" "}
+        <Tooltip
+          title={
+            approvalStatus === "rejected" && rejectionReason
+              ? rejectionReason
+              : ""
+          }
+          placement="top"
+        >
+          <span>{approvalStatus}</span>
+        </Tooltip>
       </Typography>
       <Box sx={styles.fieldsBoxStyles}>
         <Typography variant="body2" color="text.secondary">
           <strong>Contact:</strong> {retailer.contact_number}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <strong>Address:</strong>{" "}
-          {truncate(retailer.address)}
+          <strong>Address:</strong> {truncate(retailer.address)}
         </Typography>
       </Box>
       {showButtons && (

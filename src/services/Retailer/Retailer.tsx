@@ -75,12 +75,13 @@ export const approveRetailer = async (
 
 // Reject the retailer
 export const rejectRetailer = async (
-  retailerId: string
+  retailerId: string,
+  rejectionReason?: string
 ): Promise<ApiResponse> => {
   try {
     await axiosInstance.put(
       `${API_URL}/admin/rejectRetailer/${retailerId}`,
-      {}
+      { rejection_reason: rejectionReason }
     );
     return { acknowledged: true };
   } catch (error) {
