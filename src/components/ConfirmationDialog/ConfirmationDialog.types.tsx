@@ -3,7 +3,7 @@ export interface ConfirmationDialogProps {
     title: string;
     content: string;
     onClose: () => void;
-    onConfirm: () => void;
+    onConfirm: (rejectionReason?: string) => void;
     confirmButtonText?: string;
     cancelButtonText?: string;
     actionType:"approve" | "reject" | null;

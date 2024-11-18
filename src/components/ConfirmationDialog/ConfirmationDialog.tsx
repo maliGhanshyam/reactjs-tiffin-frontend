@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,6 +9,7 @@ import { ConfirmationDialogProps } from "./ConfirmationDialog.types";
 import { styles } from "./ConfirmationDialog.styles";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { TextField } from "@mui/material";
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
@@ -20,6 +21,12 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   cancelButtonText = "Cancel",
   actionType = null,
 }) => {
+  const [rejectionReason, setRejectionReason] = useState<string>("");
+  useEffect(() => {
+    if (actionType !== "reject") {
+      setRejectionReason(""); // Clear when switching from "reject" action
+    }
+  }, [actionType]);
   // Function to render the icon based on the actionType
   const renderIcon = () => {
     if (actionType === "approve") {
@@ -51,15 +58,26 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           <DialogContentText variant="body2" sx={{ paddingY: 1 }}>
             {content}
           </DialogContentText>
-          <DialogContentText variant="body2">
-            This action is irreversible and will reject the retailer.
-          </DialogContentText>
+          <TextField
+          label="Rejection Reason"
+          variant="outlined"
+          fullWidth
+          value={rejectionReason}
+          onChange={(e) => setRejectionReason(e.target.value)}
+          multiline
+          rows={2}
+          sx={{ marginTop: 2 }}
+        />
         </>
       );
     }
     return <DialogContentText variant="body2">{content}</DialogContentText>;
   };
 
+  const handleConfirm = () => {
+    onConfirm(rejectionReason); // Pass rejection reason 
+    onClose(); 
+  };
   return (
     <Dialog
       open={open}
@@ -83,7 +101,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           {cancelButtonText}
         </Button>
         <Button
-          onClick={onConfirm}
+          onClick={handleConfirm}
           color={actionType === "approve" ? "success" : "error"}
           autoFocus
           variant="contained"

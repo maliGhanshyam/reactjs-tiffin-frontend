@@ -129,13 +129,14 @@ const LandingPageAdminDashboard = () => {
   const handleAction = async (
     retailerId: string,
     action: "approve" | "reject",
-    successMessage: string
+    successMessage: string,
+    rejectionReason?: string
   ) => {
     try {
       const res: ApiResponse =
         action === "approve"
           ? await approveRetailer(retailerId)
-          : await rejectRetailer(retailerId);
+          : await rejectRetailer(retailerId,rejectionReason);
       await fetchRetailersData(page);
 
       if (res.acknowledged === true) {
@@ -151,8 +152,8 @@ const LandingPageAdminDashboard = () => {
   const handleApprove = async (retailerId: string) => {
     handleAction(retailerId, "approve", "Retailer approved sucessfully");
   };
-  const handleReject = async (retailerId: string) => {
-    handleAction(retailerId, "reject", "Retailer rejected successfully.");
+  const handleReject = async (retailerId: string,rejectionReason:string) => {
+    handleAction(retailerId, "reject", "Retailer rejected successfully.",rejectionReason);
   };
   // Dialog box model
   const openConfirmationModal = (
@@ -170,12 +171,12 @@ const LandingPageAdminDashboard = () => {
     setActionType(null);
   };
 
-  const confirmAction = () => {
+  const confirmAction = (rejectionReason: string | undefined) => {
     if (!selectedRetailer || !actionType) return;
     if (actionType === "approve") {
       handleApprove(selectedRetailer._id);
-    } else if (actionType === "reject") {
-      handleReject(selectedRetailer._id);
+    } else if (actionType === "reject" && rejectionReason) {
+      handleReject(selectedRetailer._id,rejectionReason);
     }
     closeConfirmationModal();
   };
