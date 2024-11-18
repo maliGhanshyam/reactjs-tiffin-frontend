@@ -20,18 +20,14 @@ import { loginUser } from "../../services/LoginService/loginUser";
 import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import { styles } from "./Login.style";
+import { useSnackbar } from "../../hook";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [snackbar, setSnackbar] = useState<ISnackbar>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
+  const { showSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -54,8 +50,6 @@ const LoginForm = () => {
   ) => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
-      console.log(response.role_id);
-
       if (
         response.success &&
         (response as { token?: string }).token &&
@@ -68,40 +62,21 @@ const LoginForm = () => {
             userId: response._id,
           })
         );
-        setSnackbar({
-          open: true,
-          message: "Login successful",
-          severity: "success",
-        });
-        setTimeout(() => {
-          navigate(
-            response.role_id === SUPERADMIN_ROLE_ID
-              ? "/superAdminDashboard"
-              : "/adminDashboard"
-          );
-        }, 2000);
+        showSnackbar("Login successful", "success");
+        navigate(
+          response.role_id === SUPERADMIN_ROLE_ID
+            ? "/superAdminDashboard"
+            : "/adminDashboard"
+        );
       } else {
-        setSnackbar({
-          open: true,
-          message: "Invalid credentials",
-          severity: "error",
-        });
+        showSnackbar("Invalid credentials", "error");
       }
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Login error. Please try again.",
-        severity: "error",
-      });
+      showSnackbar("Login error. Please try again.", "error");
     } finally {
       setSubmitting(false);
     }
   };
-
-  const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
-
   return (
     <Container component="div">
       <Grid2 sx={styles.containerGrid}>
@@ -200,16 +175,6 @@ const LoginForm = () => {
           </Box>
         </Grid2>
       </Grid2>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };
