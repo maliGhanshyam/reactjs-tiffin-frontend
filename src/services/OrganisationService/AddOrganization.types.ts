@@ -1,4 +1,4 @@
-export interface OrgLocation1 {
+export interface AddOrgLocation {
   loc: string;
   address: string;
   loc_contact?: number;
@@ -7,16 +7,16 @@ export interface OrgLocation1 {
   _id?: string;
 }
 
-export interface AddOrganization1 {
+export interface AddOrganization {
   _id?: string;
   org_name: string;
-  org_location: OrgLocation1[];
+  org_location: AddOrgLocation[];
   org_created_at?: string;
   org_updated_at?: string;
   isActive?: boolean;
   __v?: number;
 }
-export interface OrganizationsResponse1 {
+export interface AddOrganizationsResponses {
   statuscode: number;
-  data: AddOrganization1[];
+  data: AddOrganization[];
 }

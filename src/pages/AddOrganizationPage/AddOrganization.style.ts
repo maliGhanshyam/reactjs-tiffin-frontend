@@ -15,7 +15,6 @@ export const titleTypography: SxProps<Theme> = {
   fontSize: "1rem",
   textAlign: "center",
   marginBottom: "0.2em",
-  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   letterSpacing: "0.0075em",
 };
 

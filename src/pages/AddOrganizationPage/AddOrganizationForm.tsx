@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
-
 import * as Yup from "yup";
 import {
   Button,
@@ -22,7 +21,7 @@ import {
   getOrganizationById,
   updateOrganization,
 } from "../../services/OrganisationService/OrganizationService";
-import { AddOrganization1 } from "../../services/OrganisationService/Organization1.types";
+import { AddOrganization } from "../../services/OrganisationService/AddOrganization.types";
 import { useNavigate, useParams } from "react-router-dom";
 import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import {
@@ -36,6 +35,7 @@ import {
   saveButton,
   expandableBox,
 } from "./AddOrganization.style";
+import { useSnackbar } from "../../hook";
 
 const validationSchema = Yup.object({
   org_name: Yup.string()
@@ -67,10 +67,11 @@ const validationSchema = Yup.object({
 export default function AddOrganizationForm() {
   const navigate = useNavigate();
   const { _id } = useParams();
-  const [initialValues, setInitialValues] = useState<AddOrganization1 | null>(
+  const { showSnackbar } = useSnackbar();
+  const [initialValues, setInitialValues] = useState<AddOrganization | null>(
     null
   );
-  const [expanded, setExpanded] = React.useState<number | null>(null);
+  const [expanded, setExpanded] = useState<number | null>(null);
 
   useEffect(() => {
     if (_id) {
@@ -92,42 +93,22 @@ export default function AddOrganizationForm() {
   const handleExpandClick = (index: number) => {
     setExpanded(expanded === index ? null : index);
   };
-  const [snackbar, setSnackbar] = useState<ISnackbar>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  const handleSubmit = async (values: AddOrganization1) => {
+  const handleSubmit = async (values: AddOrganization) => {
     try {
       if (_id) {
         await updateOrganization(_id, values);
-        setSnackbar({
-          open: true,
-          message: "Organization updated successfully",
-          severity: "success",
-        });
+        showSnackbar("Organization updated successfully.", "success");
       } else {
         await addOrganization(values);
-        setSnackbar({
-          open: true,
-          message: "Organization added successfully",
-          severity: "success",
-        });
+        showSnackbar("Organization added successfully.", "success");
       }
       setTimeout(() => navigate("/SuperAdminDashboard"), 1000);
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "An error occurred. Please try again.",
-        severity: "error",
-      });
+      showSnackbar("An error occurred. Please try again..", "error");
     }
   };
-  const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
   return initialValues ? (
-    <Container component="main">
+    <Container component="div">
       <Box sx={mainContainer}>
         <Typography sx={titleTypography}>
           {_id ? "Update Organization" : "Add New Organization"}
@@ -163,7 +144,7 @@ export default function AddOrganizationForm() {
               />
               <FieldArray name="org_location">
                 {({ remove, push }) => (
-                  <React.Fragment>
+                  <>
                     {values.org_location.map((location, index) => (
                       <Box key={index} sx={locationBox}>
                         <Box
@@ -311,7 +292,7 @@ export default function AddOrganizationForm() {
                     >
                       Add Location
                     </Button>
-                  </React.Fragment>
+                  </>
                 )}
               </FieldArray>
               <Box sx={buttonGroup}>
@@ -335,16 +316,6 @@ export default function AddOrganizationForm() {
           )}
         </Formik>
       </Box>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Container>
   ) : (
     <Typography>Loading...</Typography>

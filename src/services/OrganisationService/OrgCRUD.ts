@@ -1,8 +1,4 @@
 import axios from "axios";
-import {
-  AddOrganization1,
-  OrganizationsResponse1,
-} from "./Organization1.types";
 const API_URL = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem("token");
 

@@ -1,15 +1,15 @@
 import axios from "axios";
 import { Organization, UserData } from "../../Types";
 import {
-  AddOrganization1,
-  OrganizationsResponse1,
-} from "./Organization1.types";
+  AddOrganization,
+  AddOrganizationsResponses,
+} from "./AddOrganization.types";
 import axiosInstance from "./axiosInstance";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const token = getToken();
 
-interface OrganizationsResponse {
+interface AddOrganizationsResponse {
   statuscode: number;
   data: Organization[];
 }
@@ -74,7 +74,7 @@ export const getRejectedAdmins = async (): Promise<UserData[]> => {
 export const getOrganizations = async (): Promise<Organization[]> => {
   try {
     console.log(`${API_URL}/superadmin/organizations/getallorganization`);
-    const response = await axiosInstance.get<OrganizationsResponse>(
+    const response = await axiosInstance.get<AddOrganizationsResponse>(
       "/superadmin/organizations/getallorganization"
     );
     console.log(response.data);
@@ -139,8 +139,8 @@ export const getOrganizationById = async (organizationId: string) => {
 };
 
 export const addOrganization = async (
-  organization: AddOrganization1
-): Promise<AddOrganization1[]> => {
+  organization: AddOrganization
+): Promise<AddOrganization[]> => {
   try {
     const filteredOrganization = {
       org_name: organization.org_name,
@@ -154,7 +154,7 @@ export const addOrganization = async (
       ),
     };
 
-    const response = await axiosInstance.post<OrganizationsResponse1>(
+    const response = await axiosInstance.post<AddOrganizationsResponses>(
       `${API_URL}/superadmin/organizations/addOrganization`,
       filteredOrganization
     );
@@ -167,8 +167,8 @@ export const addOrganization = async (
 
 export const updateOrganization = async (
   _id: string,
-  organization: AddOrganization1
-): Promise<AddOrganization1[]> => {
+  organization: AddOrganization
+): Promise<AddOrganization[]> => {
   try {
     const filteredOrganization = {
       org_name: organization.org_name,
@@ -182,13 +182,30 @@ export const updateOrganization = async (
       ),
     };
 
-    const response = await axiosInstance.put<AddOrganization1[]>(
+    const response = await axiosInstance.put<AddOrganization[]>(
       `${API_URL}/superadmin/organizations/updateorganization/${_id}`,
       filteredOrganization
     );
     return response.data;
   } catch (error) {
     console.error("Failed to update organization:", error);
+    throw error;
+  }
+};
+
+export const uploadOrganizationImage = async (
+  orgId: string,
+  formData: FormData
+) => {
+  try {
+    console.log("orgId", orgId, "formdata", formData);
+    const response = await axiosInstance.post(
+      `${API_URL}/superadmin/organizations/upload/${orgId}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to upload image:", error);
     throw error;
   }
 };

@@ -22,7 +22,7 @@ import { RootState } from "../../store/Store";
 import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 
 const Navbar = () => {
-  const [Open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation().pathname;
@@ -30,7 +30,7 @@ const Navbar = () => {
   const token = getToken();
 
   const handleDrawerToggle = () => {
-    setOpen(!Open);
+    setOpen(!open);
   };
 
   const handleAuthToggle = () => {
@@ -151,7 +151,7 @@ const Navbar = () => {
       </AppBar>
       <Drawer
         anchor="right"
-        open={Open}
+        open={open}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
         PaperProps={{ sx: { width: "auto" } }}
