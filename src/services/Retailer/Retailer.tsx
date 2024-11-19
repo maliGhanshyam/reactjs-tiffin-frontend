@@ -27,36 +27,24 @@ const API_URL = process.env.REACT_APP_API_URL!;
     }
   };
 
-  export const getPendingRetailers = async (
-      page?: number,
-      limit?: number
-    ): Promise<{ data: Retailer[]; totalPages: number,totalItems:number }> => {
-      return fetchRetailersWithPagination(
-        "pendingRetailers",
-        page,
-        limit
-      );
-    };
-    export const getApprovedRetailers = async (
-        page?: number,
-        limit?: number
-      ): Promise<{ data: Retailer[]; totalPages: number,totalItems:number }> => {
-        return fetchRetailersWithPagination(
-          "getapprovedRetailers",
-          page,
-          limit
-        );
-      };
-      export const getRejectedRetailers = async (
-          page: number,
-          limit: number
-        ): Promise<{ data: Retailer[]; totalPages: number,totalItems:number }> => {
-          return fetchRetailersWithPagination(
-            "getrejectedRetailers",
-            page,
-            limit
-          );
-        };
+export const getPendingRetailers = async (
+  page?: number,
+  limit?: number
+): Promise<{ data: Retailer[]; totalPages: number; totalItems: number }> => {
+  return fetchRetailersWithPagination("pendingRetailers", page, limit);
+};
+export const getApprovedRetailers = async (
+  page?: number,
+  limit?: number
+): Promise<{ data: Retailer[]; totalPages: number; totalItems: number }> => {
+  return fetchRetailersWithPagination("getapprovedRetailers", page, limit);
+};
+export const getRejectedRetailers = async (
+  page: number,
+  limit: number
+): Promise<{ data: Retailer[]; totalPages: number; totalItems: number }> => {
+  return fetchRetailersWithPagination("getrejectedRetailers", page, limit);
+};
 
 // Approve the retailer
 export const approveRetailer = async (
@@ -105,8 +93,3 @@ export const searchRetailerWithStatus = async (
     throw error;
   }
 };
-
-
-
-
-

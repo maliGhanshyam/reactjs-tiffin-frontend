@@ -20,18 +20,14 @@ import { loginUser } from "../../services/LoginService/loginUser";
 import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import { styles } from "./Login.style";
+import { useSnackbar } from "../../hook";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [snackbar, setSnackbar] = useState<ISnackbar>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
+  const { showSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -55,7 +51,10 @@ const LoginForm = () => {
     try {
       const response = await loginUser(loginData.email, loginData.password);
       if (
-        response.success 
+        response.success &&
+        (response as { token?: string }).token &&
+        (response as { _id?: string })._id &&
+        (response as { role_id?: string }).role_id
       ) {
         dispatch(
           setAuthData({
@@ -63,133 +62,119 @@ const LoginForm = () => {
             userId: response._id,
           })
         );
-        setSnackbar({
-          open: true,
-          message: "Login successful",
-          severity: "success",
-        });
-        setTimeout(() => {
-          navigate(
-            response.role_id === SUPERADMIN_ROLE_ID
-              ? "/superAdminDashboard"
-              : "/adminDashboard"
-          );
-        }, 1000);
+        showSnackbar("Login successful", "success");
+        navigate(
+          response.role_id === SUPERADMIN_ROLE_ID
+            ? "/superAdminDashboard"
+            : "/adminDashboard"
+        );
       } else {
-        setSnackbar({
-          open: true,
-          message: "Invalid credentials",
-          severity: "error",
-        });
+        showSnackbar("Invalid credentials", "error");
       }
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Login error. Please try again.",
-        severity: "error",
-      });
+      showSnackbar("Login error. Please try again.", "error");
     } finally {
       setSubmitting(false);
     }
   };
-
-  const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
-
   return (
-    <Container component="main" maxWidth="xs">
-      <Box sx={styles.container}>
-        <Typography component="h1" variant="h5" sx={styles.heading}>
-          Sign In
-        </Typography>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-            errors,
-            touched,
-          }) => (
-            <Form>
-              <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    name="email"
-                    size="small"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    size="small"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.password && Boolean(errors.password)}
-                    helperText={touched.password && errors.password}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            edge="end"
-                          >
-                            {showPassword ? (
-                              <VisibilityIcon />
-                            ) : (
-                              <VisibilityOffIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
+    <Container component="div">
+      <Grid2 sx={styles.containerGrid}>
+        <Grid2 size={5} sx={styles.svgGrid}>
+          <img
+            src="https://emp.neosofttech.com/assets/a9ba8aa/assets/images/login/login_bg.svg"
+            alt="Loginpic"
+          />
+        </Grid2>
+        <Grid2 size={{ sm: 4 }}>
+          <Box sx={styles.container}>
+            <Typography component="h1" variant="h5" sx={styles.heading}>
+              Sign In
+            </Typography>
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                values,
+                errors,
+                touched,
+              }) => (
+                <Form>
+                  <Grid2 container spacing={2} sx={{ marginTop: 2 }}>
+                    <Grid2 size={12}>
+                      <TextField
+                        fullWidth
+                        label="Email"
+                        name="email"
+                        size="small"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.email && Boolean(errors.email)}
+                        helperText={touched.email && errors.email}
+                      />
+                    </Grid2>
+                    <Grid2 size={12}>
+                      <TextField
+                        fullWidth
+                        label="Password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        size="small"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.password && Boolean(errors.password)}
+                        helperText={touched.password && errors.password}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityIcon />
+                                ) : (
+                                  <VisibilityOffIcon />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid2>
+                    <Grid2 size={12}>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        disabled={isSubmitting}
+                      >
+                        Submit
+                      </Button>
+                    </Grid2>
+                  </Grid2>
+                  <Typography
+                    variant="body2"
+                    align="center"
+                    sx={{ marginTop: 2 }}
                   >
-                    Submit
-                  </Button>
-                </Grid2>
-              </Grid2>
-              <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
-                Don’t have an account? <Link to="/register">Sign up here</Link>
-              </Typography>
-            </Form>
-          )}
-        </Formik>
-      </Box>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+                    Don’t have an account?{" "}
+                    <Link to="/register">Sign up here</Link>
+                  </Typography>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Grid2>
+      </Grid2>
     </Container>
   );
 };
