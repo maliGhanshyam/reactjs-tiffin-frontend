@@ -1,16 +1,23 @@
-import { Navigate } from "react-router-dom";
+import React from "react";
+import { Navigate, RouteObject } from "react-router-dom";
 import { AdminRegistration } from "../pages/AdminRegistration";
-import { PageNotFound } from "../components/NotFound";
 import { LoginForm } from "../pages/LoginPage";
 import SuperAdminDashboard from "../pages/dashboard/SuperAdminDashboard";
-import AuthGuard from "../components/RouteGuard";
+import ProtectedRoute from "./ProtectedRoute";
 import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../constants/ROLES";
 import AdminDashboard from "../pages/dashboard/AdminDashboard/AdminDashboard";
 import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage";
-const childRoutes = [
+import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
+import { PageNotFound } from "../components/NotFound";
+import { AddOrganizationForm } from "../pages/AddOrganizationPage";
+const childRoutes: RouteObject[] = [
   {
     path: "register",
-    element: <AdminRegistration />,
+    element: (
+      <ProtectedRoute guestOnly={true}>
+        <AdminRegistration />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",
@@ -19,29 +26,49 @@ const childRoutes = [
   {
     path: "superAdminDashboard",
     element: (
-      <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
         <SuperAdminDashboard />
-      </AuthGuard>
+      </ProtectedRoute>
     ),
   },
   {
     path: "adminDashboard",
     element: (
-      <AuthGuard requiredRole={ADMIN_ROLE_ID}>
+      <ProtectedRoute requiredRole={ADMIN_ROLE_ID}>
         <AdminDashboard />
-      </AuthGuard>
+      </ProtectedRoute>
     ),
   },
   {
     path: "login",
-    element: <LoginForm />,
+    element: (
+      <ProtectedRoute guestOnly={true}>
+        <LoginForm />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "supAdmin",
     element: (
-      <AuthGuard requiredRole={SUPERADMIN_ROLE_ID}>
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
         <SuperAdminLandingPage />
-      </AuthGuard>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "AddOrganization",
+    element: (
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
+        <AddOrganizationForm />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/editOrganization/:_id",
+    element: (
+      <ProtectedRoute requiredRole={SUPERADMIN_ROLE_ID}>
+        <AddOrganizationForm />
+      </ProtectedRoute>
     ),
   },
   {
@@ -51,6 +78,18 @@ const childRoutes = [
   {
     path: "**",
     element: <PageNotFound />,
+  },
+  {
+    path: "approved-retailers",
+    element: (
+      <ProtectedRoute requiredRole={ADMIN_ROLE_ID}>
+        <LandingPageAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "",
+    element: <Navigate to="login" />,
   },
 ];
 

@@ -6,9 +6,15 @@ import {
   OrganizationsResponse,
   ApiResponse,
 } from "../../Types";
+// import { Organization, UserData } from "../../Types";
+import {
+  AddOrganization,
+  AddOrganizationsResponses,
+} from "./AddOrganization.types";
 import axiosInstance from "./axiosInstance";
 
 const API_URL = process.env.REACT_APP_API_URL;
+// const token = getToken();
 
 // const API_URL = "http://localhost:5000";
 // console.log("API URL:", process.env.REACT_APP_API_URL);
@@ -24,6 +30,18 @@ const API_URL = process.env.REACT_APP_API_URL;
 //   data: UserData[];
 //   pagination: Pagination;
 // }
+interface AddOrganizationsResponse {
+  statuscode: number;
+  data: Organization[];
+}
+interface getByOrganizationsResponse {
+  statuscode: number;
+  data: Organization;
+}
+// interface ApiResponse {
+//   statuscode: number;
+//   data: UserData[];
+// }
 
 //Get Token
 // function getToken() {
@@ -34,7 +52,9 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const getPendingAdmins = async (): Promise<UserData[]> => {
   try {
     console.log(`${API_URL}/superadmin/pendingAdminApproval`);
-    const response = await axiosInstance.get<ApiResponse>("/superadmin/pendingAdminApproval");
+    const response = await axiosInstance.get<ApiResponse>(
+      "/superadmin/pendingAdminApproval"
+    );
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -71,7 +91,9 @@ export const getAdminRequests = async (
 export const getApprovedAdmins = async (): Promise<UserData[]> => {
   try {
     console.log(`${API_URL}/superadmin/approvedAdminApproval`);
-    const response = await axiosInstance.get<ApiResponse>("/superadmin/approvedAdminApproval");
+    const response = await axiosInstance.get<ApiResponse>(
+      "/superadmin/approvedAdminApproval"
+    );
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -83,7 +105,9 @@ export const getApprovedAdmins = async (): Promise<UserData[]> => {
 export const getRejectedAdmins = async (): Promise<UserData[]> => {
   try {
     console.log(`${API_URL}/superadmin/rejectedAdminApproval`);
-    const response = await axiosInstance.get<ApiResponse>("/superadmin/rejectedAdminApproval");
+    const response = await axiosInstance.get<ApiResponse>(
+      "/superadmin/rejectedAdminApproval"
+    );
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -96,7 +120,9 @@ export const getRejectedAdmins = async (): Promise<UserData[]> => {
 export const getOrganizations = async (): Promise<Organization[]> => {
   try {
     console.log(`${API_URL}/superadmin/organizations/getallorganization`);
-    const response = await axiosInstance.get<OrganizationsResponse>("/superadmin/organizations/getallorganization");
+    const response = await axiosInstance.get<AddOrganizationsResponse>(
+      "/superadmin/organizations/getallorganization"
+    );
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -139,6 +165,93 @@ export const deleteOrganization = async (id: string): Promise<void> => {
     console.log(`Organization with ID ${id} deleted successfully`);
   } catch (error) {
     console.error("Failed to reject organization:", error);
+    throw error;
+  }
+};
+
+export const getOrganizationById = async (organizationId: string) => {
+  try {
+    const response = await axiosInstance.get<getByOrganizationsResponse>(
+      `${API_URL}/superadmin/organizations/getorganization/${organizationId}`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch organization with ID ${organizationId}:`,
+      error
+    );
+    throw error;
+  }
+};
+
+export const addOrganization = async (
+  organization: AddOrganization
+): Promise<AddOrganization[]> => {
+  try {
+    const filteredOrganization = {
+      org_name: organization.org_name,
+      org_location: organization.org_location.map(
+        ({ loc, address, loc_contact, loc_email }) => ({
+          loc,
+          address,
+          loc_contact,
+          loc_email,
+        })
+      ),
+    };
+
+    const response = await axiosInstance.post<AddOrganizationsResponses>(
+      `${API_URL}/superadmin/organizations/addOrganization`,
+      filteredOrganization
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Failed to add organization:", error);
+    throw error;
+  }
+};
+
+export const updateOrganization = async (
+  _id: string,
+  organization: AddOrganization
+): Promise<AddOrganization[]> => {
+  try {
+    const filteredOrganization = {
+      org_name: organization.org_name,
+      org_location: organization.org_location.map(
+        ({ loc, address, loc_contact, loc_email }) => ({
+          loc,
+          address,
+          loc_contact,
+          loc_email,
+        })
+      ),
+    };
+
+    const response = await axiosInstance.put<AddOrganization[]>(
+      `${API_URL}/superadmin/organizations/updateorganization/${_id}`,
+      filteredOrganization
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to update organization:", error);
+    throw error;
+  }
+};
+
+export const uploadOrganizationImage = async (
+  orgId: string,
+  formData: FormData
+) => {
+  try {
+    console.log("orgId", orgId, "formdata", formData);
+    const response = await axiosInstance.post(
+      `${API_URL}/superadmin/organizations/upload/${orgId}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to upload image:", error);
     throw error;
   }
 };

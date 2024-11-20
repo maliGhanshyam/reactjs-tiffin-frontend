@@ -14,7 +14,7 @@ import Theme from "./components/materialUI/Theme";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App></App>,
+    element: <App />,
     children: childRoutes,
   },
 ]);

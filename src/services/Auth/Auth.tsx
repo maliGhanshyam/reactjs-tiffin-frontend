@@ -1,7 +1,7 @@
 import axios from "axios";
 import { RegisterData, RegisterResponse } from "./Auth.types";
 
-const API_URL = process.env.REACT_APP_API_URL! || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const registerAdmin = async ({
   username,
@@ -18,7 +18,7 @@ export const registerAdmin = async ({
       approval_status: "pending",
     };
 
-    const response = await axios.post(`${API_URL}/api/auth/register`, {
+    const response = await axios.post(`${API_URL}/auth/register`, {
       username,
       email,
       contact_number,

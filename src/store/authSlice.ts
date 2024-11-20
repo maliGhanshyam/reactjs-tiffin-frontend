@@ -6,8 +6,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  userRoleId: localStorage.getItem("userRoleId"),
-  userId: localStorage.getItem("userId"),
+  userRoleId: null,
+  userId: null,
 };
 
 const authSlice = createSlice({
@@ -18,10 +18,7 @@ const authSlice = createSlice({
       state.userRoleId = action.payload.userRoleId;
       state.userId = action.payload.userId;
     },
-    clearAuthData: (state) => {
-      state.userRoleId = null;
-      state.userId = null;
-    },
+    clearAuthData: (state) => initialState,
   },
 });
 
