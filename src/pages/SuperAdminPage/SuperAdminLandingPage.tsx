@@ -233,7 +233,9 @@ const SuperAdminLandingPage: React.FC = () => {
                 <OrganisationCard
                   title={item.org_name}
                   description=""
-                  image="https://picsum.photos/200/300/?blur"
+                  image={
+                    item.org_image_url || "https://picsum.photos/200/300/?blur"
+                  }
                   fields={item.org_location.map((loc, index) => ({
                     label: `Location ${index + 1}`,
                     value: loc.loc,

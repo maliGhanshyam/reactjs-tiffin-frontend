@@ -172,6 +172,7 @@ export const updateOrganization = async (
   try {
     const filteredOrganization = {
       org_name: organization.org_name,
+      org_image_url: organization.org_image_url,
       org_location: organization.org_location.map(
         ({ loc, address, loc_contact, loc_email }) => ({
           loc,
@@ -193,14 +194,10 @@ export const updateOrganization = async (
   }
 };
 
-export const uploadOrganizationImage = async (
-  orgId: string,
-  formData: FormData
-) => {
+export const uploadOrganizationImage = async (formData: FormData) => {
   try {
-    console.log("orgId", orgId, "formdata", formData);
     const response = await axiosInstance.post(
-      `${API_URL}/superadmin/organizations/upload/${orgId}`,
+      `${API_URL}/superadmin/organizations/upload`,
       formData
     );
     return response.data;

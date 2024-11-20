@@ -83,7 +83,9 @@ const SuperAdminDashboard: React.FC = () => {
               <OrganisationCard
                 title={org.org_name}
                 description=""
-                image="https://picsum.photos/200/300/?blur"
+                image={
+                  org.org_image_url || "https://picsum.photos/200/300/?blur"
+                }
                 fields={[
                   ...org.org_location.map((loc) => ({
                     label: `Location `,
