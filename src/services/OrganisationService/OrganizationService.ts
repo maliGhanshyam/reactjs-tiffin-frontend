@@ -9,7 +9,7 @@ import axiosInstance from "./axiosInstance";
 const API_URL = process.env.REACT_APP_API_URL;
 const token = getToken();
 
-interface AddOrganizationsResponse {
+interface OrganizationsResponse {
   statuscode: number;
   data: Organization[];
 }
@@ -74,7 +74,7 @@ export const getRejectedAdmins = async (): Promise<UserData[]> => {
 export const getOrganizations = async (): Promise<Organization[]> => {
   try {
     console.log(`${API_URL}/superadmin/organizations/getallorganization`);
-    const response = await axiosInstance.get<AddOrganizationsResponse>(
+    const response = await axiosInstance.get<OrganizationsResponse>(
       "/superadmin/organizations/getallorganization"
     );
     console.log(response.data);
