@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardMedia } from "@mui/material";
 import { ActionCardProps } from "./ActionCard.types";
+import { DEFAULT_IMAGE_CARD } from "../../constants/DEFAULT_IMAGE";
 
 const ActionCard: React.FC<ActionCardProps> = ({
   imageUrl,
@@ -8,12 +9,12 @@ const ActionCard: React.FC<ActionCardProps> = ({
   children,
   sx = {},
 }: ActionCardProps) => {
-  const defaultImageUrl = "https://via.placeholder.com/400x320"; // Default image
+  const defaultImageUrl = DEFAULT_IMAGE_CARD // Default image
   const imageToDisplay = imageUrl || defaultImageUrl;
   return (
     <Card sx={sx}>
         <CardMedia
-          sx={{ ...imageStyles }}
+          sx={imageStyles}
           image={imageToDisplay}
           title="Retailer Image"
         />

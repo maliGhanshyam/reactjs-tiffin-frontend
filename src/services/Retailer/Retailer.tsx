@@ -40,8 +40,8 @@ export const getApprovedRetailers = async (
   return fetchRetailersWithPagination("getapprovedRetailers", page, limit);
 };
 export const getRejectedRetailers = async (
-  page: number,
-  limit: number
+  page?: number,
+  limit?: number
 ): Promise<{ data: Retailer[]; totalPages: number; totalItems: number }> => {
   return fetchRetailersWithPagination("getrejectedRetailers", page, limit);
 };

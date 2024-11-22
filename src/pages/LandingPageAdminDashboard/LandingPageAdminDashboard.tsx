@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  Pagination,
   Button,
   Grid2,
   TextField,
@@ -16,13 +15,18 @@ import {
 } from "../../services/Retailer";
 import { useLocation } from "react-router-dom";
 import { ApiResponse } from "./LandingPageAdminDashboard.types";
-import { getButtonStyles, styles } from "./LandingPageAdminDashboard.styles";
+import {
+  getButtonStyles,
+  noDataImgStyle,
+  styles,
+} from "./LandingPageAdminDashboard.styles";
 import { useSnackbar } from "../../hook";
 import noData from "../../assets/noReports.svg";
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
 import RetailerCard from "../../components/RetailerCard/RetailerCard";
 import { NoData } from "../../components/NoData";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
+import { PaginationComponent } from "../../components/PaginationComponent";
 
 const LandingPageAdminDashboard = () => {
   const [pendingRetailer, setPendingRetailer] = useState<Retailer[]>([]);
@@ -136,7 +140,7 @@ const LandingPageAdminDashboard = () => {
       const res: ApiResponse =
         action === "approve"
           ? await approveRetailer(retailerId)
-          : await rejectRetailer(retailerId,rejectionReason);
+          : await rejectRetailer(retailerId, rejectionReason);
       await fetchRetailersData(page);
 
       if (res.acknowledged === true) {
@@ -150,10 +154,16 @@ const LandingPageAdminDashboard = () => {
     }
   };
   const handleApprove = async (retailerId: string) => {
+    console.log("a");
     handleAction(retailerId, "approve", "Retailer approved sucessfully");
   };
-  const handleReject = async (retailerId: string,rejectionReason:string) => {
-    handleAction(retailerId, "reject", "Retailer rejected successfully.",rejectionReason);
+  const handleReject = async (retailerId: string, rejectionReason: string) => {
+    handleAction(
+      retailerId,
+      "reject",
+      "Retailer rejected successfully.",
+      rejectionReason
+    );
   };
   // Dialog box model
   const openConfirmationModal = (
@@ -171,12 +181,13 @@ const LandingPageAdminDashboard = () => {
     setActionType(null);
   };
 
-  const confirmAction = (rejectionReason: string | undefined) => {
+  const confirmAction = (rejectionReason?: string | undefined) => {
     if (!selectedRetailer || !actionType) return;
     if (actionType === "approve") {
+      console.log("app");
       handleApprove(selectedRetailer._id);
     } else if (actionType === "reject" && rejectionReason) {
-      handleReject(selectedRetailer._id,rejectionReason);
+      handleReject(selectedRetailer._id, rejectionReason);
     }
     closeConfirmationModal();
   };
@@ -234,9 +245,12 @@ const LandingPageAdminDashboard = () => {
 
   return (
     <Box sx={styles.containerStyle}>
-      <Grid2 container sx={styles.buttonGroupStyle}>
-        <Grid2 size={{ sm: 6, xs: 6 }} sx={{ justifyContent: "flex-start" }}>
-        <Button
+      <Grid2 sx={styles.buttonGroupStyle}>
+        <Grid2
+          size={{ sm: 8, xs: 12 }}
+          sx={styles.gridButtonGroup}
+        >
+          <Button
             variant="outlined"
             color="primary"
             onClick={() => setActiveTab("approved")} // Switch to approved retailers
@@ -261,7 +275,7 @@ const LandingPageAdminDashboard = () => {
             Rejected Retailers
           </Button>
         </Grid2>
-        <Grid2 size={{ sm: 6, xs: 12 }} sx={styles.searchStyle}>
+        <Grid2 size={{ sm: 4, xs: 12 }} sx={styles.searchStyle}>
           <TextField
             label="Search Retailers"
             variant="outlined"
@@ -282,11 +296,13 @@ const LandingPageAdminDashboard = () => {
       </Grid2>
       {/* Actual screens for search,pending,rejected,approved and Nodata found for retailers*/}
       {searchTerm.trim() !== "" && searchResults.length === 0 ? (
-            <NoData
-              message={"No such retailers available"}
-              image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "60%"}}
-            />
-          ):searchResults.length > 0 ? (
+        <NoData
+          message={"No such retailers available"}
+          image={noData}
+          boxStyle={styles.noDataBox}
+          imgStyle={noDataImgStyle}
+        />
+      ) : searchResults.length > 0 ? (
         <Grid2 container size={12} sx={styles.content}>
           {searchResults.map((ret) => {
             const approvalStatus =
@@ -310,7 +326,9 @@ const LandingPageAdminDashboard = () => {
           {activeTab === "approved" && approvedRetailers.length === 0 ? (
             <NoData
               message={"No approved retailers available"}
-              image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "60%"}}
+              image={noData}
+              boxStyle={styles.noDataBox}
+              imgStyle={noDataImgStyle}
             />
           ) : (
             activeTab === "approved" && (
@@ -321,13 +339,10 @@ const LandingPageAdminDashboard = () => {
                   })}
                 </Grid2>
                 {approvedRetailers.length > 0 && (
-                  <Pagination
+                  <PaginationComponent
                     count={totalApprovedPages}
                     page={approvedPage}
                     onChange={handleApprovedPageChange}
-                    variant="outlined"
-                    shape="rounded"
-                    sx={styles.paginationStyle}
                   />
                 )}
               </>
@@ -336,7 +351,9 @@ const LandingPageAdminDashboard = () => {
           {activeTab === "rejected" && rejectedRetailers.length === 0 ? (
             <NoData
               message={"No rejected retailers available"}
-              image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "60%"}}
+              image={noData}
+              boxStyle={styles.noDataBox}
+              imgStyle={noDataImgStyle}
             />
           ) : (
             activeTab === "rejected" && (
@@ -347,21 +364,22 @@ const LandingPageAdminDashboard = () => {
                   })}
                 </Grid2>
                 {rejectedRetailers.length > 0 && (
-                  <Pagination
+                  <PaginationComponent
                     count={totalRejectedPages}
                     page={rejectedPage}
                     onChange={handleRejectedPageChange}
-                    variant="outlined"
-                    shape="rounded"
-                    sx={styles.paginationStyle}
                   />
                 )}
               </>
             )
           )}
           {activeTab === "pending" && pendingRetailer.length === 0 ? (
-            <NoData message={"No pending retailers available"} image={noData} 
-            boxStyle={styles.noDataBox} imgStyle={{width: "60%"}} />
+            <NoData
+              message={"No pending retailers available"}
+              image={noData}
+              boxStyle={styles.noDataBox}
+              imgStyle={noDataImgStyle}
+            />
           ) : (
             activeTab === "pending" && (
               <>
@@ -376,13 +394,10 @@ const LandingPageAdminDashboard = () => {
                   ))}
                 </Grid2>
                 {pendingRetailer.length > 0 && (
-                  <Pagination
+                  <PaginationComponent
                     count={totalPages}
                     page={page}
                     onChange={handleChangePage}
-                    variant="outlined"
-                    shape="rounded"
-                    sx={styles.paginationStyle}
                   />
                 )}
               </>

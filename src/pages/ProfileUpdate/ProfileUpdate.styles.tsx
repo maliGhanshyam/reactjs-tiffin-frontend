@@ -8,12 +8,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "32px 0px",
+    padding:"32px 0px",
     backgroundColor: "#ecf0f1",
-    borderRadius: "25px",
+    borderRadius: "25px",  
     boxShadow: 2,
-    marginLeft: { sm: 2, xs: 2 },
-    marginRight: { sm: 2, xs: 2 },
+    marginLeft: { sm: 2 ,xs:2},
+    marginRight: { sm: 2 ,xs:2},
   },
   svgGrid: {
     display: { xs: "none", sm: "block" },
@@ -38,19 +38,11 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   organizationError: {
     color: "#d32f2f",
   },
-  svgBox: {
-    display: { xs: "none", sm: "flex" },
-    justifyContent: "center",
+  svgBox:{
+    display: { xs: "none", sm: "flex" },           
+    justifyContent: "center",   
     alignItems: "center",
   },
-  outerContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  formGrid:{
-    justifyContent:"center"
-  }
 };
 
 export const ITEM_HEIGHT = 48;

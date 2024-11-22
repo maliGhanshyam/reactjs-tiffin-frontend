@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Container,
   Grid2,
   IconButton,
   InputAdornment,
@@ -124,6 +123,7 @@ const AdminRegistration = () => {
         }
         actions.resetForm();
         setSelectedOrganization("");
+        setSelectedOrganizationLoc("");
       } catch (error) {
         showSnackbar("Email already exists", "error");
       }
@@ -131,7 +131,6 @@ const AdminRegistration = () => {
   });
 
   return (
-    <Container component="main">
       <Grid2 container size={12}>
         <Grid2 size={7} sx={styles.svgGrid}>
           <Box sx={styles.svgBox}>
@@ -146,7 +145,7 @@ const AdminRegistration = () => {
             />
           </Box>
         </Grid2>
-        <Grid2 size={{ xs: 12, sm: 4 }}>
+        <Grid2 size={{ xs: 12, sm: 4 }} sx={styles.outerContainer}>
           <Box sx={styles.container}>
             <Typography
               component="h1"
@@ -162,8 +161,8 @@ const AdminRegistration = () => {
               noValidate
               sx={{ mt: 2 }}
             >
-              <Grid2 container spacing={2}>
-                <Grid2 size={12}>
+              <Grid2 container spacing={2} sx={styles.formGrid}>
+                <Grid2 size={10}>
                   <TextField
                     fullWidth
                     label="Username"
@@ -182,7 +181,7 @@ const AdminRegistration = () => {
                     }
                   />
                 </Grid2>
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <TextField
                     fullWidth
                     label="Email"
@@ -197,7 +196,7 @@ const AdminRegistration = () => {
                     helperText={formik.touched.email && formik.errors.email}
                   />
                 </Grid2>
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <TextField
                     fullWidth
                     label="Contact Number"
@@ -218,7 +217,7 @@ const AdminRegistration = () => {
                     }
                   />
                 </Grid2>
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <TextField
                     fullWidth
                     label="Address"
@@ -235,7 +234,7 @@ const AdminRegistration = () => {
                     helperText={formik.touched.address && formik.errors.address}
                   />
                 </Grid2>
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <Box sx={{ width: "100%" }}>
                     <Select
                       sx={{ textAlign: "left" }}
@@ -305,7 +304,7 @@ const AdminRegistration = () => {
                   </Box>
                 </Grid2>
                 {/* new Field added org_location */}
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <Box sx={{ width: "100%" }}>
                     <Select
                       sx={{ textAlign: "left" }}
@@ -370,7 +369,7 @@ const AdminRegistration = () => {
                       )}
                   </Box>
                 </Grid2>
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <TextField
                     fullWidth
                     label="Password"
@@ -406,7 +405,7 @@ const AdminRegistration = () => {
                     }}
                   />
                 </Grid2>
-                <Grid2 size={12}>
+                <Grid2 size={10}>
                   <TextField
                     fullWidth
                     label="Confirm Password"
@@ -446,7 +445,8 @@ const AdminRegistration = () => {
                     }}
                   />
                 </Grid2>
-              </Grid2>
+              
+              <Grid2 size={10}>
               <Button
                 type="submit"
                 fullWidth
@@ -456,6 +456,8 @@ const AdminRegistration = () => {
               >
                 Sign Up
               </Button>
+              </Grid2>
+              </Grid2>
             </Box>
             <Typography variant="body2" align="center">
               Already have an account?&nbsp;
@@ -464,7 +466,6 @@ const AdminRegistration = () => {
           </Box>
         </Grid2>
       </Grid2>
-    </Container>
   );
 };
 

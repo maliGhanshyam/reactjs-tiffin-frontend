@@ -7,8 +7,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   buttonGroupStyle: {
     display: "flex",
     mb: 3,
-    alignItems: "center",
+    marginLeft: "65px",
     flexDirection: { xs: "column", sm: "row" },
+    justifyContent: "space-between",
+    marginRight: "65px",
   },
   tabButtonStyle: {
     borderRadius: "1.2rem",
@@ -19,7 +21,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     display: "flex",
     justifyContent: "end",
     mt: 3,
-    marginRight:8
+    marginRight: 8,
   },
   titleStyle: {
     mb: 2,
@@ -76,7 +78,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       transform: "scale(1.05)",
     },
-    marginRight:"20px"
+    marginRight: "20px",
   },
   activeButton: {
     borderRadius: "1.2rem",
@@ -86,8 +88,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "#e43e38",
     },
-    marginRight:{sm:"20px"},
-    marginBottom:{xs:1, sm:0}
+    marginRight: { sm: "20px" },
+    marginBottom: { xs: 1, sm: 0 },
   },
   inactiveButton: {
     borderRadius: "1.2rem",
@@ -97,36 +99,51 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "transparent",
     },
-    marginRight:{sm:"20px"},
-    marginBottom:{xs:1, sm:0}
+    marginRight: { sm: "20px" },
+    marginBottom: { xs: 1, sm: 0 },
   },
   searchStyle: {
     display: "flex",
     justifyContent: "flex-end",
-    paddingRight:"66px"
   },
   searchTermStyle: {
     width: 250,
     borderRadius: 3,
   },
   view: {
-    minHeight:"700px",
-    marginLeft:"50px",
-    marginRight:"30px",
+    minHeight: "700px",
+    marginLeft: "50px",
+    marginRight: "30px",
   },
   content: {
-    minHeight:"700px",
-    marginLeft:"50px",
-    marginRight:"30px",
+    marginLeft: "50px",
+    marginRight: "30px",
   },
   noDataBox: {
     textAlign: "center",
     mt: 5,
-    marginY: "180px",
   },
+  gridButtonGroup:{
+      display: "flex",
+      justifyContent: "flex-start",
+      gap: { xs: 1, sm: 0 },
+  }
 };
 
-export const getButtonStyles = (tab: string, activeTab: string, styles: any) => {
+export const noDataImgStyle = {
+  width: "100%",
+  maxWidth: "60%",
+  height: "auto",
+  marginLeft: "auto",
+  marginRight: "auto",
+  display: "block",
+};
+
+export const getButtonStyles = (
+  tab: string,
+  activeTab: string,
+  styles: any
+) => {
   return {
     ...(activeTab === tab ? styles.activeButton : styles.inactiveButton),
   };

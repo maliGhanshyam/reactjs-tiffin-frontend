@@ -9,7 +9,7 @@ import { ConfirmationDialogProps } from "./ConfirmationDialog.types";
 import { styles } from "./ConfirmationDialog.styles";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import { TextField } from "@mui/material";
+import { FormHelperText, TextField } from "@mui/material";
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
@@ -22,9 +22,12 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   actionType = null,
 }) => {
   const [rejectionReason, setRejectionReason] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const maxLength = 100;
   useEffect(() => {
     if (actionType !== "reject") {
       setRejectionReason(""); // Clear when switching from "reject" action
+      setError(null);
     }
   }, [actionType]);
   // Function to render the icon based on the actionType
@@ -38,7 +41,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     return null;
   };
 
-  // Conditional content based on actionType
   const renderContent = () => {
     if (actionType === "approve") {
       return (
@@ -59,15 +61,24 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             {content}
           </DialogContentText>
           <TextField
-          label="Rejection Reason"
-          variant="outlined"
-          fullWidth
-          value={rejectionReason}
-          onChange={(e) => setRejectionReason(e.target.value)}
-          multiline
-          rows={2}
-          sx={{ marginTop: 2 }}
-        />
+            label="Rejection Reason"
+            variant="outlined"
+            fullWidth
+            value={rejectionReason}
+            onChange={handleRejectionReasonChange}
+            multiline
+            rows={2}
+            inputProps={{ maxLength }}
+            sx={{ marginTop: 2 }}
+          />
+          <FormHelperText>
+            {`${rejectionReason.length}/${maxLength} characters`}
+          </FormHelperText>
+          {error && (
+            <FormHelperText error>
+              {error}
+            </FormHelperText>
+          )}
         </>
       );
     }
@@ -75,8 +86,22 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   };
 
   const handleConfirm = () => {
-    onConfirm(rejectionReason); // Pass rejection reason 
-    onClose(); 
+    if (actionType === "reject" && rejectionReason.trim() === "") {
+      setError("Please provide a rejection reason.");
+      return;
+    }
+    setError(null);
+    onConfirm(actionType === "reject" ? rejectionReason : undefined);
+    onClose();
+  };
+  const handleRejectionReasonChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const value = e.target.value;
+    if (value.length <= maxLength) {
+      setRejectionReason(value);
+      setError(null);
+    }
   };
   return (
     <Dialog
@@ -97,7 +122,12 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       </DialogTitle>
       <DialogContent sx={styles.modalContent}>{renderContent()}</DialogContent>
       <DialogActions sx={styles.modalActions}>
-        <Button onClick={onClose} color="primary" variant="contained" sx={styles.modalButton}>
+        <Button
+          onClick={onClose}
+          color="primary"
+          variant="contained"
+          sx={styles.modalButton}
+        >
           {cancelButtonText}
         </Button>
         <Button
