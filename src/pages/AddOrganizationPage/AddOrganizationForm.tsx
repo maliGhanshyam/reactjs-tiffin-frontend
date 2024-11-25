@@ -9,8 +9,6 @@ import {
   Container,
   Box,
   Typography,
-  Alert,
-  Snackbar,
   Grid2,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -20,10 +18,10 @@ import {
   addOrganization,
   getOrganizationById,
   updateOrganization,
+  uploadOrganizationImage,
 } from "../../services/OrganisationService/OrganizationService";
 import { AddOrganization } from "../../services/OrganisationService/AddOrganization.types";
 import { useNavigate, useParams } from "react-router-dom";
-import { ISnackbar } from "../AdminRegistration/AdminRegistration.types";
 import {
   mainContainer,
   titleTypography,
@@ -36,6 +34,7 @@ import {
   expandableBox,
 } from "./AddOrganization.style";
 import { useSnackbar } from "../../hook";
+import { UploadFileRounded } from "@mui/icons-material";
 
 const validationSchema = Yup.object({
   org_name: Yup.string()
@@ -72,7 +71,7 @@ export default function AddOrganizationForm() {
     null
   );
   const [expanded, setExpanded] = useState<number | null>(null);
-
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   useEffect(() => {
     if (_id) {
       const fetchData = async () => {
@@ -86,12 +85,34 @@ export default function AddOrganizationForm() {
       setInitialValues({
         org_name: "",
         org_location: [{ loc: "", address: "", loc_contact: 0, loc_email: "" }],
+        org_image_url: "",
       });
     }
   }, [_id]);
 
   const handleExpandClick = (index: number) => {
     setExpanded(expanded === index ? null : index);
+  };
+
+  const handleImageUpload = async (
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("recfile", selectedFile);
+      try {
+        const response = await uploadOrganizationImage(formData);
+        if (response?.image) {
+          setFieldValue("org_image_url", response.image);
+          showSnackbar("Image uploaded successfully.", "success");
+        } else {
+          throw new Error("Invalid response: Missing image field.");
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        showSnackbar("Image upload failed. Please try again.", "error");
+      }
+    }
   };
   const handleSubmit = async (values: AddOrganization) => {
     try {
@@ -117,6 +138,7 @@ export default function AddOrganizationForm() {
           initialValues={
             initialValues || {
               org_name: "",
+              org_image_url: "",
               org_location: [
                 {
                   loc: "",
@@ -131,17 +153,55 @@ export default function AddOrganizationForm() {
           enableReinitialize
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, isSubmitting, dirty }) => (
+          {({
+            values,
+            errors,
+            touched,
+            isSubmitting,
+            dirty,
+            setFieldValue,
+          }) => (
             <Form>
-              <Field
-                as={TextField}
-                name="org_name"
-                label="Organization Name"
-                variant="outlined"
-                error={touched.org_name && Boolean(errors.org_name)}
-                helperText={touched.org_name && errors.org_name}
-                sx={inputField}
-              />
+              <Grid2 container spacing={1} sx={{ paddingTop: 0 }}>
+                <Grid2 size={6}>
+                  <Field
+                    as={TextField}
+                    name="org_name"
+                    label="Organization Name"
+                    variant="outlined"
+                    error={touched.org_name && Boolean(errors.org_name)}
+                    helperText={touched.org_name && errors.org_name}
+                    sx={inputField}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <Box display="flex" alignItems="center">
+                    <Field name="org_image_url">
+                      {({ field, form }: { field: any; form: any }) => (
+                        <>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                              setSelectedFile(e.target.files?.[0] || null)
+                            }
+                          />
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<UploadFileRounded />}
+                            onClick={() => handleImageUpload(setFieldValue)}
+                            disabled={!selectedFile}
+                            sx={{ marginLeft: 2 }}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </Field>
+                  </Box>
+                </Grid2>
+              </Grid2>
               <FieldArray name="org_location">
                 {({ remove, push }) => (
                   <>
@@ -201,7 +261,10 @@ export default function AddOrganizationForm() {
                                 name={`org_location[${index}].loc`}
                                 render={(msg) => (
                                   <Typography
-                                    sx={{ color: "red", fontSize: "0.875rem" }}
+                                    sx={{
+                                      color: "red",
+                                      fontSize: "0.875rem",
+                                    }}
                                   >
                                     {msg}
                                   </Typography>
@@ -222,7 +285,10 @@ export default function AddOrganizationForm() {
                                 name={`org_location[${index}].loc_contact`}
                                 render={(msg) => (
                                   <Typography
-                                    sx={{ color: "red", fontSize: "0.875rem" }}
+                                    sx={{
+                                      color: "red",
+                                      fontSize: "0.875rem",
+                                    }}
                                   >
                                     {msg}
                                   </Typography>
@@ -243,7 +309,10 @@ export default function AddOrganizationForm() {
                                 name={`org_location[${index}].loc_email`}
                                 render={(msg) => (
                                   <Typography
-                                    sx={{ color: "red", fontSize: "0.875rem" }}
+                                    sx={{
+                                      color: "red",
+                                      fontSize: "0.875rem",
+                                    }}
                                   >
                                     {msg}
                                   </Typography>
@@ -266,7 +335,10 @@ export default function AddOrganizationForm() {
                                 name={`org_location[${index}].address`}
                                 render={(msg) => (
                                   <Typography
-                                    sx={{ color: "red", fontSize: "0.875rem" }}
+                                    sx={{
+                                      color: "red",
+                                      fontSize: "0.875rem",
+                                    }}
                                   >
                                     {msg}
                                   </Typography>
