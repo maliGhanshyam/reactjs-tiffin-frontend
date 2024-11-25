@@ -12,3 +12,12 @@ export interface RegisterResponse {
   statuscode: number;
   message: string;
 }
+
+export interface OrganizationLoc {
+  loc: string;          
+  address: string;       
+  loc_contact: number;   
+  loc_email: string;    
+  _id: string; 
+}
+

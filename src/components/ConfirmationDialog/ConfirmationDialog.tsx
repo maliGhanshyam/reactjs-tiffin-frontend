@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,6 +9,7 @@ import { ConfirmationDialogProps } from "./ConfirmationDialog.types";
 import { styles } from "./ConfirmationDialog.styles";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { FormHelperText, TextField } from "@mui/material";
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
@@ -20,6 +21,15 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   cancelButtonText = "Cancel",
   actionType = null,
 }) => {
+  const [rejectionReason, setRejectionReason] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const maxLength = 100;
+  useEffect(() => {
+    if (actionType !== "reject") {
+      setRejectionReason(""); // Clear when switching from "reject" action
+      setError(null);
+    }
+  }, [actionType]);
   // Function to render the icon based on the actionType
   const renderIcon = () => {
     if (actionType === "approve") {
@@ -31,12 +41,13 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     return null;
   };
 
-  // Conditional content based on actionType
   const renderContent = () => {
     if (actionType === "approve") {
       return (
         <>
-          <DialogContentText variant="body2" >{content}</DialogContentText>
+          <DialogContentText variant="body2" sx={{ paddingY: 1 }}>
+            {content}
+          </DialogContentText>
           <DialogContentText variant="body2">
             This action will approve the retailer and allow them to proceed.
           </DialogContentText>
@@ -46,31 +57,84 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     if (actionType === "reject") {
       return (
         <>
-          <DialogContentText variant="body2">{content}</DialogContentText>
-          <DialogContentText variant="body2">
-            This action is irreversible and will reject the retailer.
+          <DialogContentText variant="body2" sx={{ paddingY: 1 }}>
+            {content}
           </DialogContentText>
+          <TextField
+            label="Rejection Reason"
+            variant="outlined"
+            fullWidth
+            value={rejectionReason}
+            onChange={handleRejectionReasonChange}
+            multiline
+            rows={2}
+            inputProps={{ maxLength }}
+            sx={{ marginTop: 2 }}
+          />
+          <FormHelperText>
+            {`${rejectionReason.length}/${maxLength} characters`}
+          </FormHelperText>
+          {error && (
+            <FormHelperText error>
+              {error}
+            </FormHelperText>
+          )}
         </>
       );
     }
     return <DialogContentText variant="body2">{content}</DialogContentText>;
   };
 
+  const handleConfirm = () => {
+    if (actionType === "reject" && rejectionReason.trim() === "") {
+      setError("Please provide a rejection reason.");
+      return;
+    }
+    setError(null);
+    onConfirm(actionType === "reject" ? rejectionReason : undefined);
+    onClose();
+  };
+  const handleRejectionReasonChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const value = e.target.value;
+    if (value.length <= maxLength) {
+      setRejectionReason(value);
+      setError(null);
+    }
+  };
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth sx={{borderRadius:1}}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: "20px",
+          overflow: "hidden",
+        },
+      }}
+    >
       <DialogTitle sx={styles.modalTitle}>
         {renderIcon()}
         {title}
       </DialogTitle>
       <DialogContent sx={styles.modalContent}>{renderContent()}</DialogContent>
       <DialogActions sx={styles.modalActions}>
-        <Button onClick={onClose} color="primary" sx={styles.modalButton}>
+        <Button
+          onClick={onClose}
+          color="primary"
+          variant="contained"
+          sx={styles.modalButton}
+        >
           {cancelButtonText}
         </Button>
         <Button
-          onClick={onConfirm}
+          onClick={handleConfirm}
           color={actionType === "approve" ? "success" : "error"}
           autoFocus
+          variant="contained"
           sx={styles.modalButton}
         >
           {confirmButtonText}

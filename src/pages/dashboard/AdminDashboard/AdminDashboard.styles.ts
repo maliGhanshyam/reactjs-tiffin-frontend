@@ -72,10 +72,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     backgroundColor: "#ecf0f1",
     borderRadius: "1.2rem",
     alignItems: "center",
-    // marginLeft: 2,
   },
   taskBox: {
-    // marginRight: 1,
     boxShadow: 3,
     padding: 2,
     borderRadius: "1.2rem",
@@ -196,6 +194,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     mt: 1,
     fontWeight: 500,
   },
+  noDataBox:{
+    textAlign: "center",
+    padding:"15px"
+  }
 };
 
 export const tooltipStyle = {
