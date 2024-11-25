@@ -1,4 +1,4 @@
-export interface Approval {
+export interface ApprovalValue {
   approval_status: string;
   organization_id: string;
   istrendy?: boolean;
@@ -9,7 +9,7 @@ export interface Retailer {
   user_image:string;
   role_specific_details: {
     organization_id: string;
-    approval: Approval[];
+    approval: ApprovalValue[];
   };
   _id: string;
   username: string;

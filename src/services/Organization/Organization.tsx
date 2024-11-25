@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL!;
 export const getOrganizations = async (): Promise<Organization[]> => {
   try {
     const response = await axiosInstance.get<OrganizationsResponse>(
-      `${API_URL}/superadmin/organizations/getallorganization`
+      `${API_URL}/superadmin/organizations/getallorganization?status=${false}`
     );
     return response.data.data;
   } catch (error) {
