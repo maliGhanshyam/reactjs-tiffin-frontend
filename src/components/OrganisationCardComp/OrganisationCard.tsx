@@ -45,7 +45,14 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
           title={title}
         />
       )}
-      <CardContent>
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flexGrow: 1,
+        }}
+      >
         <Typography
           gutterBottom
           variant="h6"
@@ -75,7 +82,14 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
         </Typography>
       </CardContent>
       {actions && (
-        <CardActions sx={OrganisationCardStyles.cardActionsStyles}>
+        <CardActions
+          sx={{
+            marginTop: "auto", // Push CardActions to the bottom
+            // display: "flex",
+            // justifyContent: "flex-end",
+            ...OrganisationCardStyles.cardActionsStyles,
+          }}
+        >
           {actions.map((action, index) => (
             <Button
               key={index}

@@ -18,7 +18,7 @@ const settings = {
   dots: true,
   infinite: true,
   speed: 500,
-  slidesToShow: 3,
+  slidesToShow: 4,
   slidesToScroll: 4,
 };
 
@@ -45,7 +45,7 @@ const SuperAdminDashboard: React.FC = () => {
     try {
       const statuses = ["pending", "approved", "rejected"];
       const page = 1;
-      const limit = 4;
+      const limit = 10;
 
       const results = await Promise.all(
         statuses.map(async (status) => {
@@ -91,64 +91,72 @@ const SuperAdminDashboard: React.FC = () => {
 
       {/* Main Container */}
       <Box
-        sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          mx: 3,
+        }}
       >
-        <Container sx={{ flexGrow: 1, py: 3 }}>
-          {/* Organizations Section */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-            }}
+        {/* <Container sx={{ flexGrow: 1, py: 3 }}> */}
+        {/* Organizations Section */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
+        >
+          <Typography variant="h5" sx={titleStyles}>
+            Available Organisations
+          </Typography>
+          <Button
+            variant="outlined" // Uses the default variant from the theme
+            color="primary" // Uses the primary color defined in the theme
+            size="small" // Uses the default size defined in the theme
+            startIcon={<VisibilityIcon />} // Adds the icon
+            onClick={() => navigate("/supAdmin")} // Navigation logic
+           
           >
-            <Typography variant="h5" sx={titleStyles}>
-              Available Organisations
-            </Typography>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              startIcon={<VisibilityIcon />}
-              onClick={() => navigate("/supAdmin")}
-            >
-              View More
-            </Button>
-          </Box>
-          <Slider {...settings}>
-            {organizations.map((org) => (
-              <Box key={org._id} sx={{ minWidth: 450, padding: "0 18px" }}>
-                <OrganisationCard
-                  title={org.org_name}
-                  description=""
-                  image="https://picsum.photos/200/300/?blur"
-                  fields={[
-                    ...org.org_location.map((loc) => ({
-                      label: `Location `,
-                      value: loc.loc,
-                    })),
-                  ]}
-                  status={org.isActive ? "Active" : "Inactive"}
-                  actions={[
-                    {
-                      label: "Update",
-                      color: "primary",
-                      onClick: () => console.log("Update"),
-                    },
-                    {
-                      label: "Delete",
-                      color: "error",
-                      onClick: () => console.log("Delete"),
-                    },
-                  ]}
-                />
-              </Box>
-            ))}
-          </Slider>
+            View More
+          </Button>
+        </Box>
+        <Slider {...settings}>
+          {organizations.map((org) => (
+            <Box key={org._id}>
+              <OrganisationCard
+                title={org.org_name}
+                description=""
+                image="https://picsum.photos/200/300/?blur"
+                fields={[
+                  ...org.org_location.map((loc) => ({
+                    label: `Location `,
+                    value: loc.loc,
+                  })),
+                ]}
+                status={org.isActive ? "Active" : "Inactive"}
+                actions={
+                  [
+                    // {
+                    //   label: "Update",
+                    //   color: "primary",
+                    //   onClick: () => console.log("Update"),
+                    // },
+                    // {
+                    //   label: "Delete",
+                    //   color: "error",
+                    //   onClick: () => console.log("Delete"),
+                    // },
+                  ]
+                }
+              />
+            </Box>
+          ))}
+        </Slider>
 
-          {/* Admins Section */}
-          {/* <Box
+        {/* Admins Section */}
+        {/* <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
@@ -208,7 +216,7 @@ const SuperAdminDashboard: React.FC = () => {
           ) : (
             <Typography>No admins available for approval.</Typography>
           )} */}
-        </Container>
+        {/* </Container> */}
       </Box>
     </>
   );

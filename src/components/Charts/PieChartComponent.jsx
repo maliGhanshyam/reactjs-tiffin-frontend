@@ -18,8 +18,9 @@ const styles = {
   avatar: {
     flex: 1,
     height: "100%", // Full height within the task bar container
-    backgroundColor: "#f0f0f0",
     objectFit: "cover", // Ensures image covers the area without distortion
+    marginTop: "22px", // Equal top margin
+    marginBottom: "8px", // Equal bottom margin
   },
 
   pendingCount: { fontWeight: "bold", color: "#c0392b" },
