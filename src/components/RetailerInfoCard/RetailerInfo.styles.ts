@@ -13,7 +13,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   cardActionsStyles: {
     justifyContent: "center",
     marginTop: 1,
-    gap:3
+    gap: 3,
   },
   buttonStyles: {
     borderRadius: 1,
@@ -31,7 +31,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     "&:hover": {
       backgroundColor: "error.dark",
     },
-    paddingRight:"16px"
+    paddingRight: "16px",
   },
 
   trendyButtonStyles: {
@@ -62,8 +62,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
       backgroundColor: "transparent",
     },
   },
-  boxStyle:{
-    p:2
-  }
+  boxStyle: {
+    p: 2,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+  },
 };
-

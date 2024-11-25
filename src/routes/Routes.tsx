@@ -10,6 +10,7 @@ import SuperAdminLandingPage from "../pages/SuperAdminPage/SuperAdminLandingPage
 import { LandingPageAdminDashboard } from "../pages/LandingPageAdminDashboard";
 import { PageNotFound } from "../components/NotFound";
 import { AddOrganizationForm } from "../pages/AddOrganizationPage";
+import { ProfileUpdate } from "../pages/ProfileUpdate";
 const childRoutes: RouteObject[] = [
   {
     path: "register",
@@ -90,6 +91,12 @@ const childRoutes: RouteObject[] = [
   {
     path: "",
     element: <Navigate to="login" />,
+  },
+  {
+    path: "update-profile",
+    element: (
+    <ProtectedRoute requiredRole={ADMIN_ROLE_ID}><ProfileUpdate/></ProtectedRoute>
+    )
   },
 ];
 

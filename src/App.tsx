@@ -10,13 +10,13 @@ import { SnackbarProvider } from "./context";
 function App() {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh">
+      <SnackbarProvider>
       <Navbar />
       <main className="main-content">
-        <SnackbarProvider>
           <Outlet />
-        </SnackbarProvider>
       </main>
       <Footer />
+      </SnackbarProvider>
     </Box>
   );
 }

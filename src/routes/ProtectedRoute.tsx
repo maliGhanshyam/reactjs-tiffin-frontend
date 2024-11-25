@@ -2,7 +2,6 @@ import { ReactNode, FC, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/Store";
-import axios from "axios";
 import { setAuthData } from "../store/authSlice";
 import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "../constants/ROLES";
 import axiosInstance from "../services/Organization/axiosInstance";

@@ -18,7 +18,9 @@ import { styles, tooltipStyle } from "./AdminDashboard.styles";
 import { RetailerInfoCard } from "../../../components/RetailerInfoCard";
 import { useSnackbar } from "../../../hook";
 import { fetchRetailersWithPagination } from "../../../services/Retailer";
-
+import { NoData } from "../../../components/NoData";
+import noData from "../../../assets/noReports.svg";
+import noGroups from "../../../assets/noCustomGroups.svg"
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
@@ -37,6 +39,7 @@ const AdminDashboard = () => {
     try {
       const {totalItems} = await fetchRetailersWithPagination("pendingRetailers"); 
       setPendingCount(totalItems);
+      if (totalItems === 0) showSnackbar("No pending retailers available", "success");
     } catch (error) {
       showSnackbar("Error fetching pending retailers", "error");
     }
@@ -47,6 +50,7 @@ const AdminDashboard = () => {
       const {data,totalItems} = await fetchRetailersWithPagination("getapprovedRetailers");
       setApproveRetailer(data);
       setApprovedCount(totalItems);
+      if (totalItems === 0) showSnackbar("No approved retailers available", "success");
     } catch (error) {
       showSnackbar("Error fetching pending retailers", "error");
     }
@@ -56,6 +60,7 @@ const AdminDashboard = () => {
     try {
       const {totalItems} = await fetchRetailersWithPagination("getrejectedRetailers");
       setRejectedCount(totalItems);
+      if (totalItems === 0) showSnackbar("No rejected retailers available", "success");
     } catch (error) {
       showSnackbar("Error fetching rejected retailers", "error");
     }
@@ -66,14 +71,16 @@ const AdminDashboard = () => {
     { name: "Approved", value: approvedCount },
     { name: "Rejected", value: rejectedCount },
   ];
-
+  const totalCount=pendingCount+approvedCount+rejectedCount;
+  const showRetailersSlider = approveRetailers.length > 0;
   return (
      <Box sx={styles.innerContainerStyle}>
         <Grid2 container size={{ sm: 12, xs: 8 }} spacing={4} sx={styles.outerGrid}>
-        
           <Grid2 size={{ sm: 4, xs:11 }}>
             <Box sx={styles.innerGridA}>
-              {/* Piechart */}
+            {totalCount===0 ?
+            (<NoData message={"No Data"} image={noGroups} boxStyle={styles.noDataBox} imgStyle={{width: "100%",height:"150px",marginTop:"15px",marginBottom:"15px"}}/>):
+              (
               <PieChart width={300} height={240}>
                 <Pie
                   data={chartData}
@@ -98,7 +105,7 @@ const AdminDashboard = () => {
                     paddingLeft: 30,
                   }}
                 />
-              </PieChart>
+              </PieChart>)}
             </Box>
           </Grid2>
           <Grid2 size={{ sm: 7, xs:11 }}>
@@ -148,7 +155,7 @@ const AdminDashboard = () => {
             See all
           </Button>
         </Grid2>
-
+        {showRetailersSlider ? (
         <CardSlider data={approveRetailers}>
           {(ret) => (
             <ActionCard
@@ -159,7 +166,7 @@ const AdminDashboard = () => {
               <RetailerInfoCard retailer={ret} />
             </ActionCard>
           )}
-        </CardSlider>
+        </CardSlider>):(<NoData message={"No Data"} image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "100%",height:"150px",marginTop:"15px",marginBottom:"15px"}}/>)}
      </Box>
   );
 };
