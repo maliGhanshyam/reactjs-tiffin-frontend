@@ -116,6 +116,7 @@ const SuperAdminDashboard: React.FC = () => {
             color="primary" // Uses the primary color defined in the theme
             size="small" // Uses the default size defined in the theme
             startIcon={<VisibilityIcon />} // Adds the icon
+            sx={{borderRadius: "8px",}}
             onClick={() => navigate("/supAdmin")} // Navigation logic
            
           >

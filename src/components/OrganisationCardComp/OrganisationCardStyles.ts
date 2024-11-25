@@ -45,8 +45,10 @@ const OrganisationCardStyles = {
   },
   buttonStyles: (color: "primary" | "error"): SxProps<Theme> => ({
     transition: "background-color 0.2s ease-in-out",
+   borderRadius: "8px",
+
     "&:hover": {
-      backgroundColor: color === "primary" ? "primary.main" : "primary.dark",
+      backgroundColor: color === "primary" ? "#d32f2f" : "#d32f2f",
       color: "white",
     },
   }),
