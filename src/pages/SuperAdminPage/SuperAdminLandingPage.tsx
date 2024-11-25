@@ -6,6 +6,7 @@ import {
   Tabs,
   Tab,
   Pagination,
+  Grid,
 } from "@mui/material";
 import OrganisationCard from "../../components/OrganisationCardComp/OrganisationCard";
 import {
@@ -202,7 +203,7 @@ const SuperAdminLandingPage: React.FC = () => {
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <Container sx={{ flexGrow: 1, py: 2 }}>
+      <Container sx={{ flexGrow: 1, py: 2  }} maxWidth={false}>
         <Tabs
           value={currentTab}
           sx={OrganisationCardStyles.subTitleStyles}
@@ -229,16 +230,19 @@ const SuperAdminLandingPage: React.FC = () => {
             sx={OrganisationCardStyles.subTitleStyles}
           />
         </Tabs>
-        <Box
+        {/* //TODO: */}
+        <Grid
           sx={{
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "left",
             py: 2,
           }}
+          container
+          spacing={4}
         >
           {displayedData.map((item) => (
-            <Box key={item._id} sx={{ m: 1, width: "calc(25% - 16px)" }}>
+            <Grid key={item._id} item xs={12} sm={6} md={3}>
               {isUserData(item) ? (
                 <OrganisationCard
                   title={item.username}
@@ -267,9 +271,9 @@ const SuperAdminLandingPage: React.FC = () => {
                   actions={getActions(item)}
                 />
               )}
-            </Box>
+            </Grid>
           ))}
-        </Box>
+        </Grid>
         <Box sx={{ display: "flex", justifyContent: "right", mt: 4 }}>
           <Pagination
             count={Math.ceil(displayData.length / rowsPerPage)}
