@@ -33,9 +33,13 @@ const ProtectedRoute: FC<AuthGuardProps> = ({
       const response = await axiosInstance.get(
         `${API_URL}/auth/getuserbytoken`
       );
-      const { _id, role_id } = response.data.data;
-      if (_id && role_id) {
-        dispatch(setAuthData({ userRoleId: role_id, userId: _id }));
+      if (response.data.data._id && response.data.data.role_id) {
+        dispatch(
+          setAuthData({
+            userRoleId: response.data.data.role_id,
+            userId: response.data.data._id,
+          })
+        );
       }
     } catch (error) {
       console.error("Error fetching user by token:", error);

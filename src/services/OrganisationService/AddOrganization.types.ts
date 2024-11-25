@@ -9,6 +9,7 @@ export interface AddOrgLocation {
 
 export interface AddOrganization {
   _id?: string;
+  org_image_url?: "";
   org_name: string;
   org_location: AddOrgLocation[];
   org_created_at?: string;
