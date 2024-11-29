@@ -5,7 +5,7 @@ import { RootState } from "../store/Store";
 import axios from "axios";
 import { setAuthData } from "../store/authSlice";
 import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "../constants/ROLES";
-import axiosInstance from "../services/Organization/axiosInstance";
+import axiosInstance from "../services/OrganisationService/axiosInstance";
 const API_URL = process.env.REACT_APP_API_URL;
 interface AuthGuardProps {
   children: ReactNode;
