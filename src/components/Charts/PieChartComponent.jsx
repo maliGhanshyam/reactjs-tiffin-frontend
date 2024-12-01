@@ -47,11 +47,26 @@ export default function PieChartComponent({ chartData }) {
   return (
     <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
       <Container disableGutters maxWidth={false}>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            flexDirection: { xs: "column", md: "row" }, // Stack on smaller screens
+          }}
+        >
           {/* Chart Section */}
-          <Paper sx={{ ...styles.card, flexBasis: "35%", m: 0 }}>
+          <Paper
+            sx={{
+              ...styles.card,
+              flexBasis: { xs: "100%", md: "35%" }, // Full width on small screens
+              m: 0,
+            }}
+          >
             <Box display="flex" justifyContent="center" alignItems="center">
-              <PieChart width={450} height={300}>
+              <PieChart
+                width={window.innerWidth > 600 ? 450 : 300} // Adjust chart size
+                height={window.innerWidth > 600 ? 300 : 200}
+              >
                 <Pie
                   data={chartData}
                   dataKey="value"
@@ -83,15 +98,29 @@ export default function PieChartComponent({ chartData }) {
           </Paper>
 
           {/* Task Section */}
-          <Paper sx={{ ...styles.card, flexBasis: "65%", m: 0 }}>
-            <Box sx={styles.taskBox}>
+          <Paper
+            sx={{
+              ...styles.card,
+              flexBasis: { xs: "100%", md: "65%" }, // Full width on small screens
+              m: 0,
+            }}
+          >
+            <Box
+              sx={{
+                ...styles.taskBox,
+                flexDirection: { xs: "column", md: "row" }, // Stack content on small screens
+              }}
+            >
               {/* Left Image */}
-              {/* <Box
+              <Box
                 component="img"
                 src={noTask}
                 alt="Left Image"
-                sx={styles.avatar}
-              /> */}
+                sx={{
+                  ...styles.avatar,
+                  display: { xs: "none", sm: "none", md: "block" }, // Hide image on small screens
+                }}
+              />
 
               {/* Text Content */}
               <Box
@@ -114,6 +143,7 @@ export default function PieChartComponent({ chartData }) {
                   </Typography>
                 </Box>
                 <Button
+                  className="custom-outlined"
                   variant="outlined"
                   sx={{ borderRadius: "12px" }}
                   onClick={() => navigate("/supAdmin")}
@@ -124,12 +154,15 @@ export default function PieChartComponent({ chartData }) {
               </Box>
 
               {/* Right Image */}
-              <Box
+              {/* <Box
                 component="img"
                 src={noTask}
                 alt="Right Image"
-                sx={styles.avatar}
-              />
+                sx={{
+                  ...styles.avatar,
+                  display: { xs: "block", md: "none" }, // Show only on small screens
+                }}
+              />*/}
             </Box>
           </Paper>
         </Box>

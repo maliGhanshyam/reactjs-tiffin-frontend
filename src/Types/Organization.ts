@@ -1,6 +1,7 @@
 export interface Organization {
   _id: string;
   org_name: string;
+  org_image_url?: string;
   org_location: OrgLocation[];
   org_created_at: string;
   org_updated_at: string;

@@ -4,7 +4,7 @@ import { SxProps, Theme } from "@mui/material";
 
 const OrganisationCardStyles = {
   cardStyles: {
-    maxWidth: 390,
+    maxWidth: 300,
     height: 400,
     backgroundColor: "#f9f9f9",
     borderRadius: 5,
@@ -45,8 +45,10 @@ const OrganisationCardStyles = {
   },
   buttonStyles: (color: "primary" | "error"): SxProps<Theme> => ({
     transition: "background-color 0.2s ease-in-out",
+   borderRadius: "8px",
+
     "&:hover": {
-      backgroundColor: color === "primary" ? "primary.main" : "primary.dark",
+      backgroundColor: color === "primary" ? "#d32f2f" : "#d32f2f",
       color: "white",
     },
   }),
