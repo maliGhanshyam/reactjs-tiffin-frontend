@@ -4,7 +4,6 @@ import { Box, Container, Typography, Paper, Button } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import noTask from "../../assets/noTask.svg";
-// import timeBloack from "../../assets/timeblock.png";
 
 const styles = {
   card: {
@@ -14,22 +13,24 @@ const styles = {
     transition: "0.3s",
     "&:hover": { boxShadow: 6 },
   },
-  taskBox: { display: "flex", alignItems: "center", gap: 2 },
+  taskBox: {
+    display: "flex",
+    alignItems: "center",
+    gap: 2,
+  },
   avatar: {
     flex: 1,
-    height: "100%", // Full height within the task bar container
-    objectFit: "cover", // Ensures image covers the area without distortion
-    marginTop: "22px", // Equal top margin
-    marginBottom: "8px", // Equal bottom margin
+    height: "100%",
+    objectFit: "cover",
+    marginTop: "22px",
+    marginBottom: "8px",
   },
-
   pendingCount: { fontWeight: "bold", color: "#c0392b" },
 };
 
 export default function PieChartComponent({ chartData }) {
   const navigate = useNavigate();
 
-  // Moved getGreetingMessage logic here
   const getGreetingMessage = () => {
     const currentHour = new Date().getHours();
     if (currentHour < 12) {
@@ -51,20 +52,20 @@ export default function PieChartComponent({ chartData }) {
           sx={{
             display: "flex",
             gap: 2,
-            flexDirection: { xs: "column", md: "row" }, // Stack on smaller screens
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
           {/* Chart Section */}
           <Paper
             sx={{
               ...styles.card,
-              flexBasis: { xs: "100%", md: "35%" }, // Full width on small screens
+              flexBasis: { xs: "100%", md: "35%" },
               m: 0,
             }}
           >
             <Box display="flex" justifyContent="center" alignItems="center">
               <PieChart
-                width={window.innerWidth > 600 ? 450 : 300} // Adjust chart size
+                width={window.innerWidth > 600 ? 450 : 300}
                 height={window.innerWidth > 600 ? 300 : 200}
               >
                 <Pie
@@ -101,26 +102,26 @@ export default function PieChartComponent({ chartData }) {
           <Paper
             sx={{
               ...styles.card,
-              flexBasis: { xs: "100%", md: "65%" }, // Full width on small screens
+              flexBasis: { xs: "100%", md: "65%" },
               m: 0,
             }}
           >
             <Box
               sx={{
                 ...styles.taskBox,
-                flexDirection: { xs: "column", md: "row" }, // Stack content on small screens
+                flexDirection: { xs: "column", md: "row" },
               }}
             >
-              {/* Left Image */}
-              <Box
+              {/* Left Image (Hidden on small screens) */}
+              {/* <Box
                 component="img"
                 src={noTask}
                 alt="Left Image"
                 sx={{
                   ...styles.avatar,
-                  display: { xs: "none", sm: "none", md: "block" }, // Hide image on small screens
+                  display: { xs: "none", md: "block" },
                 }}
-              />
+              /> */}
 
               {/* Text Content */}
               <Box
@@ -143,9 +144,8 @@ export default function PieChartComponent({ chartData }) {
                   </Typography>
                 </Box>
                 <Button
-                  className="custom-outlined"
                   variant="outlined"
-                  sx={{ borderRadius: "12px" }}
+                  sx={{ borderRadius: "12px", mt: 2 }}
                   onClick={() => navigate("/supAdmin")}
                   startIcon={<VisibilityIcon />}
                 >
@@ -153,16 +153,16 @@ export default function PieChartComponent({ chartData }) {
                 </Button>
               </Box>
 
-              {/* Right Image */}
-              {/* <Box
+              {/* Right Image (Visible on desktop, hidden on small screens) */}
+              <Box
                 component="img"
                 src={noTask}
                 alt="Right Image"
                 sx={{
                   ...styles.avatar,
-                  display: { xs: "block", md: "none" }, // Show only on small screens
+                  display: { xs: "none", sm: "none", md: "block" },
                 }}
-              />*/}
+              />
             </Box>
           </Paper>
         </Box>
