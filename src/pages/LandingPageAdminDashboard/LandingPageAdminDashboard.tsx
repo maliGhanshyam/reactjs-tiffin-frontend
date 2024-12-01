@@ -73,12 +73,16 @@ const LandingPageAdminDashboard = () => {
   }, [location.state?.viewRejected]);
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setSearchResults([]);
-      fetchRetailersData(page);
-    } else {
-      handleSearch();
-    }
+    const timeout = setTimeout(() => {
+      if (searchTerm.trim() === "") {
+        setSearchResults([]);
+        fetchRetailersData(page); 
+      } else {
+        handleSearch();
+      }
+    }, 500);
+  
+    return () => clearTimeout(timeout); // Clear timeout on cleanup
   }, [searchTerm, activeTab, page]);
   // Fetch Retailers
   const fetchRetailers = async (page: number) => {

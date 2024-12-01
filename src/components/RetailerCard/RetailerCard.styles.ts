@@ -5,7 +5,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     minWidth: 320,
   },
   innerCardContainerStyle: {
-    minWidth: 320,
+    minWidth: 306,
     mr: 2,
   },
   cardMediaStyles: {
