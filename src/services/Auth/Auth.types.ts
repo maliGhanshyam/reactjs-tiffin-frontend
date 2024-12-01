@@ -10,7 +10,7 @@ export interface RegisterData {
   role_id: string;
 }
 export interface RegisterResponse {
-  statuscode: number;
+  statusCode: number;
   message: string;
   token?: string;
 }

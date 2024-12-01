@@ -117,7 +117,7 @@ const AdminRegistration = () => {
     onSubmit: async (values, actions) => {
       try {
         const res: RegisterResponse = await registerAdmin(values);
-        if (res.statuscode === 201) {
+        if (res.statusCode === 201) {
           showSnackbar("Admin registered successfully.", "success");
           navigate("/login");
         }

@@ -38,10 +38,10 @@ export const registerAdmin = async ({
 
     // Extract the data from the response
     const { data } = response;
-    const { statuscode, message, token } = data;
+    const { statusCode, message, token } = data;
 
     return {
-      statuscode,
+      statusCode,
       message,
       token,
     };
