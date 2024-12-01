@@ -41,18 +41,21 @@ const AdminDashboard = () => {
       const {totalItems} = await fetchRetailersWithPagination("pendingRetailers"); 
       setPendingCount(totalItems);
       if (totalItems === 0) showSnackbar("No pending retailers available", "success");
-    } catch (error) {
+    } catch (error:any) {
+      (error.status === 401)?
+      showSnackbar("Admin has not been approved yet.", "success"):
       showSnackbar("Error fetching pending retailers", "error");
     }
   };
-
   const fetchApprovedRetailers = async () => {
     try {
       const {data,totalItems} = await fetchRetailersWithPagination("getapprovedRetailers");
       setApproveRetailer(data);
       setApprovedCount(totalItems);
       if (totalItems === 0) showSnackbar("No approved retailers available", "success");
-    } catch (error) {
+    } catch (error:any) {
+      (error.status === 401)?
+    showSnackbar("Admin has not been approved yet.", "success"):
       showSnackbar("Error fetching pending retailers", "error");
     }
   };
@@ -62,7 +65,9 @@ const AdminDashboard = () => {
       const {totalItems} = await fetchRetailersWithPagination("getrejectedRetailers");
       setRejectedCount(totalItems);
       if (totalItems === 0) showSnackbar("No rejected retailers available", "success");
-    } catch (error) {
+    } catch (error:any) {
+      (error.status === 401)?
+    showSnackbar("Admin has not been approved yet.", "success"):
       showSnackbar("Error fetching rejected retailers", "error");
     }
   };

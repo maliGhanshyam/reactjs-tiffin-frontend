@@ -8,7 +8,7 @@ import {
   searchRetailerWithStatus,
 } from "../../services/Retailer";
 import { useLocation } from "react-router-dom";
-import { ApiResponse } from "./LandingPageAdminDashboard.types";
+import { ApiResponse} from "./LandingPageAdminDashboard.types";
 import {
   getButtonStyles,
   noDataImgStyle,
@@ -90,7 +90,9 @@ const LandingPageAdminDashboard = () => {
       );
       setPendingRetailer(data);
       setTotalPages(totalPages);
-    } catch (error) {
+    } catch (error:any) {
+      (error.status === 401)?
+      showSnackbar("Admin has not been approved yet.", "success"):
       showSnackbar("Error fetching pending retailers", "error");
     }
   };
@@ -104,7 +106,9 @@ const LandingPageAdminDashboard = () => {
       );
       setApprovedRetailers(data);
       setTotalApprovedPages(totalPages);
-    } catch (error) {
+    } catch (error:any) {
+      (error.status === 401)?
+      showSnackbar("Admin has not been approved yet.", "success"):
       showSnackbar("Error fetching approved retailers", "error");
     }
   };
@@ -118,7 +122,9 @@ const LandingPageAdminDashboard = () => {
       );
       setRejectedRetailers(data);
       setTotalRejectedPages(totalPages);
-    } catch (error) {
+    } catch (error:any) {
+      (error.status === 401)?
+      showSnackbar("Admin has not been approved yet.", "success"):
       showSnackbar("Error fetching rejected retailers", "error");
     }
   };
