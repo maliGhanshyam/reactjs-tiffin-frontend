@@ -105,9 +105,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   searchStyle: {
     display: "flex",
     justifyContent: "flex-end",
+    marginTop:{sm:0,xs:1}
   },
   searchTermStyle: {
-    width: 250,
+    width: {sm:250,xs:300},
     borderRadius: 3,
   },
   view: {

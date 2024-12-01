@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid2,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
+import { Box, Button, Grid2, TextField, InputAdornment } from "@mui/material";
 import { Retailer } from "../dashboard/AdminDashboard/AdminDashboard.types";
 import {
   approveRetailer,
@@ -177,8 +171,10 @@ const LandingPageAdminDashboard = () => {
 
   const closeConfirmationModal = () => {
     setOpenModal(false);
-    setSelectedRetailer(null);
-    setActionType(null);
+    setTimeout(() => {
+      setSelectedRetailer(null);
+      setActionType(null);
+    }, 300);
   };
 
   const confirmAction = (rejectionReason?: string | undefined) => {
@@ -246,10 +242,7 @@ const LandingPageAdminDashboard = () => {
   return (
     <Box sx={styles.containerStyle}>
       <Grid2 sx={styles.buttonGroupStyle}>
-        <Grid2
-          size={{ sm: 8, xs: 12 }}
-          sx={styles.gridButtonGroup}
-        >
+        <Grid2 size={{ sm: 8, xs: 12 }} sx={styles.gridButtonGroup}>
           <Button
             variant="outlined"
             color="primary"

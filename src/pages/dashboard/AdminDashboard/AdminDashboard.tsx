@@ -21,6 +21,7 @@ import { fetchRetailersWithPagination } from "../../../services/Retailer";
 import { NoData } from "../../../components/NoData";
 import noData from "../../../assets/noReports.svg";
 import noGroups from "../../../assets/noCustomGroups.svg"
+// import { ResponsiveContainer } from "recharts";
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
@@ -77,6 +78,7 @@ const AdminDashboard = () => {
      <Box sx={styles.innerContainerStyle}>
         <Grid2 container size={{ sm: 12, xs: 8 }} spacing={4} sx={styles.outerGrid}>
           <Grid2 size={{ sm: 4, xs:11 }}>
+          {/* <ResponsiveContainer width="100%" height={240}> */}
             <Box sx={styles.innerGridA}>
             {totalCount===0 ?
             (<NoData message={"No Data"} image={noGroups} boxStyle={styles.noDataBox} imgStyle={{width: "100%",height:"150px",marginTop:"15px",marginBottom:"15px"}}/>):
@@ -107,6 +109,7 @@ const AdminDashboard = () => {
                 />
               </PieChart>)}
             </Box>
+            {/* </ResponsiveContainer> */}
           </Grid2>
           <Grid2 size={{ sm: 7, xs:11 }}>
             <Box sx={styles.taskBox}>
