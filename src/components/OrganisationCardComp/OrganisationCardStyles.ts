@@ -4,7 +4,7 @@ import { SxProps, Theme } from "@mui/material";
 
 const OrganisationCardStyles = {
   cardStyles: {
-    maxWidth: 390,
+    maxWidth: 300,
     height: 400,
     backgroundColor: "#f9f9f9",
     borderRadius: 5,

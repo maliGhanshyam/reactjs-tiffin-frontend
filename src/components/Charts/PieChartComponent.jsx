@@ -4,7 +4,6 @@ import { Box, Container, Typography, Paper, Button } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import noTask from "../../assets/noTask.svg";
-// import timeBloack from "../../assets/timeblock.png";
 
 const styles = {
   card: {
@@ -14,22 +13,24 @@ const styles = {
     transition: "0.3s",
     "&:hover": { boxShadow: 6 },
   },
-  taskBox: { display: "flex", alignItems: "center", gap: 2 },
+  taskBox: {
+    display: "flex",
+    alignItems: "center",
+    gap: 2,
+  },
   avatar: {
     flex: 1,
-    height: "100%", // Full height within the task bar container
-    objectFit: "cover", // Ensures image covers the area without distortion
-    marginTop: "22px", // Equal top margin
-    marginBottom: "8px", // Equal bottom margin
+    height: "100%",
+    objectFit: "cover",
+    marginTop: "22px",
+    marginBottom: "8px",
   },
-
   pendingCount: { fontWeight: "bold", color: "#c0392b" },
 };
 
 export default function PieChartComponent({ chartData }) {
   const navigate = useNavigate();
 
-  // Moved getGreetingMessage logic here
   const getGreetingMessage = () => {
     const currentHour = new Date().getHours();
     if (currentHour < 12) {
@@ -47,11 +48,26 @@ export default function PieChartComponent({ chartData }) {
   return (
     <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
       <Container disableGutters maxWidth={false}>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            flexDirection: { xs: "column", md: "row" },
+          }}
+        >
           {/* Chart Section */}
-          <Paper sx={{ ...styles.card, flexBasis: "35%", m: 0 }}>
+          <Paper
+            sx={{
+              ...styles.card,
+              flexBasis: { xs: "100%", md: "35%" },
+              m: 0,
+            }}
+          >
             <Box display="flex" justifyContent="center" alignItems="center">
-              <PieChart width={450} height={300}>
+              <PieChart
+                width={window.innerWidth > 600 ? 450 : 300}
+                height={window.innerWidth > 600 ? 300 : 200}
+              >
                 <Pie
                   data={chartData}
                   dataKey="value"
@@ -83,14 +99,28 @@ export default function PieChartComponent({ chartData }) {
           </Paper>
 
           {/* Task Section */}
-          <Paper sx={{ ...styles.card, flexBasis: "65%", m: 0 }}>
-            <Box sx={styles.taskBox}>
-              {/* Left Image */}
+          <Paper
+            sx={{
+              ...styles.card,
+              flexBasis: { xs: "100%", md: "65%" },
+              m: 0,
+            }}
+          >
+            <Box
+              sx={{
+                ...styles.taskBox,
+                flexDirection: { xs: "column", md: "row" },
+              }}
+            >
+              {/* Left Image (Hidden on small screens) */}
               {/* <Box
                 component="img"
                 src={noTask}
                 alt="Left Image"
-                sx={styles.avatar}
+                sx={{
+                  ...styles.avatar,
+                  display: { xs: "none", md: "block" },
+                }}
               /> */}
 
               {/* Text Content */}
@@ -115,7 +145,7 @@ export default function PieChartComponent({ chartData }) {
                 </Box>
                 <Button
                   variant="outlined"
-                  sx={{ borderRadius: "12px" }}
+                  sx={{ borderRadius: "12px", mt: 2 }}
                   onClick={() => navigate("/supAdmin")}
                   startIcon={<VisibilityIcon />}
                 >
@@ -123,12 +153,15 @@ export default function PieChartComponent({ chartData }) {
                 </Button>
               </Box>
 
-              {/* Right Image */}
+              {/* Right Image (Visible on desktop, hidden on small screens) */}
               <Box
                 component="img"
                 src={noTask}
                 alt="Right Image"
-                sx={styles.avatar}
+                sx={{
+                  ...styles.avatar,
+                  display: { xs: "none", sm: "none", md: "block" },
+                }}
               />
             </Box>
           </Paper>
