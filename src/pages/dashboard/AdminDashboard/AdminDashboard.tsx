@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Retailer } from "./AdminDashboard.types";
-import { ActionCard } from "../../../components/ActionCard";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -15,12 +14,12 @@ import { CardSlider } from "../../../components/CardSlider";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { styles, tooltipStyle } from "./AdminDashboard.styles";
-import { RetailerInfoCard } from "../../../components/RetailerInfoCard";
 import { useSnackbar } from "../../../hook";
 import { fetchRetailersWithPagination } from "../../../services/Retailer";
 import { NoData } from "../../../components/NoData";
 import noData from "../../../assets/noReports.svg";
 import noGroups from "../../../assets/noCustomGroups.svg"
+import RetailerCard from "../../../components/RetailerCard/RetailerCard";
 // import { ResponsiveContainer } from "recharts";
 const AdminDashboard = () => {
   const [approveRetailers, setApproveRetailer] = useState<Retailer[]>([]);
@@ -166,13 +165,7 @@ const AdminDashboard = () => {
         {showRetailersSlider ? (
         <CardSlider data={approveRetailers}>
           {(ret) => (
-            <ActionCard
-              sx={styles.cardStyles}
-              imageUrl={ret.user_image}
-              imageStyles={styles.cardMediaStyles}
-            >
-              <RetailerInfoCard retailer={ret} />
-            </ActionCard>
+            <RetailerCard retailer={ret}/>
           )}
         </CardSlider>):(<NoData message={"No Data"} image={noData} boxStyle={styles.noDataBox} imgStyle={{width: "100%",height:"150px",marginTop:"15px",marginBottom:"15px"}}/>)}
      </Box>
