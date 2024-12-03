@@ -5,7 +5,7 @@ import { styles } from "./CardSlider.styles";
 
 const CardSlider = <T extends { _id: string }>({ data, children, settings }: CardSliderProps<T>) => {
   const defaultSettings = {
-    infinite: false,
+    infinite: data.length>1,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 2,
@@ -21,7 +21,7 @@ const CardSlider = <T extends { _id: string }>({ data, children, settings }: Car
         },
       },
       {
-        breakpoint: 800,
+        breakpoint: 900,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -40,7 +40,7 @@ const CardSlider = <T extends { _id: string }>({ data, children, settings }: Car
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
+          slidesToScroll: 1,
         },
       },
     ],

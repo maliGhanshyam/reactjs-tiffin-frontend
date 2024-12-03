@@ -31,3 +31,8 @@ export interface RetailersResponse {
 export interface ApiResponse {
   acknowledged: boolean;
 }
+
+export interface CountValue{
+  approval_status: string;
+  count: number;
+}

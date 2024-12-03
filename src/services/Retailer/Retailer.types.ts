@@ -30,3 +30,8 @@ export interface RetailersResponse {
 export interface ApiResponse {
   acknowledged: boolean;
 }
+
+export interface CountResponse {
+  statuscode: number; 
+  data: [];
+}

@@ -1,31 +1,34 @@
 import axiosInstance from "../OrganisationService/axiosInstance";
-import { ApiResponse, Retailer, RetailersResponse } from "./Retailer.types";
+import { ApiResponse, CountResponse, Retailer, RetailersResponse } from "./Retailer.types";
 
 const API_URL = process.env.REACT_APP_API_URL!;
 
 // Fetch pending , approved, rejected retailers with pagination
 // Reusable function to fetch retailers with pagination
-  export const fetchRetailersWithPagination = async (
-    endpoint: string,
-    page?: number,
-    limit?: number
-  ): Promise<{ data: Retailer[]; totalPages: number,totalItems:number }> => {
-    try {
-      const url=page && limit
-      ? `${API_URL}/admin/${endpoint}?page=${page}&limit=${limit}` 
-      : `${API_URL}/admin/${endpoint}`;
-      const response = await axiosInstance.get<
-        RetailersResponse & { pagination: { totalPages: number,totalItems:number } }
-      >(url);
-      return {
-        data: response.data.data,
-        totalPages: response.data.pagination.totalPages,
-        totalItems:response.data.pagination.totalItems,
-      };
-    } catch (error) {
-      throw error;
-    }
-  };
+export const fetchRetailersWithPagination = async (
+  endpoint: string,
+  page?: number,
+  limit?: number
+): Promise<{ data: Retailer[]; totalPages: number; totalItems: number }> => {
+  try {
+    const url =
+      page && limit
+        ? `${API_URL}/admin/${endpoint}?page=${page}&limit=${limit}`
+        : `${API_URL}/admin/${endpoint}`;
+    const response = await axiosInstance.get<
+      RetailersResponse & {
+        pagination: { totalPages: number; totalItems: number };
+      }
+    >(url);
+    return {
+      data: response.data.data,
+      totalPages: response.data.pagination.totalPages,
+      totalItems: response.data.pagination.totalItems,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getPendingRetailers = async (
   page?: number,
@@ -67,10 +70,9 @@ export const rejectRetailer = async (
   rejectionReason?: string
 ): Promise<ApiResponse> => {
   try {
-    await axiosInstance.put(
-      `${API_URL}/admin/rejectRetailer/${retailerId}`,
-      { rejection_reason: rejectionReason }
-    );
+    await axiosInstance.put(`${API_URL}/admin/rejectRetailer/${retailerId}`, {
+      rejection_reason: rejectionReason,
+    });
     return { acknowledged: true };
   } catch (error) {
     throw error;
@@ -87,6 +89,17 @@ export const searchRetailerWithStatus = async (
       `${API_URL}/admin/searchRetailer?query=${encodeURIComponent(
         query
       )}&approval_status=${encodeURIComponent(approval_status)}`
+    );
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCount = async () => {
+  try {
+    const response = await axiosInstance.get<CountResponse>(
+      `${API_URL}/admin/getretailercount`
     );
     return response.data.data;
   } catch (error) {

@@ -3,4 +3,5 @@ export {
   approveRetailer,
   rejectRetailer,
   searchRetailerWithStatus,
+  getCount
 } from "./Retailer";

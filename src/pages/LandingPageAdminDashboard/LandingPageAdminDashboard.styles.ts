@@ -7,10 +7,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   buttonGroupStyle: {
     display: "flex",
     mb: 3,
-    marginLeft: "65px",
+    marginLeft: {sm:"65px",xs:"20px"},
     flexDirection: { xs: "column", sm: "row" },
     justifyContent: "space-between",
-    marginRight: "65px",
+    marginRight: {sm:"65px",xs:"20px"}
   },
   tabButtonStyle: {
     borderRadius: "1.2rem",
@@ -104,7 +104,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   },
   searchStyle: {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: {sm:"flex-end",xs:"center"},
     marginTop:{sm:0,xs:1}
   },
   searchTermStyle: {
@@ -113,12 +113,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   },
   view: {
     minHeight: "700px",
-    marginLeft: "50px",
-    marginRight: "30px",
+    marginLeft: {sm:"50px",xs:"30px"},
+    marginRight: {sm:"30px",xs:"0px"},
   },
   content: {
-    marginLeft: "50px",
-    marginRight: "30px",
+    marginLeft: {sm:"50px",xs:"20px"},
+    marginRight: {sm:"30px",xs:"20px"}
   },
   noDataBox: {
     textAlign: "center",
