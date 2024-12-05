@@ -1,6 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-import { Box, Container, Typography, Paper, Button } from "@mui/material";
+import { Box, Container, Typography, Paper, Button, Divider } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import noTask from "../../assets/noTask.svg";
@@ -15,7 +15,7 @@ const styles = {
   },
   taskBox: {
     display: "flex",
-    alignItems: "center",
+    // alignItems: "center",
     gap: 2,
   },
   avatar: {
@@ -44,6 +44,17 @@ export default function PieChartComponent({ chartData }) {
 
   const pendingCount =
     chartData.find((item) => item.name === "Pending")?.value || 0;
+  
+  // Custom responsive dimensions for PieChart
+  const getChartDimensions = () => {
+    if (window.innerWidth <= 600)
+      return { width: 400, height: 200, outerRadius: 80 };
+    if (window.innerWidth <= 960)
+      return { width: 400, height: 200, outerRadius: 80 };
+    return { width: 315, height: 200, outerRadius: 80 };
+  };
+
+  const chartDimensions = getChartDimensions();
 
   return (
     <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
@@ -60,13 +71,28 @@ export default function PieChartComponent({ chartData }) {
             sx={{
               ...styles.card,
               flexBasis: { xs: "100%", md: "35%" },
-              m: 0,
+              minHeight: { xs: "200px", md: "200px" },
             }}
           >
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              // mb={2}
+              align="center"
+              // sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }}
+            >
+              Admin Approval Status
+            </Typography>
+            <Divider
+              sx={{
+                my: 1, // Adds vertical margin above and below the divider
+                borderColor: "rgba(0, 0, 0, 0.1)", // Soft divider color
+              }}
+            />
             <Box display="flex" justifyContent="center" alignItems="center">
               <PieChart
-                width={window.innerWidth > 600 ? 450 : 300}
-                height={window.innerWidth > 600 ? 300 : 200}
+                width={chartDimensions.width}
+                height={chartDimensions.height}
               >
                 <Pie
                   data={chartData}
@@ -74,8 +100,8 @@ export default function PieChartComponent({ chartData }) {
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
-                  innerRadius={50}
+                  outerRadius={chartDimensions.outerRadius}
+                  innerRadius={chartDimensions.outerRadius * 0.5}
                   fill="#8884d8"
                 >
                   <Cell key="Pending" fill="#ff7300" />
@@ -130,13 +156,19 @@ export default function PieChartComponent({ chartData }) {
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                justifyContent="center"
+                // justifyContent="center"
               >
                 <Typography variant="h5" fontWeight="bold" mb={2}>
                   {getGreetingMessage()} !
                 </Typography>
+                <Divider
+                  sx={{
+                    // my: 1, // Adds vertical margin above and below the divider
+                    borderColor: "rgba(0, 0, 0, 0.2)", // Soft divider color
+                  }}
+                />
                 <Box display="flex" alignItems="center" gap={1}>
-                  <Typography variant="body2">
+                  <Typography variant="body1">
                     Pending Admins Approval:
                   </Typography>
                   <Typography variant="h6" sx={styles.pendingCount}>

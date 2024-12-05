@@ -57,7 +57,10 @@ const SuperAdminDashboard: React.FC = () => {
   // Fetch Organizations
   const fetchOrganizations = async () => {
     try {
-      const data = await getOrganizations();
+      const { data, pagination } = await getOrganizations(
+        1,
+        10
+      );
       setOrganizations(data);
     } catch (error) {
       console.error("Error fetching organizations:", error);
@@ -103,7 +106,14 @@ const SuperAdminDashboard: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <Container
+      sx={{
+        "@media (max-width: 1600px)": {
+          maxWidth: "none",
+          marginTop: "16px",
+        },
+      }}
+    >
       {/* Pie Chart */}
       <PieChartComponent
         chartData={[
@@ -132,7 +142,7 @@ const SuperAdminDashboard: React.FC = () => {
             mb: 4,
           }}
         >
-          <Typography variant="h5" sx={titleStyles}>
+          <Typography variant="h6" fontWeight="bold" sx={titleStyles}>
             Available Organisations
           </Typography>
           <Button
@@ -141,7 +151,7 @@ const SuperAdminDashboard: React.FC = () => {
             color="primary" // Uses the primary color defined in the theme
             size="small" // Uses the default size defined in the theme
             startIcon={<VisibilityIcon />} // Adds the icon
-            sx={{ borderRadius: "8px", marginTop: "10px",}}
+            sx={{ borderRadius: "8px", marginTop: "10px" }}
             onClick={() => navigate("/supAdmin")} // Navigation logic
           >
             View More
@@ -245,7 +255,7 @@ const SuperAdminDashboard: React.FC = () => {
           )} */}
         {/* </Container> */}
       </Box>
-    </>
+    </Container>
   );
 };
 

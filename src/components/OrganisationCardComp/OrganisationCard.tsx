@@ -88,13 +88,13 @@ const OrganisationCard: React.FC<OrganisationCardProps> = ({
                       <IconButton
                         size="small"
                         onClick={toggleExpand}
-                        sx={{ ml: 1}}
+                        sx={{ ml: 1, my: 0 }}
                       >
                         {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                       </IconButton>
                     )}
                   </Box>
-                  { <Divider sx={{ my: 1 }} />}
+                  {<Divider sx={{ my: 1 }} />}
                 </div>
               );
             }

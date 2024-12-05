@@ -4,7 +4,7 @@ import { SxProps, Theme } from "@mui/material";
 
 const OrganisationCardStyles = {
   cardStyles: {
-    maxWidth: 300,
+    maxWidth: 280,
     height: 400,
     backgroundColor: "#f9f9f9",
     borderRadius: 5,
@@ -29,7 +29,7 @@ const OrganisationCardStyles = {
     fontSize: "1.1rem",
   },
   statusStyles: (status: string): SxProps<Theme> => ({
-    mt: 1,
+    // mt: 1,
     color:
       status.toLowerCase() === "active"
         ? "success.main"
@@ -40,7 +40,7 @@ const OrganisationCardStyles = {
   cardActionsStyles: {
     display: "flex",
     justifyContent: "center",
-    paddingBottom: 2,
+    // paddingBottom: 2,
     position: "relative",
   },
   buttonStyles: (color: "primary" | "error"): SxProps<Theme> => ({
