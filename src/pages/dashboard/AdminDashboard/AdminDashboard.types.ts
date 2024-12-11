@@ -2,6 +2,7 @@ export interface Approval {
   approval_status: string;
   organization_id: string;
   istrendy?: boolean;
+  rejection_reason?:string;
   _id?: string;
 }
 

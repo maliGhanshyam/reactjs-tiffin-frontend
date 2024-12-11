@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -15,11 +15,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import tiff3 from "../../assets/tiff3.png";
 import { getToken, logoutUser } from "../../services/LoginService/loginUser";
-import { logoStyle, styles } from "./Navbar.styles";
+import { style, styles } from "./Navbar.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAuthData } from "../../store/authSlice";
 import { RootState } from "../../store/Store";
-import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
+import { ADMIN_ROLE_ID, SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
+import { useSnackbar } from "../../hook";
+import { Theme } from "../materialUI";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -27,6 +30,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const location = useLocation().pathname;
   const userRoleId = useSelector((state: RootState) => state.auth.userRoleId);
+  const userId = useSelector((state: RootState) => state.auth.userId);
   const token = getToken();
 
   const handleDrawerToggle = () => {
@@ -47,22 +51,37 @@ const Navbar = () => {
     <Box onClick={handleDrawerToggle} sx={styles.drawerBox}>
       <List>
         {token && (
-          <ListItem component={Link} to="/dashboard">
-            <ListItemText primary="Home" />
-          </ListItem>
+          <>
+            <ListItem
+              component={Link}
+              to={
+                userRoleId === SUPERADMIN_ROLE_ID
+                  ? "/superAdminDashboard"
+                  : "/adminDashboard"
+              }
+              sx={styles.listItemStyle}
+            >
+              <ListItemText primary="Home" />
+            </ListItem>
+            {userRoleId === SUPERADMIN_ROLE_ID && (
+              <ListItem
+                component={Link}
+                to="/AddOrganization"
+                sx={styles.listItemStyle}
+              >
+                <ListItemText primary="Add Organization" />
+              </ListItem>
+            )}
+          </>
         )}
         {location !== "/login" && (
           <ListItem
             component={Link}
             to={token ? "#" : "/login"}
             onClick={token ? handleAuthToggle : undefined}
+            sx={styles.listItemStyle}
           >
             <ListItemText primary={token ? "Logout" : "Login"} />
-          </ListItem>
-        )}
-        {location !== "/register" && !token && (
-          <ListItem component={Link} to="/register">
-            <ListItemText primary="Register" />
           </ListItem>
         )}
       </List>
@@ -74,90 +93,112 @@ const Navbar = () => {
       <AppBar sx={styles.appBar}>
         <Toolbar sx={styles.toolbar}>
           <Box sx={styles.toolbar}>
-            <img src={tiff3} alt="Logo" style={logoStyle} />
+            <img src={tiff3} alt="Logo" style={style.logoStyle} />
             <Typography
               variant="h5"
               sx={{ ...styles.title, fontFamily: "Futura, Avenir, sans-serif" }}
             >
-              <span style={{ color: "black", fontWeight: "bold" }}>Neo</span>
-              <span style={{ color: "white", fontWeight: "bold" }}>
-                Tiffins
-              </span>
+              <span style={style.logoWordBlack}>Neo</span>
+              <span style={style.logoWordWhite}>Tiffins</span>
             </Typography>
             {token && (
-              <Button
-                color="inherit"
-                component={Link}
-                to={
-                  userRoleId === SUPERADMIN_ROLE_ID
-                    ? "/superAdminDashboard"
-                    : "/adminDashboard"
-                }
-                sx={styles.button}
-              >
-                Home
-              </Button>
-            )}
-            {token && userRoleId === SUPERADMIN_ROLE_ID && (
-              <Button
-                color="inherit"
-                component={Link}
-                to="/AddOrganization"
-                sx={styles.button}
-              >
-                Add Organization
-              </Button>
+              <>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to={
+                    userRoleId === SUPERADMIN_ROLE_ID
+                      ? "/superAdminDashboard"
+                      : "/adminDashboard"
+                  }
+                  sx={styles.button}
+                >
+                  Home
+                </Button>
+                {token && userRoleId === SUPERADMIN_ROLE_ID && (
+                  <Button
+                    color="inherit"
+                    component={Link}
+                    to="/AddOrganization"
+                    sx={styles.button}
+                  >
+                    Add Organization
+                  </Button>
+                )}
+              </>
             )}
           </Box>
-          <Box
-            sx={{
-              display: { xs: "none", sm: "flex" },
-              marginLeft: "auto",
-              gap: 1,
-            }}
-          >
-            {location !== "/login" && (
+          <Box sx={styles.boxRight}>
+            {open && !token && location !== "/login" && (
               <Button
                 color="inherit"
                 component={Link}
-                to={token ? "#" : "/login"}
-                onClick={token ? handleAuthToggle : undefined}
-                sx={styles.button2}
+                to="/login"
+                variant="outlined"
               >
-                {token ? "Logout" : "Login"}
+                Login
               </Button>
+            )}
+            {location !== "/login" && (
+              <>
+                {token && userRoleId === ADMIN_ROLE_ID && (
+                  <IconButton
+                    color="inherit"
+                    component={Link}
+                    to="/update-profile"
+                    sx={styles.updateNavigate}
+                  >
+                    <AccountCircleIcon sx={styles.profileIcon} />
+                  </IconButton>
+                )}
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to={token ? "#" : "/login"}
+                  onClick={token ? handleAuthToggle : undefined}
+                  sx={styles.buttonOutlined}
+                  variant="outlined"
+                >
+                  {token ? "Logout" : "Login"}
+                </Button>
+              </>
             )}
             {location !== "/register" && !token && (
               <Button
                 color="inherit"
                 component={Link}
                 to="/register"
-                sx={styles.button2}
+                sx={styles.buttonOutlined}
+                variant="outlined"
               >
                 Register
               </Button>
             )}
           </Box>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerToggle}
-            sx={styles.iconButton}
-          >
-            <MenuIcon />
-          </IconButton>
+          {token && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerToggle}
+              sx={styles.iconButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
-      <Drawer
-        anchor="right"
-        open={open}
-        onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
-        PaperProps={{ sx: { width: "auto" } }}
-      >
-        {drawer}
-      </Drawer>
+      {token && (
+        <Drawer
+          anchor="right"
+          open={open}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          PaperProps={{ sx: { width: "auto", backgroundColor: "#f4f6f7" } }}
+        >
+          {drawer}
+        </Drawer>
+      )}
     </>
   );
 };
